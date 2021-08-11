@@ -1,10 +1,10 @@
 package by.itechart.lastcoursetask.util;
 
 import by.itechart.lastcoursetask.dto.TransactionDTO;
-import by.itechart.lastcoursetask.dto.UserDTO;
+import by.itechart.lastcoursetask.dto.OperatorDTO;
+import by.itechart.lastcoursetask.entity.Operator;
 import by.itechart.lastcoursetask.entity.Role;
 import by.itechart.lastcoursetask.entity.Transaction;
-import by.itechart.lastcoursetask.entity.User;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -13,26 +13,26 @@ import java.util.UUID;
 
 @Service
 public class EntityMapper {
-    public UserDTO mapToUserDTO(User user) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(user.getId().toString());
-        userDTO.setFirstName(user.getFirstName());
-        userDTO.setLastName(user.getLastName());
-        userDTO.setNickname(user.getNickname());
-        userDTO.setPassword(user.getPassword());
-        userDTO.setRole(user.getRole().getValue());
-        return userDTO;
+    public OperatorDTO mapToUserDTO(Operator operator) {
+        OperatorDTO operatorDTO = new OperatorDTO();
+        operatorDTO.setId(operator.getId().toString());
+        operatorDTO.setFirstName(operator.getFirstName());
+        operatorDTO.setLastName(operator.getLastName());
+        operatorDTO.setNickname(operator.getNickname());
+        operatorDTO.setPassword(operator.getPassword());
+        operatorDTO.setRole(operator.getRole().getValue());
+        return operatorDTO;
     }
 
-    public User mapToUserEntity(UserDTO userDTO) {
-        User user = new User();
-        user.setId(UUID.fromString(userDTO.getId()));
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setNickname(userDTO.getNickname());
-        user.setPassword(userDTO.getPassword());
-        user.setRole(getRole(userDTO.getRole()));
-        return user;
+    public Operator mapToUserEntity(OperatorDTO operatorDTO) {
+        Operator operator = new Operator();
+        operator.setId(UUID.fromString(operatorDTO.getId()));
+        operator.setFirstName(operatorDTO.getFirstName());
+        operator.setLastName(operatorDTO.getLastName());
+        operator.setNickname(operatorDTO.getNickname());
+        operator.setPassword(operatorDTO.getPassword());
+        operator.setRole(getRole(operatorDTO.getRole()));
+        return operator;
     }
 
     public TransactionDTO mapToTransactionDTO(Transaction transaction) {
