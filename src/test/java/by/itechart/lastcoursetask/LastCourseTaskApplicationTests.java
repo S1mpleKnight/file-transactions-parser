@@ -7,7 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 class LastCourseTaskApplicationTests {
 
     @Test
-    void contextLoads() {
+    void contextLoadsSuccess() {
+        LastCourseTaskApplication.main(new String[]{});
     }
 
 }
