@@ -1,6 +1,7 @@
 package by.itechart.lastcoursetask.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @ToString
 @RequiredArgsConstructor
 @Entity
+@NoArgsConstructor
 public class User {
     @Id
     private UUID id;
