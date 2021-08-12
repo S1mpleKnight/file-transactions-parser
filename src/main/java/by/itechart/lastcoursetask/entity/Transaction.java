@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,10 +24,14 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Transaction {
     @Id
+    @Column(name = "id")
+    @Type(type = "uuid-char")
     private UUID id;
     private Boolean status;
     private BigDecimal amount;
     private String currency;
+    @Column(name = "customer_id")
+    @Type(type = "uuid-char")
     private UUID customerId;
     private String customerFirstName;
     private String customerLastName;

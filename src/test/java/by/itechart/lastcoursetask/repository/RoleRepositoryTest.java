@@ -1,5 +1,6 @@
 package by.itechart.lastcoursetask.repository;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +13,7 @@ class RoleRepositoryTest {
     private RoleRepository repository;
 
     @Test
-    void findByValue() {
+    void findByValueSuccess() {
+        Assertions.assertEquals("user", repository.findByValue("user").getValue());
     }
 }

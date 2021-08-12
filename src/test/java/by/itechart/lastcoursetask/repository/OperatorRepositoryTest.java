@@ -1,5 +1,6 @@
 package by.itechart.lastcoursetask.repository;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,10 +13,12 @@ class OperatorRepositoryTest {
     private OperatorRepository repository;
 
     @Test
-    void findByNickname() {
+    void findByNicknameSuccess() {
+        Assertions.assertEquals("Misha", repository.findByNickname("genius").getFirstName());
     }
 
     @Test
-    void findByFirstNameAndLastName() {
+    void findByFirstNameAndLastNameSuccess() {
+        Assertions.assertEquals(5L, repository.findByFirstNameAndLastName("Boss", "Galaxy").getId());
     }
 }
