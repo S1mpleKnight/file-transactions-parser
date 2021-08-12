@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface OperatorRepository extends CrudRepository<Operator, UUID> {
+public interface OperatorRepository extends CrudRepository<Operator, Long> {
     Operator findByNickname(String nickname);
 
     Operator findByFirstNameAndLastName(String firstName, String lastName);

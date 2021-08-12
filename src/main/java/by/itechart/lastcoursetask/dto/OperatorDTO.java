@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OperatorDTO {
-    private String id;
+    private Long id;
     private String firstName;
     private String lastName;
     private String nickname;

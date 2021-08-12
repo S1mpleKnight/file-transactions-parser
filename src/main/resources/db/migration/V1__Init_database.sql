@@ -1,6 +1,6 @@
 create table operator
 (
-    id         varchar(36) not null
+    id         bigint not null
         primary key,
     first_name varchar(20) not null,
     last_name  varchar(30) not null,

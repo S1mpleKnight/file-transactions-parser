@@ -15,7 +15,7 @@ import java.util.UUID;
 public class EntityMapper {
     public OperatorDTO mapToUserDTO(Operator operator) {
         OperatorDTO operatorDTO = new OperatorDTO();
-        operatorDTO.setId(operator.getId().toString());
+        operatorDTO.setId(operator.getId());
         operatorDTO.setFirstName(operator.getFirstName());
         operatorDTO.setLastName(operator.getLastName());
         operatorDTO.setNickname(operator.getNickname());
@@ -26,7 +26,7 @@ public class EntityMapper {
 
     public Operator mapToUserEntity(OperatorDTO operatorDTO) {
         Operator operator = new Operator();
-        operator.setId(UUID.fromString(operatorDTO.getId()));
+        operator.setId(operatorDTO.getId());
         operator.setFirstName(operatorDTO.getFirstName());
         operator.setLastName(operatorDTO.getLastName());
         operator.setNickname(operatorDTO.getNickname());
