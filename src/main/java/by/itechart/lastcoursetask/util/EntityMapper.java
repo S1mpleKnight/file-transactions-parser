@@ -1,17 +1,17 @@
 package by.itechart.lastcoursetask.util;
 
-import by.itechart.lastcoursetask.dto.TransactionDTO;
 import by.itechart.lastcoursetask.dto.OperatorDTO;
+import by.itechart.lastcoursetask.dto.TransactionDTO;
 import by.itechart.lastcoursetask.entity.Operator;
 import by.itechart.lastcoursetask.entity.Role;
 import by.itechart.lastcoursetask.entity.Transaction;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Service
+@Component
 public class EntityMapper {
     public OperatorDTO mapToUserDTO(Operator operator) {
         OperatorDTO operatorDTO = new OperatorDTO();

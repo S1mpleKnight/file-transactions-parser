@@ -12,10 +12,7 @@ create table role
 (
     id      varchar(36) not null
         primary key,
-    role    varchar(5)  not null,
-    operator_id varchar(36) not null,
-    constraint role_operator_id_fk
-        foreign key (operator_id) references operator (id)
+    role    varchar(5)  not null
 );
 
 create table transaction

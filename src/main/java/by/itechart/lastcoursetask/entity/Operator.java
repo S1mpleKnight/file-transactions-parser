@@ -9,6 +9,7 @@ import lombok.ToString;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -30,6 +31,7 @@ public class Operator {
     private String nickname;
     private String password;
     @ManyToOne
+    @JoinColumn(name = "role_id")
     private Role role;
     @ToString.Exclude
     @OneToMany(mappedBy = "operator", fetch = FetchType.LAZY)

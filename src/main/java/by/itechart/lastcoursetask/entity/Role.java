@@ -5,10 +5,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import java.util.Objects;
 import java.util.Set;
@@ -26,6 +29,10 @@ public class Role {
     @OneToMany(mappedBy = "role")
     @ToString.Exclude
     private Set<Operator> operators;
+    @ToString.Exclude
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "operator_id")
+    private Set<Transaction> transactions;
 
     @Override
     public boolean equals(Object o) {
