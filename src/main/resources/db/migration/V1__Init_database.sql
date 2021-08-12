@@ -27,8 +27,6 @@ create table transaction
     customer_last_name  varchar(30)  null,
     customer_email      varchar(256) null,
     date_time           timestamp    not null,
-    operator_id             varchar(36)  not null,
-    constraint transaction_operator_id_fk
-        foreign key (operator_id) references operator (id)
+    operator_id         bigint  not null
 );
 
