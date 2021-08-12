@@ -1,3 +1,10 @@
+create table role
+(
+    id      varchar(36) not null
+        primary key,
+    name    varchar(5)  not null
+);
+
 create table operator
 (
     id         bigint not null
@@ -5,14 +12,10 @@ create table operator
     first_name varchar(20) not null,
     last_name  varchar(30) not null,
     nickname   varchar(15) not null,
-    password   varchar(50) not null
-);
-
-create table role
-(
-    id      varchar(36) not null
-        primary key,
-    role    varchar(5)  not null
+    password   varchar(50) not null,
+    role_id    varchar(36) not null,
+    constraint operator_role_id_fk
+        foreign key (role_id) references role (id)
 );
 
 create table transaction
