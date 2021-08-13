@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 
+@TestPropertySource(locations = "classpath:test.properties")
 @ActiveProfiles("test")
 @SpringBootTest
 class RoleRepositoryTest {
@@ -14,11 +16,11 @@ class RoleRepositoryTest {
 
     @Test
     void findByValueSuccess() {
-        Assertions.assertEquals("user", repository.findByValue("user").getValue());
+        Assertions.assertEquals("user", repository.findByName("user").getName());
     }
 
     @Test
     void existByValueTrue() {
-        Assertions.assertTrue(repository.existsByValue("admin"));
+        Assertions.assertTrue(repository.existsByName("admin"));
     }
 }
