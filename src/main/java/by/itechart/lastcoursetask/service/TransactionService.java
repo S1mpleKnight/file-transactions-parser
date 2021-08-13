@@ -1,7 +1,6 @@
 package by.itechart.lastcoursetask.service;
 
 import by.itechart.lastcoursetask.dto.TransactionDTO;
-import by.itechart.lastcoursetask.entity.Customer;
 import by.itechart.lastcoursetask.entity.Operator;
 import by.itechart.lastcoursetask.entity.Transaction;
 import by.itechart.lastcoursetask.repository.TransactionRepository;
@@ -42,47 +41,40 @@ public class TransactionService {
     }
 
     @Transactional
-    public void delete(TransactionDTO transactionDTO) {
-        if (isTransactionExist(transactionDTO.getTransactionId())) {
-            repository.delete(mapper.mapToTransactionEntity(transactionDTO));
+    public void delete(UUID transactionId) {
+        if (repository.existsById(transactionId)) {
+            repository.delete(mapper.mapToTransactionEntity(findById(transactionId)));
         } else {
             throw new IllegalArgumentException("Transaction is not exist");
         }
     }
 
     @Transactional
-    public void save(TransactionDTO transactionDTO, Operator operator, Customer customer) {
+    public void save(TransactionDTO transactionDTO, Operator operator) {
         if (!isTransactionExist(transactionDTO.getTransactionId())) {
-            repository.save(fillTransactionField(transactionDTO, operator, customer));
-        } else {
-            throw new IllegalArgumentException("Transaction is already exist");
-        }
-    }
-
-    @Transactional
-    public void update(TransactionDTO oldTransaction, TransactionDTO newTransaction) {
-        if (isTransactionExist(oldTransaction.getTransactionId())) {
-            Transaction transaction = mapper.mapToTransactionEntity(newTransaction);
-            transaction.setId(UUID.fromString(oldTransaction.getTransactionId()));
+            Transaction transaction = mapper.mapToTransactionEntity(transactionDTO);
+            transaction.setOperator(operator);
             repository.save(transaction);
         } else {
             throw new IllegalArgumentException("Transaction is already exist");
         }
     }
 
-    private Transaction fillTransactionField(TransactionDTO transactionDTO, Operator operator, Customer customer) {
-        Transaction transaction = mapper.mapToTransactionEntity(transactionDTO);
-        transaction.setOperator(operator);
-        fillTransactionCustomerFields(customer, transaction);
-        return transaction;
+    @Transactional
+    public void update(UUID oldTransactionId, TransactionDTO newTransaction) {
+        if (repository.existsById(oldTransactionId)) {
+            Transaction transaction = mapper.mapToTransactionEntity(newTransaction);
+            transaction.setId(oldTransactionId);
+            repository.save(transaction);
+        } else {
+            throw new IllegalArgumentException("Transaction is already exist");
+        }
     }
 
-    private void fillTransactionCustomerFields(Customer customer, Transaction transaction) {
-        if (customer != null) {
-            transaction.setCustomerEmail(customer.getEmail());
-            transaction.setCustomerFirstName(customer.getFirstName());
-            transaction.setCustomerLastName(customer.getLastName());
-        }
+    private Transaction fillTransactionField(TransactionDTO transactionDTO, Operator operator) {
+        Transaction transaction = mapper.mapToTransactionEntity(transactionDTO);
+        transaction.setOperator(operator);
+        return transaction;
     }
 
     private boolean isTransactionExist(String transactionUUID) {

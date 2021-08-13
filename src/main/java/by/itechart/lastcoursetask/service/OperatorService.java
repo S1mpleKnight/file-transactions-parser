@@ -53,20 +53,19 @@ public class OperatorService {
     }
 
     @Transactional
-    public void delete(OperatorDTO operatorDTO) {
-        Operator operator = mapper.mapToOperatorEntity(operatorDTO);
-        if (isOperatorExist(operator.getFirstName(), operator.getLastName())) {
-            repository.delete(operator);
+    public void delete(Long operatorId) {
+        if (repository.existsById(operatorId)) {
+            repository.delete(mapper.mapToOperatorEntity(findById(operatorId)));
         } else {
             throw new IllegalArgumentException("Operator is not exist");
         }
     }
 
     @Transactional
-    public void update(OperatorDTO oldOperator, OperatorDTO newOperator) {
-        if (isOperatorExist(oldOperator.getFirstName(), oldOperator.getLastName())) {
+    public void update(Long operatorId, OperatorDTO newOperator) {
+        if (repository.existsById(operatorId)) {
             Operator operator = mapper.mapToOperatorEntity(newOperator);
-            operator.setId(oldOperator.getId());
+            operator.setId(operatorId);
             repository.save(operator);
         } else {
             throw new IllegalArgumentException("Operator is not exist");
