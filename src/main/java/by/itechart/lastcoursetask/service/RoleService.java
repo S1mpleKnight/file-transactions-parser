@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 public class RoleService {
     private final RoleRepository repository;
 
-    public Role findByValue(String value) throws IllegalAccessException {
-        if (repository.existsByValue(value)) {
-            return repository.findByValue(value);
+    public Role findByName(String value) throws IllegalAccessException {
+        if (repository.existsByName(value)) {
+            return repository.findByName(value);
         }
         throw new IllegalAccessException("Role does not exist: " + value);
     }

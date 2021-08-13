@@ -26,7 +26,7 @@ public class EntityMapper {
         operatorDTO.setLastName(operator.getLastName());
         operatorDTO.setNickname(operator.getNickname());
         operatorDTO.setPassword(operator.getPassword());
-        operatorDTO.setRole(operator.getRole().getValue());
+        operatorDTO.setRole(operator.getRole().getName());
         return operatorDTO;
     }
 
@@ -65,7 +65,7 @@ public class EntityMapper {
 
     private Role getRole(String role) {
         try {
-            return service.findByValue(role);
+            return service.findByName(role);
         } catch (IllegalAccessException e) {
             System.out.println("Can not find role with value: " + role);
             return service.findById(BASIC_OPERATOR_ROLE_POSITION);
