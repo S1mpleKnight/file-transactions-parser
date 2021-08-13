@@ -5,6 +5,8 @@ import by.itechart.lastcoursetask.dto.TransactionDTO;
 import by.itechart.lastcoursetask.entity.Operator;
 import by.itechart.lastcoursetask.entity.Role;
 import by.itechart.lastcoursetask.entity.Transaction;
+import by.itechart.lastcoursetask.service.RoleService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -12,8 +14,12 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Component
+@AllArgsConstructor
 public class EntityMapper {
-    public OperatorDTO mapToUserDTO(Operator operator) {
+    private final static Long BASIC_OPERATOR_ROLE_POSITION = 2L;
+    private final RoleService service;
+
+    public OperatorDTO mapToOperatorDTO(Operator operator) {
         OperatorDTO operatorDTO = new OperatorDTO();
         operatorDTO.setId(operator.getId());
         operatorDTO.setFirstName(operator.getFirstName());
@@ -24,7 +30,7 @@ public class EntityMapper {
         return operatorDTO;
     }
 
-    public Operator mapToUserEntity(OperatorDTO operatorDTO) {
+    public Operator mapToOperatorEntity(OperatorDTO operatorDTO) {
         Operator operator = new Operator();
         operator.setId(operatorDTO.getId());
         operator.setFirstName(operatorDTO.getFirstName());
@@ -58,7 +64,11 @@ public class EntityMapper {
     }
 
     private Role getRole(String role) {
-        //todo: use RoleService to get correct role
-        return null;
+        try {
+            return service.findByValue(role);
+        } catch (IllegalAccessException e) {
+            System.out.println("Can not find role with value: " + role);
+            return service.findById(BASIC_OPERATOR_ROLE_POSITION);
+        }
     }
 }
