@@ -16,4 +16,9 @@ class RoleRepositoryTest {
     void findByValueSuccess() {
         Assertions.assertEquals("user", repository.findByValue("user").getValue());
     }
+
+    @Test
+    void existByValueTrue() {
+        Assertions.assertTrue(repository.existsByValue("admin"));
+    }
 }

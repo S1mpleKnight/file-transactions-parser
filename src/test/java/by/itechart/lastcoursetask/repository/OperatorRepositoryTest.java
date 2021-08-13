@@ -18,6 +18,16 @@ class OperatorRepositoryTest {
     }
 
     @Test
+    void existByNicknameTrue() {
+        Assertions.assertTrue(repository.existsByNickname("krendel"));
+    }
+
+    @Test
+    void existByFirstNameAndLastNameTrue() {
+        Assertions.assertTrue(repository.existsByFirstNameAndLastName("Dasha", "Deshina"));
+    }
+
+    @Test
     void findByFirstNameAndLastNameSuccess() {
         Assertions.assertEquals(5L, repository.findByFirstNameAndLastName("Boss", "Galaxy").getId());
     }
