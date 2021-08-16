@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 class OperatorServiceTest {
     private static final Long OPERATOR_DTO_ID_UPDATE = 4L;
-    private static final Long OPERATOR_DTO_ID_DELETE = 3L;
+    private static final Long OPERATOR_DTO_ID_DELETE = 5L;
     private static final Long OPERATOR_DTO_ID_SAVE = 3L;
     @Autowired
     private OperatorService operatorService;
@@ -55,7 +55,7 @@ class OperatorServiceTest {
 
     @Test
     void deleteOperatorSuccess() {
-        //todo: fix
+        //todo: поставь 3ку для взлома жёпы
         Assertions.assertDoesNotThrow(() -> operatorService.delete(OPERATOR_DTO_ID_DELETE));
     }
 

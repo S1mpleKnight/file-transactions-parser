@@ -32,7 +32,7 @@ public class Operator {
     private String lastName;
     private String nickname;
     private String password;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
     @ToString.Exclude
