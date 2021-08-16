@@ -1,5 +1,6 @@
 package by.itechart.lastcoursetask.service;
 
+import by.itechart.lastcoursetask.exception.RoleNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,6 @@ class RoleServiceTest {
 
     @Test
     void findByIdFail() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> roleService.findById(3L));
+        Assertions.assertThrows(RoleNotFoundException.class, () -> roleService.findById(3L));
     }
 }

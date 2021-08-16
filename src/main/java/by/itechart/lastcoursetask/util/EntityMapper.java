@@ -5,6 +5,7 @@ import by.itechart.lastcoursetask.dto.TransactionDTO;
 import by.itechart.lastcoursetask.entity.Operator;
 import by.itechart.lastcoursetask.entity.Role;
 import by.itechart.lastcoursetask.entity.Transaction;
+import by.itechart.lastcoursetask.exception.RoleNotFoundException;
 import by.itechart.lastcoursetask.service.RoleService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -66,8 +67,8 @@ public class EntityMapper {
     private Role getRole(String role) {
         try {
             return service.findByName(role);
-        } catch (IllegalAccessException e) {
-            System.out.println("Can not find role with value: " + role);
+        } catch (RoleNotFoundException exception) {
+            System.out.println(exception.getMessage());
             return service.findById(BASIC_OPERATOR_ROLE_POSITION);
         }
     }

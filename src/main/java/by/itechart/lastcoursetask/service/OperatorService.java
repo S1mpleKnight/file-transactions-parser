@@ -2,6 +2,7 @@ package by.itechart.lastcoursetask.service;
 
 import by.itechart.lastcoursetask.dto.OperatorDTO;
 import by.itechart.lastcoursetask.entity.Operator;
+import by.itechart.lastcoursetask.exception.OperatorNotFoundException;
 import by.itechart.lastcoursetask.repository.OperatorRepository;
 import by.itechart.lastcoursetask.util.EntityMapper;
 import lombok.AllArgsConstructor;
@@ -26,21 +27,21 @@ public class OperatorService {
 
     public OperatorDTO findById(Long id) {
         return repository.findById(id).map(mapper::mapToOperatorDTO)
-                .orElseThrow(() -> new IllegalArgumentException("Operator does not exist: " + id));
+                .orElseThrow(() -> new OperatorNotFoundException("Operator does not exist: " + id));
     }
 
     public OperatorDTO findByNickName(String nickname) {
         if (repository.existsByNickname(nickname)) {
             return mapper.mapToOperatorDTO(repository.findByNickname(nickname));
         }
-        throw new IllegalArgumentException("Operator does not exist: " + nickname);
+        throw new OperatorNotFoundException("Operator does not exist: " + nickname);
     }
 
     public OperatorDTO findByFirstNameAndLastName(String firstName, String lastName) {
         if (isOperatorExist(firstName, lastName)) {
             return mapper.mapToOperatorDTO(repository.findByFirstNameAndLastName(firstName, lastName));
         }
-        throw new IllegalArgumentException("Operator does not exist, first name: " + firstName
+        throw new OperatorNotFoundException("Operator does not exist, first name: " + firstName
                 + " last name: " + lastName);
     }
 
@@ -59,7 +60,7 @@ public class OperatorService {
         if (repository.existsById(operatorId)) {
             repository.delete(mapper.mapToOperatorEntity(findById(operatorId)));
         } else {
-            throw new IllegalArgumentException("Operator is not exist");
+            throw new OperatorNotFoundException("Operator is not exist");
         }
     }
 
@@ -70,7 +71,7 @@ public class OperatorService {
             operator.setId(operatorId);
             repository.save(operator);
         } else {
-            throw new IllegalArgumentException("Operator is not exist");
+            throw new OperatorNotFoundException("Operator is not exist");
         }
     }
 

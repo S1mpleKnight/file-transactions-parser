@@ -4,6 +4,7 @@ import by.itechart.lastcoursetask.dto.OperatorDTO;
 import by.itechart.lastcoursetask.dto.TransactionDTO;
 import by.itechart.lastcoursetask.entity.Operator;
 import by.itechart.lastcoursetask.entity.Transaction;
+import by.itechart.lastcoursetask.exception.TransactionNotFoundException;
 import by.itechart.lastcoursetask.repository.TransactionRepository;
 import by.itechart.lastcoursetask.util.EntityMapper;
 import lombok.AllArgsConstructor;
@@ -30,7 +31,7 @@ public class TransactionService {
 
     public TransactionDTO findById(UUID id) {
         return repository.findById(id).map(mapper::mapToTransactionDTO)
-                .orElseThrow(() -> new IllegalArgumentException("Transaction is not exist, id: " + id));
+                .orElseThrow(() -> new TransactionNotFoundException("Transaction is not exist, id: " + id));
     }
 
     public Set<TransactionDTO> findByCustomerId(UUID customerId) {
@@ -48,7 +49,7 @@ public class TransactionService {
         if (repository.existsById(transactionId)) {
             repository.delete(mapper.mapToTransactionEntity(findById(transactionId)));
         } else {
-            throw new IllegalArgumentException("Transaction is not exist");
+            throw new TransactionNotFoundException("Transaction is not exist");
         }
     }
 
@@ -71,7 +72,7 @@ public class TransactionService {
             transaction.setOperator(repository.findById(oldTransactionId).get().getOperator());
             repository.save(transaction);
         } else {
-            throw new IllegalArgumentException("Transaction is already exist");
+            throw new TransactionNotFoundException("Transaction is not exist");
         }
     }
 
