@@ -1,19 +1,19 @@
 create table role
 (
-    id      varchar(36) not null
+    id      int(11) not null auto_increment
         primary key,
     name    varchar(5)  not null
 );
 
 create table operator
 (
-    id         bigint not null
+    id         int(11) not null auto_increment
         primary key,
     first_name varchar(20) not null,
     last_name  varchar(30) not null,
     nickname   varchar(15) not null,
     password   varchar(50) not null,
-    role_id    varchar(36) not null,
+    role_id    int(11) not null,
     constraint operator_role_id_fk
         foreign key (role_id) references role (id)
 );

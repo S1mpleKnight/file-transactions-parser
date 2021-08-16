@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,7 +19,8 @@ public class OperatorService {
     private final EntityMapper mapper;
 
     public Set<OperatorDTO> findAll() {
-        Set<Operator> operators = (Set<Operator>) repository.findAll();
+        Set<Operator> operators = new HashSet<>();
+        repository.findAll().forEach(operators::add);
         return operators.stream().map(mapper::mapToOperatorDTO).collect(Collectors.toSet());
     }
 

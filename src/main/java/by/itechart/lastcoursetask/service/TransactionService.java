@@ -1,5 +1,6 @@
 package by.itechart.lastcoursetask.service;
 
+import by.itechart.lastcoursetask.dto.OperatorDTO;
 import by.itechart.lastcoursetask.dto.TransactionDTO;
 import by.itechart.lastcoursetask.entity.Operator;
 import by.itechart.lastcoursetask.entity.Transaction;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -21,7 +23,8 @@ public class TransactionService {
     private final EntityMapper mapper;
 
     public Set<TransactionDTO> findAll() {
-        Set<Transaction> transactions = (Set<Transaction>) repository.findAll();
+        Set<Transaction> transactions = new HashSet<>();
+        repository.findAll().forEach(transactions::add);
         return getTransactionDTOSet(transactions);
     }
 
@@ -50,10 +53,10 @@ public class TransactionService {
     }
 
     @Transactional
-    public void save(TransactionDTO transactionDTO, Operator operator) {
+    public void save(TransactionDTO transactionDTO, OperatorDTO operatorDTO) {
         if (!isTransactionExist(transactionDTO.getTransactionId())) {
             Transaction transaction = mapper.mapToTransactionEntity(transactionDTO);
-            transaction.setOperator(operator);
+            transaction.setOperator(mapper.mapToOperatorEntity(operatorDTO));
             repository.save(transaction);
         } else {
             throw new IllegalArgumentException("Transaction is already exist");
@@ -65,6 +68,7 @@ public class TransactionService {
         if (repository.existsById(oldTransactionId)) {
             Transaction transaction = mapper.mapToTransactionEntity(newTransaction);
             transaction.setId(oldTransactionId);
+            transaction.setOperator(repository.findById(oldTransactionId).get().getOperator());
             repository.save(transaction);
         } else {
             throw new IllegalArgumentException("Transaction is already exist");
