@@ -2,6 +2,7 @@ package by.itechart.lastcoursetask.service;
 
 import by.itechart.lastcoursetask.dto.OperatorDTO;
 import by.itechart.lastcoursetask.entity.Operator;
+import by.itechart.lastcoursetask.exception.OperatorExistException;
 import by.itechart.lastcoursetask.exception.OperatorNotFoundException;
 import by.itechart.lastcoursetask.repository.OperatorRepository;
 import by.itechart.lastcoursetask.util.EntityMapper;
@@ -27,22 +28,21 @@ public class OperatorService {
 
     public OperatorDTO findById(Long id) {
         return repository.findById(id).map(mapper::mapToOperatorDTO)
-                .orElseThrow(() -> new OperatorNotFoundException("Operator does not exist: " + id));
+                .orElseThrow(() -> new OperatorNotFoundException(id.toString()));
     }
 
     public OperatorDTO findByNickName(String nickname) {
         if (repository.existsByNickname(nickname)) {
             return mapper.mapToOperatorDTO(repository.findByNickname(nickname));
         }
-        throw new OperatorNotFoundException("Operator does not exist: " + nickname);
+        throw new OperatorNotFoundException(nickname);
     }
 
     public OperatorDTO findByFirstNameAndLastName(String firstName, String lastName) {
         if (isOperatorExist(firstName, lastName)) {
             return mapper.mapToOperatorDTO(repository.findByFirstNameAndLastName(firstName, lastName));
         }
-        throw new OperatorNotFoundException("Operator does not exist, first name: " + firstName
-                + " last name: " + lastName);
+        throw new OperatorNotFoundException(firstName + " " + lastName);
     }
 
     @Transactional
@@ -51,7 +51,7 @@ public class OperatorService {
         if (!isOperatorExist(operator.getFirstName(), operator.getLastName())) {
             repository.save(operator);
         } else {
-            throw new IllegalArgumentException("Operator is already exist");
+            throw new OperatorExistException(operator.getId());
         }
     }
 
@@ -60,7 +60,7 @@ public class OperatorService {
         if (repository.existsById(operatorId)) {
             repository.delete(mapper.mapToOperatorEntity(findById(operatorId)));
         } else {
-            throw new OperatorNotFoundException("Operator is not exist");
+            throw new OperatorNotFoundException(operatorId.toString());
         }
     }
 
@@ -71,7 +71,7 @@ public class OperatorService {
             operator.setId(operatorId);
             repository.save(operator);
         } else {
-            throw new OperatorNotFoundException("Operator is not exist");
+            throw new OperatorNotFoundException(operatorId.toString());
         }
     }
 

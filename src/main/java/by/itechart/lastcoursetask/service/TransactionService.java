@@ -4,6 +4,7 @@ import by.itechart.lastcoursetask.dto.OperatorDTO;
 import by.itechart.lastcoursetask.dto.TransactionDTO;
 import by.itechart.lastcoursetask.entity.Operator;
 import by.itechart.lastcoursetask.entity.Transaction;
+import by.itechart.lastcoursetask.exception.TransactionExistException;
 import by.itechart.lastcoursetask.exception.TransactionNotFoundException;
 import by.itechart.lastcoursetask.repository.TransactionRepository;
 import by.itechart.lastcoursetask.util.EntityMapper;
@@ -31,7 +32,7 @@ public class TransactionService {
 
     public TransactionDTO findById(UUID id) {
         return repository.findById(id).map(mapper::mapToTransactionDTO)
-                .orElseThrow(() -> new TransactionNotFoundException("Transaction is not exist, id: " + id));
+                .orElseThrow(() -> new TransactionNotFoundException(id.toString()));
     }
 
     public Set<TransactionDTO> findByCustomerId(UUID customerId) {
@@ -49,7 +50,7 @@ public class TransactionService {
         if (repository.existsById(transactionId)) {
             repository.delete(mapper.mapToTransactionEntity(findById(transactionId)));
         } else {
-            throw new TransactionNotFoundException("Transaction is not exist");
+            throw new TransactionNotFoundException(transactionId.toString());
         }
     }
 
@@ -60,7 +61,7 @@ public class TransactionService {
             transaction.setOperator(mapper.mapToOperatorEntity(operatorDTO));
             repository.save(transaction);
         } else {
-            throw new IllegalArgumentException("Transaction is already exist");
+            throw new TransactionExistException(transactionDTO.getTransactionId());
         }
     }
 
@@ -72,14 +73,8 @@ public class TransactionService {
             transaction.setOperator(repository.findById(oldTransactionId).get().getOperator());
             repository.save(transaction);
         } else {
-            throw new TransactionNotFoundException("Transaction is not exist");
+            throw new TransactionNotFoundException(oldTransactionId.toString());
         }
-    }
-
-    private Transaction fillTransactionField(TransactionDTO transactionDTO, Operator operator) {
-        Transaction transaction = mapper.mapToTransactionEntity(transactionDTO);
-        transaction.setOperator(operator);
-        return transaction;
     }
 
     private boolean isTransactionExist(String transactionUUID) {

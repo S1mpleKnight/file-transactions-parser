@@ -15,10 +15,10 @@ public class RoleService {
         if (repository.existsByName(value)) {
             return repository.findByName(value);
         }
-        throw new RoleNotFoundException("Role does not exist: " + value);
+        throw new RoleNotFoundException(value);
     }
 
     public Role findById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new RoleNotFoundException("Role does not exist, id: " + id));
+        return repository.findById(id).orElseThrow(() -> new RoleNotFoundException(id.toString()));
     }
 }
