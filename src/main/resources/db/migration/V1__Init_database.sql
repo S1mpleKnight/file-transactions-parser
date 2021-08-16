@@ -30,6 +30,6 @@ create table transaction
     customer_last_name  varchar(30)  null,
     customer_email      varchar(256) null,
     date_time           timestamp    not null,
-    operator_id         bigint  not null
+    operator_id         bigint       null
 );
 
