@@ -3,6 +3,7 @@ package by.itechart.lastcoursetask.parser.impl;
 import by.itechart.lastcoursetask.dto.TransactionDTO;
 import by.itechart.lastcoursetask.exception.FileNotReadException;
 import by.itechart.lastcoursetask.parser.api.FileParser;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Component
 public class CSVFileParserImpl implements FileParser {
     private final static String VALID_REGEX = "[0-9]{10,},([0-9a-z-]{36},){2}[0-9]+,[a-z]{3},[a-z]{6,8}";
     private final static String TIMEZONE_OFFSET = "+02:00";
@@ -78,7 +80,7 @@ public class CSVFileParserImpl implements FileParser {
         try (Stream<String> stringStream = Files.lines(file.toPath())) {
             fileStrings = stringStream.collect(Collectors.toList());
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace();//todo: add some logs
             throw new FileNotReadException(file.getAbsolutePath());
         }
         return fileStrings;
