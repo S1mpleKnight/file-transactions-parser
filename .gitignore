@@ -12,3 +12,6 @@ buildNumber.properties
 ### InteliJ IDEA ###
 .idea/
 *.iml
+
+### Logs ###
+logs/

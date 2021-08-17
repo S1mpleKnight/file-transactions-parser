@@ -8,12 +8,14 @@ import by.itechart.lastcoursetask.entity.Transaction;
 import by.itechart.lastcoursetask.exception.RoleNotFoundException;
 import by.itechart.lastcoursetask.service.RoleService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Slf4j
 @Component
 @AllArgsConstructor
 public class EntityMapper {
@@ -68,7 +70,7 @@ public class EntityMapper {
         try {
             return service.findByName(role);
         } catch (RoleNotFoundException exception) {
-            System.out.println(exception.getMessage());
+            log.error(exception.getMessage());
             return service.findById(BASIC_OPERATOR_ROLE_POSITION);
         }
     }

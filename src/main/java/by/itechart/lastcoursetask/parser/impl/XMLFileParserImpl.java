@@ -4,6 +4,7 @@ import by.itechart.lastcoursetask.dto.TransactionDTO;
 import by.itechart.lastcoursetask.exception.FileNotReadException;
 import by.itechart.lastcoursetask.handler.SAXHandler;
 import by.itechart.lastcoursetask.parser.api.FileParser;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -15,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 @Component
 public class XMLFileParserImpl implements FileParser {
     private static XMLFileParserImpl parser;
@@ -44,7 +46,7 @@ public class XMLFileParserImpl implements FileParser {
             xmlReader.parse(file.getAbsolutePath());
             return handler.getTransactionsList();
         } catch (ParserConfigurationException | IOException | SAXException e) {
-            e.printStackTrace();//todo: add some logs
+            log.error(e.getMessage());
             throw new FileNotReadException(file.getAbsolutePath());
         }
     }

@@ -2,7 +2,6 @@ package by.itechart.lastcoursetask.service;
 
 import by.itechart.lastcoursetask.dto.OperatorDTO;
 import by.itechart.lastcoursetask.dto.TransactionDTO;
-import by.itechart.lastcoursetask.entity.Operator;
 import by.itechart.lastcoursetask.entity.Transaction;
 import by.itechart.lastcoursetask.exception.TransactionExistException;
 import by.itechart.lastcoursetask.exception.TransactionNotFoundException;

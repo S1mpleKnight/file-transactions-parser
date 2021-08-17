@@ -1,14 +1,15 @@
 package by.itechart.lastcoursetask.handler;
 
 import by.itechart.lastcoursetask.dto.TransactionDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Component
 public class SAXHandler extends DefaultHandler {
     private final static String ID_TAG = "id";
@@ -41,7 +42,7 @@ public class SAXHandler extends DefaultHandler {
 
     @Override
     public void startDocument() {
-        //todo: add some logs
+        log.info("Parsing XML file");
     }
 
     @Override

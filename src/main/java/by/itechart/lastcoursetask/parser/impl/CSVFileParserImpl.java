@@ -3,6 +3,7 @@ package by.itechart.lastcoursetask.parser.impl;
 import by.itechart.lastcoursetask.dto.TransactionDTO;
 import by.itechart.lastcoursetask.exception.FileNotReadException;
 import by.itechart.lastcoursetask.parser.api.FileParser;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Slf4j
 @Component
 public class CSVFileParserImpl implements FileParser {
     private final static String VALID_REGEX = "[0-9]{10,},([0-9a-z-]{36},){2}[0-9]+,[a-z]{3},[a-z]{6,8}";
@@ -35,6 +37,7 @@ public class CSVFileParserImpl implements FileParser {
 
     @Override
     public List<TransactionDTO> parse(File file) {
+        log.info("Parsing CSV file");
         List<String> fileStrings = getText(file);
         List<String> validStrings = getValidStrings(fileStrings);
         return getTransactionDTOs(validStrings);
@@ -80,7 +83,7 @@ public class CSVFileParserImpl implements FileParser {
         try (Stream<String> stringStream = Files.lines(file.toPath())) {
             fileStrings = stringStream.collect(Collectors.toList());
         } catch (IOException e) {
-            e.printStackTrace();//todo: add some logs
+            log.error(e.getMessage());
             throw new FileNotReadException(file.getAbsolutePath());
         }
         return fileStrings;
