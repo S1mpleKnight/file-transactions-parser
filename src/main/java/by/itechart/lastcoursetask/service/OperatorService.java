@@ -51,14 +51,14 @@ public class OperatorService {
         if (!isOperatorExist(operator.getFirstName(), operator.getLastName())) {
             repository.save(operator);
         } else {
-            throw new OperatorExistException(operator.getId());
+            throw new OperatorExistException(operator.getId().toString());
         }
     }
 
     @Transactional
     public void delete(Long operatorId) {
         if (repository.existsById(operatorId)) {
-            repository.delete(mapper.mapToOperatorEntity(findById(operatorId)));
+            repository.deleteById(operatorId);
         } else {
             throw new OperatorNotFoundException(operatorId.toString());
         }

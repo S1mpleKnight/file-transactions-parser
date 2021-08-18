@@ -47,7 +47,7 @@ public class TransactionService {
     @Transactional
     public void delete(UUID transactionId) {
         if (repository.existsById(transactionId)) {
-            repository.delete(mapper.mapToTransactionEntity(findById(transactionId)));
+            repository.deleteById(transactionId);
         } else {
             throw new TransactionNotFoundException(transactionId.toString());
         }
