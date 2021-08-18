@@ -4,6 +4,7 @@ import by.itechart.lastcoursetask.dto.TransactionDTO;
 import by.itechart.lastcoursetask.exception.FileNotReadException;
 import by.itechart.lastcoursetask.parser.api.FileParser;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
+@Scope("singleton")
 @Component
 public class CSVFileParserImpl implements FileParser {
     private final static String STATUS_REGEX = "((success)|(failed)|(rejected))";
@@ -25,17 +27,6 @@ public class CSVFileParserImpl implements FileParser {
     private final static String TIMEZONE_OFFSET = "+02:00";
     private final static String SUCCESS_STATUS = "success";
     private final static String DELIMITER = ",";
-    private static CSVFileParserImpl parser;
-
-    private CSVFileParserImpl() {
-    }
-
-    public static CSVFileParserImpl getInstance() {
-        if (parser == null) {
-            parser = new CSVFileParserImpl();
-        }
-        return parser;
-    }
 
     @Override
     public List<TransactionDTO> parse(File file) {

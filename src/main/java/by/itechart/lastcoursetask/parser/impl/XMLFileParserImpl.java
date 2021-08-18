@@ -5,6 +5,8 @@ import by.itechart.lastcoursetask.exception.FileNotReadException;
 import by.itechart.lastcoursetask.handler.SAXHandler;
 import by.itechart.lastcoursetask.parser.api.FileParser;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -17,20 +19,9 @@ import java.io.IOException;
 import java.util.List;
 
 @Slf4j
+@Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Component
 public class XMLFileParserImpl implements FileParser {
-    private static XMLFileParserImpl parser;
-
-    private XMLFileParserImpl() {
-    }
-
-    public static XMLFileParserImpl getInstance() {
-        if (parser == null) {
-            parser = new XMLFileParserImpl();
-        }
-        return parser;
-    }
-
     @Override
     public List<TransactionDTO> parse(File file) {
         SAXParserFactory spf = SAXParserFactory.newInstance();
