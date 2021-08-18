@@ -19,7 +19,9 @@ import java.util.stream.Stream;
 @Slf4j
 @Component
 public class CSVFileParserImpl implements FileParser {
-    private final static String VALID_REGEX = "[0-9]{10,},([0-9a-z-]{36},){2}[0-9]+,[a-z]{3},[a-z]{6,8}";
+    private final static String STATUS_REGEX = "((success)|(failed)|(rejected))";
+    private final static String UUID_REGEX = "[0-9a-z]{8}-([0-9a-z]{4}-){3}[0-9a-z]{12}";
+    private final static String VALID_REGEX = "[0-9]{10,},(" + UUID_REGEX + ",){2}[0-9]+,[a-z]{3}," + STATUS_REGEX;
     private final static String TIMEZONE_OFFSET = "+02:00";
     private final static String SUCCESS_STATUS = "success";
     private final static String DELIMITER = ",";
@@ -39,8 +41,11 @@ public class CSVFileParserImpl implements FileParser {
     public List<TransactionDTO> parse(File file) {
         log.info("Parsing CSV file");
         List<String> fileStrings = getText(file);
-        List<String> validStrings = getValidStrings(fileStrings);
-        return getTransactionDTOs(validStrings);
+        if (isDataValid(fileStrings)) {
+            return getTransactionDTOs(fileStrings);
+        } else {
+            throw new FileNotReadException(file.getAbsolutePath());
+        }
     }
 
     private List<TransactionDTO> getTransactionDTOs(List<String> validStrings) {
@@ -72,10 +77,10 @@ public class CSVFileParserImpl implements FileParser {
         return LocalDateTime.ofEpochSecond(time, 0, ZoneOffset.of(TIMEZONE_OFFSET)).toString();
     }
 
-    private List<String> getValidStrings(List<String> text) {
+    private Boolean isDataValid(List<String> text) {
         return text.stream()
-                .filter(line -> line.matches(VALID_REGEX))
-                .collect(Collectors.toList());
+                .filter(line -> !line.matches(VALID_REGEX))
+                .toList().size() == 0;
     }
 
     private List<String> getText(File file) {

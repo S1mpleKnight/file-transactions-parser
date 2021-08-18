@@ -4,6 +4,7 @@ import by.itechart.lastcoursetask.dto.TransactionDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import java.util.ArrayList;
@@ -26,6 +27,11 @@ public class SAXHandler extends DefaultHandler {
     private final static String TRANSACTION_TAG = "transaction";
     private final static String TRANSACTIONS_TAG = "transactions";
     private final static String SUCCESS_TRANSACTION_STATUS = "COMPLETE";
+    private final static String DATE_TIME_REGEX = "[0-9]{4}(-[0-9]{2}){2} ([0-9]{2}:){2}[0-9]{2}";
+    private final static String STATUS_REGEX = "((complete)|(failure))";
+    private final static String CURRENCY_REGEX = "[a-z]{3}";
+    private final static String AMOUNT_REGEX = "[0-9 ]+";
+    private final static String ID_REGEX = "[0-9a-z]{8}-([0-9a-z]{4}-){3}[0-9a-z]{12}";
 
     private List<TransactionDTO> transactionsList;
     private TransactionDTO transactionDTO;
@@ -72,7 +78,7 @@ public class SAXHandler extends DefaultHandler {
     }
 
     @Override
-    public void characters(char[] ch, int start, int length) {
+    public void characters(char[] ch, int start, int length) throws SAXException {
         String data = new String(ch, start, length);
         if (data.contains("<") || currentTag == null) {
             return;
@@ -80,7 +86,7 @@ public class SAXHandler extends DefaultHandler {
         manipulateData(data);
     }
 
-    private void manipulateData(String data) {
+    private void manipulateData(String data) throws SAXException {
         trySetID(data);
         trySetAmount(data);
         trySetCurrency(data);
@@ -88,37 +94,61 @@ public class SAXHandler extends DefaultHandler {
         trySetDateTime(data);
     }
 
-    private void trySetDateTime(String data) {
+    private void trySetDateTime(String data) throws SAXException {
         if (currentTag.equals(TIMESTAMP_TAG)) {
-            this.transactionDTO.setDateTime(data);
-        }
-    }
-
-    private void trySetStatus(String data) {
-        if (currentTag.equals(STATUS_TAG)) {
-            this.transactionDTO.setStatus(data.equals(SUCCESS_TRANSACTION_STATUS));
-        }
-    }
-
-    private void trySetCurrency(String data) {
-        if (currentTag.equals(CURRENCY_TAG)) {
-            this.transactionDTO.setCurrency(data.toLowerCase());
-        }
-    }
-
-    private void trySetAmount(String data) {
-        if (currentTag.equals(AMOUNT_TAG)) {
-            this.transactionDTO.setAmount(String.join("", data.split(" ")));
-        }
-    }
-
-    private void trySetID(String data) {
-        if (currentTag.equals(ID_TAG)) {
-            if (isTransactionId) {
-                this.transactionDTO.setTransactionId(data);
+            if (data.matches(DATE_TIME_REGEX)) {
+                this.transactionDTO.setDateTime(data);
             } else {
-                this.transactionDTO.setCustomerId(data);
+                throw new SAXException("Invalid date/time value: " + data);
             }
+        }
+    }
+
+    private void trySetStatus(String data) throws SAXException {
+        if (currentTag.equals(STATUS_TAG)) {
+            if (data.toLowerCase().matches(STATUS_REGEX)) {
+                this.transactionDTO.setStatus(data.equals(SUCCESS_TRANSACTION_STATUS));
+            } else {
+                throw new SAXException("Invalid status value: " + data);
+            }
+        }
+    }
+
+    private void trySetCurrency(String data) throws SAXException {
+        if (currentTag.equals(CURRENCY_TAG)) {
+            if (data.toLowerCase().matches(CURRENCY_REGEX)) {
+                this.transactionDTO.setCurrency(data.toLowerCase());
+            } else {
+                throw new SAXException("Invalid currency name: " + data);
+            }
+        }
+    }
+
+    private void trySetAmount(String data) throws SAXException {
+        if (currentTag.equals(AMOUNT_TAG)) {
+            if (data.matches(AMOUNT_REGEX)) {
+                this.transactionDTO.setAmount(String.join("", data.split(" ")));
+            } else {
+                throw new SAXException("Invalid amount: " + data);
+            }
+        }
+    }
+
+    private void trySetID(String data) throws SAXException {
+        if (currentTag.equals(ID_TAG)) {
+            if (data.matches(ID_REGEX)) {
+                fillTransaction(data);
+            } else {
+                throw new SAXException("Invalid id: " + data);
+            }
+        }
+    }
+
+    private void fillTransaction(String data) {
+        if (isTransactionId) {
+            this.transactionDTO.setTransactionId(data);
+        } else {
+            this.transactionDTO.setCustomerId(data);
         }
     }
 }
