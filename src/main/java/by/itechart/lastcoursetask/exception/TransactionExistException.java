@@ -1,14 +1,9 @@
 package by.itechart.lastcoursetask.exception;
 
 public class TransactionExistException extends RuntimeException {
-    private final String id;
 
-    public TransactionExistException(String id) {
-        this.id = id;
+    public TransactionExistException(String message) {
+        super("Transaction is already exist: " + message);
     }
 
-    @Override
-    public String getMessage() {
-        return "Transaction is already exist: " + id;
-    }
 }
