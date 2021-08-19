@@ -28,6 +28,9 @@ public class CSVFileParserImpl implements FileParser {
     private final static String SUCCESS_STATUS = "success";
     private final static String DELIMITER = ",";
 
+    CSVFileParserImpl() {
+    }
+
     @Override
     public List<TransactionDTO> parse(File file) {
         log.info("Parsing CSV file");

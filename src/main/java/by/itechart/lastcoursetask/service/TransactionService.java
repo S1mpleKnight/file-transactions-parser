@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -61,6 +62,13 @@ public class TransactionService {
             repository.save(transaction);
         } else {
             throw new TransactionExistException(transactionDTO.getTransactionId());
+        }
+    }
+
+    @Transactional
+    public void saveAll(Collection<TransactionDTO> transactions, OperatorDTO operatorDTO) {
+        for (TransactionDTO transactionDTO : transactions) {
+            save(transactionDTO, operatorDTO);
         }
     }
 

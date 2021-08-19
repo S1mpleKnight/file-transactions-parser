@@ -22,6 +22,9 @@ import java.util.List;
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Component
 public class XMLFileParserImpl implements FileParser {
+    XMLFileParserImpl() {
+    }
+
     @Override
     public List<TransactionDTO> parse(File file) {
         SAXParserFactory spf = SAXParserFactory.newInstance();
