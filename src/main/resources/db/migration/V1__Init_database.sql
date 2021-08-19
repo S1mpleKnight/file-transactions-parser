@@ -18,7 +18,7 @@ create table operator
         foreign key (role_id) references role (id)
 );
 
-create table transaction
+create table transactions
 (
     id                  varchar(36)  not null
         primary key,
@@ -30,6 +30,8 @@ create table transaction
     customer_last_name  varchar(30)  null,
     customer_email      varchar(256) null,
     date_time           timestamp    not null,
-    operator_id         int(11)       null
+    operator_id         int(11)      null,
+    constraint transactions_operator_id_fk
+        foreign key (operator_id) references operator (id)
+           on update cascade on delete set null
 );
-

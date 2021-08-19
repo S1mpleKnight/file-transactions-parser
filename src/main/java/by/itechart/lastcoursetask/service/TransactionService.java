@@ -5,6 +5,7 @@ import by.itechart.lastcoursetask.dto.TransactionDTO;
 import by.itechart.lastcoursetask.entity.Transaction;
 import by.itechart.lastcoursetask.exception.TransactionExistException;
 import by.itechart.lastcoursetask.exception.TransactionNotFoundException;
+import by.itechart.lastcoursetask.repository.OperatorRepository;
 import by.itechart.lastcoursetask.repository.TransactionRepository;
 import by.itechart.lastcoursetask.util.EntityMapper;
 import lombok.AllArgsConstructor;
@@ -21,34 +22,39 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class TransactionService {
-    private final TransactionRepository repository;
+    private final OperatorRepository operatorRepository;
+    private final TransactionRepository transactionRepository;
     private final EntityMapper mapper;
 
     public Set<TransactionDTO> findAll() {
-        Set<Transaction> transactions = new HashSet<>();
-        repository.findAll().forEach(transactions::add);
+        Set<Transaction> transactions = new HashSet<>(transactionRepository.findAll());
         return getTransactionDTOSet(transactions);
     }
 
     public TransactionDTO findById(UUID id) {
-        return repository.findById(id).map(mapper::mapToTransactionDTO)
+        return transactionRepository.findById(id).map(mapper::mapToTransactionDTO)
                 .orElseThrow(() -> new TransactionNotFoundException(id.toString()));
     }
 
     public Set<TransactionDTO> findByCustomerId(UUID customerId) {
-        Set<Transaction> transactions = repository.findByCustomerId(customerId);
+        Set<Transaction> transactions = transactionRepository.findByCustomerId(customerId);
         return getTransactionDTOSet(transactions);
     }
 
     public Set<TransactionDTO> findByDateAndTime(LocalDateTime dateTime) {
-        Set<Transaction> transactions = repository.findByDateTime(dateTime);
+        Set<Transaction> transactions = transactionRepository.findByDateTime(dateTime);
+        return getTransactionDTOSet(transactions);
+    }
+
+    public Set<TransactionDTO> findByOperatorId(Long id) {
+        Set<Transaction> transactions = transactionRepository.findByOperator_Id(id);
         return getTransactionDTOSet(transactions);
     }
 
     @Transactional
     public void delete(UUID transactionId) {
-        if (repository.existsById(transactionId)) {
-            repository.deleteById(transactionId);
+        if (transactionRepository.existsById(transactionId)) {
+            transactionRepository.deleteById(transactionId);
         } else {
             throw new TransactionNotFoundException(transactionId.toString());
         }
@@ -59,7 +65,7 @@ public class TransactionService {
         if (!isTransactionExist(transactionDTO.getTransactionId())) {
             Transaction transaction = mapper.mapToTransactionEntity(transactionDTO);
             transaction.setOperator(mapper.mapToOperatorEntity(operatorDTO));
-            repository.save(transaction);
+            transactionRepository.save(transaction);
         } else {
             throw new TransactionExistException(transactionDTO.getTransactionId());
         }
@@ -74,18 +80,28 @@ public class TransactionService {
 
     @Transactional
     public void update(UUID oldTransactionId, TransactionDTO newTransaction) {
-        if (repository.existsById(oldTransactionId)) {
+        if (transactionRepository.existsById(oldTransactionId)) {
             Transaction transaction = mapper.mapToTransactionEntity(newTransaction);
             transaction.setId(oldTransactionId);
-            transaction.setOperator(repository.findById(oldTransactionId).get().getOperator());
-            repository.save(transaction);
+            transaction.setOperator(transactionRepository.getById(oldTransactionId).getOperator());
+            transactionRepository.save(transaction);
+        } else {
+            throw new TransactionNotFoundException(oldTransactionId.toString());
+        }
+    }
+
+    @Transactional
+    public void updateOperator(UUID oldTransactionId, Long operatorId) {
+        if (transactionRepository.existsById(oldTransactionId)) {
+            Transaction transaction = transactionRepository.getById(oldTransactionId);
+            transaction.setOperator(operatorRepository.getById(operatorId));
         } else {
             throw new TransactionNotFoundException(oldTransactionId.toString());
         }
     }
 
     private boolean isTransactionExist(String transactionUUID) {
-        return repository.findById(UUID.fromString(transactionUUID)).isPresent();
+        return transactionRepository.findById(UUID.fromString(transactionUUID)).isPresent();
     }
 
     private Set<TransactionDTO> getTransactionDTOSet(Set<Transaction> transactions) {

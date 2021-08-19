@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -22,6 +23,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @NoArgsConstructor
+@Table(name = "transactions")
 public class Transaction {
     @Id
     @Column(name = "id")
@@ -33,9 +35,6 @@ public class Transaction {
     @Column(name = "customer_id")
     @Type(type = "uuid-char")
     private UUID customerId;
-    private String customerFirstName;
-    private String customerLastName;
-    private String customerEmail;
     private LocalDateTime dateTime;
     @ManyToOne
     private Operator operator;
@@ -45,11 +44,11 @@ public class Transaction {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Transaction that = (Transaction) o;
-        return Objects.equals(id, that.id) && Objects.equals(status, that.status) && Objects.equals(amount, that.amount) && Objects.equals(currency, that.currency) && Objects.equals(customerId, that.customerId) && Objects.equals(customerFirstName, that.customerFirstName) && Objects.equals(customerLastName, that.customerLastName) && Objects.equals(customerEmail, that.customerEmail) && Objects.equals(dateTime, that.dateTime) && Objects.equals(operator, that.operator);
+        return Objects.equals(id, that.id) && Objects.equals(status, that.status) && Objects.equals(amount, that.amount) && Objects.equals(currency, that.currency) && Objects.equals(customerId, that.customerId) && Objects.equals(dateTime, that.dateTime) && Objects.equals(operator, that.operator);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, status, amount, currency, customerId, customerFirstName, customerLastName, customerEmail, dateTime, operator);
+        return Objects.hash(id, status, amount, currency, customerId, dateTime, operator);
     }
 }

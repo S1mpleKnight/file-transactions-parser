@@ -13,12 +13,12 @@ create table operator
     last_name  varchar(30) not null,
     nickname   varchar(15) not null,
     password   varchar(50) not null,
-    role_id    bigint not null,
+    role_id    bigint      not null,
     constraint operator_role_id_fk
         foreign key (role_id) references role (id)
 );
 
-create table transaction
+create table transactions
 (
     id                  varchar(36)  not null
         primary key,
@@ -30,7 +30,10 @@ create table transaction
     customer_last_name  varchar(30)  null,
     customer_email      varchar(256) null,
     date_time           timestamp    not null,
-    operator_id         bigint  null
+    operator_id         bigint       null,
+    constraint transactions_operator_id_fk
+        foreign key (operator_id) references operator (id)
+            on update cascade on delete set null
 );
 
 INSERT INTO role (id, name)
@@ -46,7 +49,7 @@ VALUES
     (4,'Misha', 'Prostak', 'genius', '654321ytrewq', 2),
     (5,'Boss', 'Galaxy', 'admin', 'zmpqksjdp', 1);
 
-INSERT INTO transaction
+INSERT INTO transactions
 (date_time,id,customer_id,amount,currency,status,operator_id)
 VALUES
     (parsedatetime('29.04.2021 08:29:14', 'dd.MM.yyyy HH:mm:ss'),'1c22f114-8251-404e-8c3f-73b70bd0ec80','a00a7fb0-3a72-454d-865d-8f6818f8dd62',34623,'usd',true, 1),

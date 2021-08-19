@@ -6,9 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,7 +34,7 @@ public class Operator {
     @JoinColumn(name = "role_id")
     private Role role;
     @ToString.Exclude
-    @OneToMany(mappedBy = "operator", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "operator")
     private Set<Transaction> transactions;
 
     @Override

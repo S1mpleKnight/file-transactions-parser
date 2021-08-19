@@ -1,6 +1,7 @@
 package by.itechart.lastcoursetask.service;
 
 import by.itechart.lastcoursetask.dto.OperatorDTO;
+import by.itechart.lastcoursetask.dto.TransactionDTO;
 import by.itechart.lastcoursetask.entity.Operator;
 import by.itechart.lastcoursetask.exception.OperatorExistException;
 import by.itechart.lastcoursetask.exception.OperatorNotFoundException;
@@ -12,17 +13,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class OperatorService {
+    private static final Long ADMIN_ID = 1L;
+    private final TransactionService transactionService;
     private final OperatorRepository repository;
     private final EntityMapper mapper;
 
     public Set<OperatorDTO> findAll() {
-        Set<Operator> operators = new HashSet<>();
-        repository.findAll().forEach(operators::add);
+        Set<Operator> operators = new HashSet<>(repository.findAll());
         return operators.stream().map(mapper::mapToOperatorDTO).collect(Collectors.toSet());
     }
 
@@ -58,7 +61,11 @@ public class OperatorService {
     @Transactional
     public void delete(Long operatorId) {
         if (repository.existsById(operatorId)) {
+            Set<TransactionDTO> transactionDTOs = transactionService.findByOperatorId(operatorId);
             repository.deleteById(operatorId);
+            for (TransactionDTO transaction : transactionDTOs) {
+                transactionService.updateOperator(UUID.fromString(transaction.getTransactionId()), ADMIN_ID);
+            }
         } else {
             throw new OperatorNotFoundException(operatorId.toString());
         }

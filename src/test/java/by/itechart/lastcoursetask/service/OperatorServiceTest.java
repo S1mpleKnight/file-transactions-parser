@@ -15,10 +15,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 class OperatorServiceTest {
     private static final Long OPERATOR_DTO_ID_UPDATE = 4L;
-    private static final Long OPERATOR_DTO_ID_DELETE = 5L;
+    private static final Long OPERATOR_DTO_ID_DELETE = 3L;
     private static final Long OPERATOR_DTO_ID_SAVE = 3L;
     @Autowired
     private OperatorService operatorService;
+    @Autowired
+    private TransactionService transactionService;
 
     @Test
     void findAllSizeNotNullTrue() {
@@ -57,6 +59,7 @@ class OperatorServiceTest {
     void deleteOperatorSuccess() {
         //todo: поставь 3ку для взлома жёпы
         Assertions.assertDoesNotThrow(() -> operatorService.delete(OPERATOR_DTO_ID_DELETE));
+        System.out.println(transactionService.findByOperatorId(1L));
     }
 
     private OperatorDTO createOperatorDTO(String name, String role, String nickname) {
