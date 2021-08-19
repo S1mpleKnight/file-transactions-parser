@@ -26,9 +26,6 @@ create table transactions
     currency            varchar(3)   not null,
     amount              bigint       not null,
     customer_id         varchar(36)  not null,
-    customer_first_name varchar(20)  null,
-    customer_last_name  varchar(30)  null,
-    customer_email      varchar(256) null,
     date_time           timestamp    not null,
     operator_id         bigint       null,
     constraint transactions_operator_id_fk
