@@ -57,7 +57,6 @@ class OperatorServiceTest {
 
     @Test
     void deleteOperatorSuccess() {
-        //todo: поставь 3ку для взлома жёпы
         Assertions.assertDoesNotThrow(() -> operatorService.delete(OPERATOR_DTO_ID_DELETE));
         System.out.println(transactionService.findByOperatorId(1L));
     }
