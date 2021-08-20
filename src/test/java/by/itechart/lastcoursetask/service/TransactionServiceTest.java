@@ -1,7 +1,7 @@
 package by.itechart.lastcoursetask.service;
 
-import by.itechart.lastcoursetask.dto.OperatorDTO;
-import by.itechart.lastcoursetask.dto.TransactionDTO;
+import by.itechart.lastcoursetask.dto.OperatorDto;
+import by.itechart.lastcoursetask.dto.TransactionDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -47,15 +47,15 @@ class TransactionServiceTest {
 
     @Test
     void saveTransactionFail() {
-        TransactionDTO transactionDTO = createTransaction("1c22f114-8251-404e-8c3f-73b70bd0ec80", "a00a7fb0-3a72-454d-865d-8f6818f8dd62");
-        OperatorDTO operatorDTO = operatorService.findById(1L);
+        TransactionDto transactionDTO = createTransaction("1c22f114-8251-404e-8c3f-73b70bd0ec80", "a00a7fb0-3a72-454d-865d-8f6818f8dd62");
+        OperatorDto operatorDTO = operatorService.findById(1L);
         assertThrows(IllegalArgumentException.class, () -> transactionService.save(transactionDTO, operatorDTO));
     }
 
     @Test
     void updateTransactionSuccess() {
-        TransactionDTO newTransactionDTO = createTransaction("4f9a9605-bd78-4b35-aa10-9f1e0407d03c", "31d1b033-08a3-4755-b9ab-1475092548fc");
-        assertDoesNotThrow(() -> transactionService.update(UUID.fromString("1c22f114-8251-404e-8c3f-73b70bd0ec80"), newTransactionDTO));
+        TransactionDto newTransactionDto = createTransaction("4f9a9605-bd78-4b35-aa10-9f1e0407d03c", "31d1b033-08a3-4755-b9ab-1475092548fc");
+        assertDoesNotThrow(() -> transactionService.update(UUID.fromString("1c22f114-8251-404e-8c3f-73b70bd0ec80"), newTransactionDto));
     }
 
     @Test
@@ -63,8 +63,8 @@ class TransactionServiceTest {
         assertDoesNotThrow(() -> transactionService.delete(UUID.fromString("b54ca174-03f1-4a87-a1f2-dee732a8b754")));
     }
 
-    private TransactionDTO createTransaction(String transactionId, String customerId) {
-        TransactionDTO transactionDTO = new TransactionDTO();
+    private TransactionDto createTransaction(String transactionId, String customerId) {
+        TransactionDto transactionDTO = new TransactionDto();
         transactionDTO.setStatus(true);
         transactionDTO.setCurrency("usd");
         transactionDTO.setAmount("123123");

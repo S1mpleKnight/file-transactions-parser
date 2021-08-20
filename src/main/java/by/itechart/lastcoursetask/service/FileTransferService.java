@@ -1,6 +1,6 @@
 package by.itechart.lastcoursetask.service;
 
-import by.itechart.lastcoursetask.dto.TransactionDTO;
+import by.itechart.lastcoursetask.dto.TransactionDto;
 import by.itechart.lastcoursetask.exception.FileNotReadException;
 import by.itechart.lastcoursetask.exception.InvalidFileExtensionException;
 import by.itechart.lastcoursetask.parser.api.FileParser;
@@ -29,14 +29,14 @@ public class FileTransferService {
         File loadedFile = storeFile(file);
         String filenameExtension = checkCSVExtension(getFilenameExtension(loadedFile));
         if (filenameExtension != null) {
-            List<TransactionDTO> transactions = readTransactions(loadedFile, filenameExtension);
+            List<TransactionDto> transactions = readTransactions(loadedFile, filenameExtension);
             transactionService.saveAll(transactions, operatorService.findById(id));
         } else {
             throw new InvalidFileExtensionException(file.getOriginalFilename());
         }
     }
 
-    private List<TransactionDTO> readTransactions(File loadedFile, String filenameExtension) {
+    private List<TransactionDto> readTransactions(File loadedFile, String filenameExtension) {
         FileParser parser = FileParserFactory.getParser(filenameExtension);
         return parser.parse(loadedFile);
     }

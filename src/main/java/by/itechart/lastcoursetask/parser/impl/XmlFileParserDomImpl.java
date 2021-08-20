@@ -1,6 +1,6 @@
 package by.itechart.lastcoursetask.parser.impl;
 
-import by.itechart.lastcoursetask.dto.TransactionDTO;
+import by.itechart.lastcoursetask.dto.TransactionDto;
 import by.itechart.lastcoursetask.parser.api.FileParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -23,7 +23,7 @@ import java.util.List;
 @Slf4j
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Component
-public class XMLFileParserImpl2 implements FileParser {
+public class XmlFileParserDomImpl implements FileParser {
     private final static String SUCCESS_TRANSACTION_STATUS = "COMPLETE";
     private final static String DATE_TIME_REGEX = "[0-9]{4}(-[0-9]{2}){2} ([0-9]{2}:){2}[0-9]{2}";
     private final static String STATUS_REGEX = "((complete)|(failure))";
@@ -40,9 +40,9 @@ public class XMLFileParserImpl2 implements FileParser {
     private final static int CURRENCY_TAG_POS = 1;
     private final static int STATUS_TAG_POS = 4;
     private final List<String> invalidDataMessages;
-    private TransactionDTO transactionDTO;
+    private TransactionDto transactionDTO;
 
-    XMLFileParserImpl2() {
+    XmlFileParserDomImpl() {
         this.invalidDataMessages = new ArrayList<>();
     }
 
@@ -52,7 +52,7 @@ public class XMLFileParserImpl2 implements FileParser {
     }
 
     @Override
-    public List<TransactionDTO> parse(File file) {
+    public List<TransactionDto> parse(File file) {
         DocumentBuilderFactory factory = prepareParser();
         try {
             Document document = getDocument(file, factory);
@@ -75,17 +75,17 @@ public class XMLFileParserImpl2 implements FileParser {
         return DocumentBuilderFactory.newInstance();
     }
 
-    private List<TransactionDTO> getTransactions(NodeList nodeList) {
-        List<TransactionDTO> transactions = new ArrayList<>();
+    private List<TransactionDto> getTransactions(NodeList nodeList) {
+        List<TransactionDto> transactions = new ArrayList<>();
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node node = nodeList.item(i);
-            this.transactionDTO = new TransactionDTO();
+            this.transactionDTO = new TransactionDto();
             addTransaction(transactions, node);
         }
         return transactions;
     }
 
-    private void addTransaction(List<TransactionDTO> transactions, Node node) {
+    private void addTransaction(List<TransactionDto> transactions, Node node) {
         try {
             tryFillTransaction(node);
             transactions.add(this.transactionDTO);

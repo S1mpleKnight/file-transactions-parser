@@ -1,7 +1,7 @@
 package by.itechart.lastcoursetask.service;
 
-import by.itechart.lastcoursetask.dto.OperatorDTO;
-import by.itechart.lastcoursetask.dto.TransactionDTO;
+import by.itechart.lastcoursetask.dto.OperatorDto;
+import by.itechart.lastcoursetask.dto.TransactionDto;
 import by.itechart.lastcoursetask.entity.Transaction;
 import by.itechart.lastcoursetask.exception.TransactionExistException;
 import by.itechart.lastcoursetask.exception.TransactionNotFoundException;
@@ -26,27 +26,27 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final EntityMapper mapper;
 
-    public Set<TransactionDTO> findAll() {
+    public Set<TransactionDto> findAll() {
         Set<Transaction> transactions = new HashSet<>(transactionRepository.findAll());
         return getTransactionDTOSet(transactions);
     }
 
-    public TransactionDTO findById(UUID id) {
+    public TransactionDto findById(UUID id) {
         return transactionRepository.findById(id).map(mapper::mapToTransactionDTO)
                 .orElseThrow(() -> new TransactionNotFoundException(id.toString()));
     }
 
-    public Set<TransactionDTO> findByCustomerId(UUID customerId) {
+    public Set<TransactionDto> findByCustomerId(UUID customerId) {
         Set<Transaction> transactions = transactionRepository.findByCustomerId(customerId);
         return getTransactionDTOSet(transactions);
     }
 
-    public Set<TransactionDTO> findByDateAndTime(LocalDateTime dateTime) {
+    public Set<TransactionDto> findByDateAndTime(LocalDateTime dateTime) {
         Set<Transaction> transactions = transactionRepository.findByDateTime(dateTime);
         return getTransactionDTOSet(transactions);
     }
 
-    public Set<TransactionDTO> findByOperatorId(Long id) {
+    public Set<TransactionDto> findByOperatorId(Long id) {
         Set<Transaction> transactions = transactionRepository.findByOperator_Id(id);
         return getTransactionDTOSet(transactions);
     }
@@ -61,7 +61,7 @@ public class TransactionService {
     }
 
     @Transactional
-    public void save(TransactionDTO transactionDTO, OperatorDTO operatorDTO) {
+    public void save(TransactionDto transactionDTO, OperatorDto operatorDTO) {
         if (!isTransactionExist(transactionDTO.getTransactionId())) {
             Transaction transaction = mapper.mapToTransactionEntity(transactionDTO);
             transaction.setOperator(mapper.mapToOperatorEntity(operatorDTO));
@@ -72,14 +72,14 @@ public class TransactionService {
     }
 
     @Transactional
-    public void saveAll(Collection<TransactionDTO> transactions, OperatorDTO operatorDTO) {
-        for (TransactionDTO transactionDTO : transactions) {
+    public void saveAll(Collection<TransactionDto> transactions, OperatorDto operatorDTO) {
+        for (TransactionDto transactionDTO : transactions) {
             save(transactionDTO, operatorDTO);
         }
     }
 
     @Transactional
-    public void update(UUID oldTransactionId, TransactionDTO newTransaction) {
+    public void update(UUID oldTransactionId, TransactionDto newTransaction) {
         if (transactionRepository.existsById(oldTransactionId)) {
             Transaction transaction = mapper.mapToTransactionEntity(newTransaction);
             transaction.setId(oldTransactionId);
@@ -104,7 +104,7 @@ public class TransactionService {
         return transactionRepository.findById(UUID.fromString(transactionUUID)).isPresent();
     }
 
-    private Set<TransactionDTO> getTransactionDTOSet(Set<Transaction> transactions) {
+    private Set<TransactionDto> getTransactionDTOSet(Set<Transaction> transactions) {
         return transactions.stream().map(mapper::mapToTransactionDTO).collect(Collectors.toSet());
     }
 }

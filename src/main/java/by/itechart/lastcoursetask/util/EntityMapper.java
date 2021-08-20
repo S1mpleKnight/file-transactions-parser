@@ -1,7 +1,7 @@
 package by.itechart.lastcoursetask.util;
 
-import by.itechart.lastcoursetask.dto.OperatorDTO;
-import by.itechart.lastcoursetask.dto.TransactionDTO;
+import by.itechart.lastcoursetask.dto.OperatorDto;
+import by.itechart.lastcoursetask.dto.TransactionDto;
 import by.itechart.lastcoursetask.entity.Operator;
 import by.itechart.lastcoursetask.entity.Role;
 import by.itechart.lastcoursetask.entity.Transaction;
@@ -22,8 +22,8 @@ public class EntityMapper {
     private final static Long BASIC_OPERATOR_ROLE_POSITION = 2L;
     private final RoleService service;
 
-    public OperatorDTO mapToOperatorDTO(Operator operator) {
-        OperatorDTO operatorDTO = new OperatorDTO();
+    public OperatorDto mapToOperatorDTO(Operator operator) {
+        OperatorDto operatorDTO = new OperatorDto();
         operatorDTO.setId(operator.getId());
         operatorDTO.setFirstName(operator.getFirstName());
         operatorDTO.setLastName(operator.getLastName());
@@ -33,7 +33,7 @@ public class EntityMapper {
         return operatorDTO;
     }
 
-    public Operator mapToOperatorEntity(OperatorDTO operatorDTO) {
+    public Operator mapToOperatorEntity(OperatorDto operatorDTO) {
         Operator operator = new Operator();
         operator.setId(operatorDTO.getId());
         operator.setFirstName(operatorDTO.getFirstName());
@@ -44,8 +44,8 @@ public class EntityMapper {
         return operator;
     }
 
-    public TransactionDTO mapToTransactionDTO(Transaction transaction) {
-        TransactionDTO transactionDTO = new TransactionDTO();
+    public TransactionDto mapToTransactionDTO(Transaction transaction) {
+        TransactionDto transactionDTO = new TransactionDto();
         transactionDTO.setTransactionId(transaction.getId().toString());
         transactionDTO.setCustomerId(transaction.getCustomerId().toString());
         transactionDTO.setAmount(transaction.getAmount().toString());
@@ -55,7 +55,7 @@ public class EntityMapper {
         return transactionDTO;
     }
 
-    public Transaction mapToTransactionEntity(TransactionDTO transactionDTO) {
+    public Transaction mapToTransactionEntity(TransactionDto transactionDTO) {
         Transaction transaction = new Transaction();
         transaction.setId(UUID.fromString(transactionDTO.getTransactionId()));
         transaction.setCustomerId(UUID.fromString(transactionDTO.getCustomerId()));

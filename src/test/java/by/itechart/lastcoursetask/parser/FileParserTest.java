@@ -1,6 +1,6 @@
 package by.itechart.lastcoursetask.parser;
 
-import by.itechart.lastcoursetask.dto.TransactionDTO;
+import by.itechart.lastcoursetask.dto.TransactionDto;
 import by.itechart.lastcoursetask.parser.api.FileParser;
 import by.itechart.lastcoursetask.parser.impl.FileParserFactory;
 import org.junit.jupiter.api.Test;
@@ -26,19 +26,19 @@ class FileParserTest {
     void parseCSVSuccess() {
         File file = new File(CSV_FILE_PATH);
         FileParser fileParser = FileParserFactory.getParser(CSV_EXTENSION);
-        List<TransactionDTO> transactionDTOs = fileParser.parse(file);
-        System.out.println(transactionDTOs);
+        List<TransactionDto> transactionDtos = fileParser.parse(file);
+        System.out.println(transactionDtos);
         System.out.println(fileParser.getInvalidTransactionsData());
-        assertNotEquals(0, transactionDTOs.size());
+        assertNotEquals(0, transactionDtos.size());
     }
 
     @Test
     void parseXMLSuccess() {
         File file = new File(XML_FILE_PATH);
         FileParser fileParser = FileParserFactory.getParser(XML_EXTENSION);
-        List<TransactionDTO> transactionDTOs = fileParser.parse(file);
-        System.out.println(transactionDTOs);
+        List<TransactionDto> transactionDtos = fileParser.parse(file);
+        System.out.println(transactionDtos);
         System.out.println(fileParser.getInvalidTransactionsData());
-        assertNotEquals(0, transactionDTOs.size());
+        assertNotEquals(0, transactionDtos.size());
     }
 }

@@ -11,12 +11,11 @@ public class FileParserFactory {
 
     public static FileParser getParser(String filenameExtension) {
         if (filenameExtension.equals(CSV_EXTENSION)) {
-            return new CSVFileParserImpl();
+            return new CsvFileParserImpl();
         }
         if (filenameExtension.equals(XML_EXTENSION)) {
-            return new XMLFileParserImpl2();
+            return new XmlFileParserDomImpl();
         }
         throw new InvalidFileExtensionException(filenameExtension);
     }
-
 }

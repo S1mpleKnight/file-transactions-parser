@@ -1,7 +1,7 @@
 package by.itechart.lastcoursetask.service;
 
-import by.itechart.lastcoursetask.dto.OperatorDTO;
-import by.itechart.lastcoursetask.dto.TransactionDTO;
+import by.itechart.lastcoursetask.dto.OperatorDto;
+import by.itechart.lastcoursetask.dto.TransactionDto;
 import by.itechart.lastcoursetask.entity.Operator;
 import by.itechart.lastcoursetask.exception.OperatorExistException;
 import by.itechart.lastcoursetask.exception.OperatorNotFoundException;
@@ -24,24 +24,24 @@ public class OperatorService {
     private final OperatorRepository repository;
     private final EntityMapper mapper;
 
-    public Set<OperatorDTO> findAll() {
+    public Set<OperatorDto> findAll() {
         Set<Operator> operators = new HashSet<>(repository.findAll());
         return operators.stream().map(mapper::mapToOperatorDTO).collect(Collectors.toSet());
     }
 
-    public OperatorDTO findById(Long id) {
+    public OperatorDto findById(Long id) {
         return repository.findById(id).map(mapper::mapToOperatorDTO)
                 .orElseThrow(() -> new OperatorNotFoundException(id.toString()));
     }
 
-    public OperatorDTO findByNickName(String nickname) {
+    public OperatorDto findByNickName(String nickname) {
         if (repository.existsByNickname(nickname)) {
             return mapper.mapToOperatorDTO(repository.findByNickname(nickname));
         }
         throw new OperatorNotFoundException(nickname);
     }
 
-    public OperatorDTO findByFirstNameAndLastName(String firstName, String lastName) {
+    public OperatorDto findByFirstNameAndLastName(String firstName, String lastName) {
         if (isOperatorExist(firstName, lastName)) {
             return mapper.mapToOperatorDTO(repository.findByFirstNameAndLastName(firstName, lastName));
         }
@@ -49,7 +49,7 @@ public class OperatorService {
     }
 
     @Transactional
-    public void save(OperatorDTO operatorDTO) {
+    public void save(OperatorDto operatorDTO) {
         Operator operator = mapper.mapToOperatorEntity(operatorDTO);
         if (!isOperatorExist(operator.getFirstName(), operator.getLastName())) {
             repository.save(operator);
@@ -61,9 +61,9 @@ public class OperatorService {
     @Transactional
     public void delete(Long operatorId) {
         if (repository.existsById(operatorId)) {
-            Set<TransactionDTO> transactionDTOs = transactionService.findByOperatorId(operatorId);
+            Set<TransactionDto> transactionDtos = transactionService.findByOperatorId(operatorId);
             repository.deleteById(operatorId);
-            for (TransactionDTO transaction : transactionDTOs) {
+            for (TransactionDto transaction : transactionDtos) {
                 transactionService.updateOperator(UUID.fromString(transaction.getTransactionId()), ADMIN_ID);
             }
         } else {
@@ -72,7 +72,7 @@ public class OperatorService {
     }
 
     @Transactional
-    public void update(Long operatorId, OperatorDTO newOperator) {
+    public void update(Long operatorId, OperatorDto newOperator) {
         if (repository.existsById(operatorId)) {
             Operator operator = mapper.mapToOperatorEntity(newOperator);
             operator.setId(operatorId);

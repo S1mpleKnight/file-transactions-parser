@@ -1,6 +1,6 @@
 package by.itechart.lastcoursetask.handler;
 
-import by.itechart.lastcoursetask.dto.TransactionDTO;
+import by.itechart.lastcoursetask.dto.TransactionDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.xml.sax.Attributes;
@@ -12,7 +12,7 @@ import java.util.List;
 
 @Slf4j
 @Component
-public class SAXHandler extends DefaultHandler {
+public class SaxHandler extends DefaultHandler {
     private final static String ID_TAG = "id";
     private final static String USER_TAG = "user";
     private final static String TIMESTAMP_TAG = "timestamp";
@@ -33,16 +33,16 @@ public class SAXHandler extends DefaultHandler {
     private final static String AMOUNT_REGEX = "[0-9 ]+";
     private final static String ID_REGEX = "[0-9a-z]{8}-([0-9a-z]{4}-){3}[0-9a-z]{12}";
 
-    private List<TransactionDTO> transactionsList;
-    private TransactionDTO transactionDTO;
+    private List<TransactionDto> transactionsList;
+    private TransactionDto transactionDTO;
     private Boolean isTransactionId;
     private String currentTag;
 
-    public SAXHandler() {
+    public SaxHandler() {
         this.isTransactionId = true;
     }
 
-    public List<TransactionDTO> getTransactionsList() {
+    public List<TransactionDto> getTransactionsList() {
         return this.transactionsList;
     }
 
@@ -55,7 +55,7 @@ public class SAXHandler extends DefaultHandler {
     public void startElement(String uri, String localName, String qName, Attributes attributes) {
         this.currentTag = qName;
         if (qName.equals(TRANSACTION_TAG)) {
-            this.transactionDTO = new TransactionDTO();
+            this.transactionDTO = new TransactionDto();
         }
         if (qName.equals(TRANSACTIONS_TAG)) {
             this.transactionsList = new ArrayList<>();

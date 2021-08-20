@@ -1,6 +1,6 @@
 package by.itechart.lastcoursetask.service;
 
-import by.itechart.lastcoursetask.dto.OperatorDTO;
+import by.itechart.lastcoursetask.dto.OperatorDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,14 +44,14 @@ class OperatorServiceTest {
 
     @Test
     void saveOperatorSuccess() {
-        OperatorDTO operatorDTO = createOperatorDTO("Vanya", "admin","fly");
+        OperatorDto operatorDTO = createOperatorDTO("Vanya", "admin","fly");
         operatorDTO.setId(OPERATOR_DTO_ID_SAVE);
         Assertions.assertDoesNotThrow(() -> operatorService.save(operatorDTO));
     }
 
     @Test
     void updateOperatorSuccess() {
-        OperatorDTO operatorDTO = createOperatorDTO("Muslim", "user", "suicide");
+        OperatorDto operatorDTO = createOperatorDTO("Muslim", "user", "suicide");
         Assertions.assertDoesNotThrow(() -> operatorService.update(OPERATOR_DTO_ID_UPDATE, operatorDTO));
     }
 
@@ -61,8 +61,8 @@ class OperatorServiceTest {
         System.out.println(transactionService.findByOperatorId(1L));
     }
 
-    private OperatorDTO createOperatorDTO(String name, String role, String nickname) {
-        OperatorDTO operatorDTO = new OperatorDTO();
+    private OperatorDto createOperatorDTO(String name, String role, String nickname) {
+        OperatorDto operatorDTO = new OperatorDto();
         operatorDTO.setFirstName(name);
         operatorDTO.setLastName(name);
         operatorDTO.setRole(role);

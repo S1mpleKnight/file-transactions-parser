@@ -1,8 +1,8 @@
 package by.itechart.lastcoursetask.parser.impl;
 
-import by.itechart.lastcoursetask.dto.TransactionDTO;
+import by.itechart.lastcoursetask.dto.TransactionDto;
 import by.itechart.lastcoursetask.exception.FileNotReadException;
-import by.itechart.lastcoursetask.handler.SAXHandler;
+import by.itechart.lastcoursetask.handler.SaxHandler;
 import by.itechart.lastcoursetask.parser.api.FileParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -21,14 +21,14 @@ import java.util.List;
 @Slf4j
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Component
-public class XMLFileParserImpl1 implements FileParser {
-    XMLFileParserImpl1() {
+public class XmlFileParserSaxImpl implements FileParser {
+    XmlFileParserSaxImpl() {
     }
 
     @Override
-    public List<TransactionDTO> parse(File file) {
+    public List<TransactionDto> parse(File file) {
         SAXParserFactory spf = SAXParserFactory.newInstance();
-        SAXHandler handler = new SAXHandler();
+        SaxHandler handler = new SaxHandler();
         return getTransactionDTOs(file, spf, handler);
     }
 
@@ -37,7 +37,7 @@ public class XMLFileParserImpl1 implements FileParser {
         return null;
     }
 
-    private List<TransactionDTO> getTransactionDTOs(File file, SAXParserFactory spf, SAXHandler handler) {
+    private List<TransactionDto> getTransactionDTOs(File file, SAXParserFactory spf, SaxHandler handler) {
         try {
             SAXParser saxParser = spf.newSAXParser();
             XMLReader xmlReader = saxParser.getXMLReader();

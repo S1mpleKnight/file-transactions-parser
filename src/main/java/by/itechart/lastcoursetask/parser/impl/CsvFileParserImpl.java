@@ -1,6 +1,6 @@
 package by.itechart.lastcoursetask.parser.impl;
 
-import by.itechart.lastcoursetask.dto.TransactionDTO;
+import by.itechart.lastcoursetask.dto.TransactionDto;
 import by.itechart.lastcoursetask.exception.FileNotReadException;
 import by.itechart.lastcoursetask.parser.api.FileParser;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 @Slf4j
 @Scope("singleton")
 @Component
-public class CSVFileParserImpl implements FileParser {
+public class CsvFileParserImpl implements FileParser {
     private final static String STATUS_REGEX = "((success)|(failed)|(rejected))";
     private final static String UUID_REGEX = "[0-9a-z]{8}-([0-9a-z]{4}-){3}[0-9a-z]{12}";
     private final static String VALID_REGEX = "[0-9]{10,},(" + UUID_REGEX + ",){2}[0-9]+,[a-z]{3}," + STATUS_REGEX;
@@ -30,12 +30,12 @@ public class CSVFileParserImpl implements FileParser {
     private final static String INVALID_DATA_MESSAGE = "Invalid data in line: ";
     private final List<String> invalidDataMessages;
 
-    CSVFileParserImpl() {
+    CsvFileParserImpl() {
         this.invalidDataMessages = new ArrayList<>();
     }
 
     @Override
-    public List<TransactionDTO> parse(File file) {
+    public List<TransactionDto> parse(File file) {
         log.info("Parsing CSV file");
         List<String> fileStrings = getText(file);
         this.invalidDataMessages.clear();
@@ -48,17 +48,17 @@ public class CSVFileParserImpl implements FileParser {
         return new ArrayList<>(this.invalidDataMessages);
     }
 
-    private List<TransactionDTO> getTransactionDTOs(List<String> validStrings) {
-        List<TransactionDTO> transactionDTOs = new ArrayList<>();
+    private List<TransactionDto> getTransactionDTOs(List<String> validStrings) {
+        List<TransactionDto> transactionDtos = new ArrayList<>();
         for (String data : validStrings) {
             String[] fields = data.split(DELIMITER);
-            transactionDTOs.add(createFromData(fields));
+            transactionDtos.add(createFromData(fields));
         }
-        return transactionDTOs;
+        return transactionDtos;
     }
 
-    private TransactionDTO createFromData(String[] fields) {
-        TransactionDTO transactionDTO = new TransactionDTO();
+    private TransactionDto createFromData(String[] fields) {
+        TransactionDto transactionDTO = new TransactionDto();
         transactionDTO.setDateTime(getDateTime(fields[0]));
         transactionDTO.setTransactionId(fields[1]);
         transactionDTO.setCustomerId(fields[2]);

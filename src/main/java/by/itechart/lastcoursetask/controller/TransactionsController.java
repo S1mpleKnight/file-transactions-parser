@@ -1,6 +1,6 @@
 package by.itechart.lastcoursetask.controller;
 
-import by.itechart.lastcoursetask.dto.TransactionDTO;
+import by.itechart.lastcoursetask.dto.TransactionDto;
 import by.itechart.lastcoursetask.service.TransactionService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,19 +24,19 @@ public class TransactionsController {
     private final TransactionService transactionService;
 
     @GetMapping
-    public ResponseEntity<Set<TransactionDTO>> findAll() {
+    public ResponseEntity<Set<TransactionDto>> findAll() {
         log.info("Find All");
         return ResponseEntity.ok(transactionService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TransactionDTO> findById(@PathVariable String id) {
+    public ResponseEntity<TransactionDto> findById(@PathVariable String id) {
         log.info("Find by id: " + id);
         return ResponseEntity.ok(transactionService.findById(UUID.fromString(id)));
     }
 
     @GetMapping("/customer/{id}")
-    public ResponseEntity<Set<TransactionDTO>> findByCustomerId(@PathVariable String id) {
+    public ResponseEntity<Set<TransactionDto>> findByCustomerId(@PathVariable String id) {
         log.info("Find by customer id: " + id);
         return ResponseEntity.ok(transactionService.findByCustomerId(UUID.fromString(id)));
     }
@@ -49,7 +49,7 @@ public class TransactionsController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> update(@PathVariable String id, @RequestParam TransactionDTO transactionDTO) {
+    public ResponseEntity<String> update(@PathVariable String id, @RequestParam TransactionDto transactionDTO) {
         log.info("Update id: " + id);
         transactionService.update(UUID.fromString(id), transactionDTO);
         return ResponseEntity.ok("Transaction was successfully updated");
