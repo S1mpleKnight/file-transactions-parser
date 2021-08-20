@@ -16,6 +16,7 @@ create table operator
     role_id    bigint      not null,
     constraint operator_role_id_fk
         foreign key (role_id) references role (id)
+            on update cascade on delete cascade
 );
 
 create table transactions
