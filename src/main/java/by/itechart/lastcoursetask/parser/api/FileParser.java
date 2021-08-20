@@ -9,4 +9,6 @@ import java.util.List;
 @Component
 public interface FileParser {
     List<TransactionDTO> parse(File file);
+
+    List<String> getInvalidTransactionsData();
 }

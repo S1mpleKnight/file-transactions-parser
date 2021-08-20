@@ -21,8 +21,8 @@ import java.util.List;
 @Slf4j
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Component
-public class XMLFileParserImpl implements FileParser {
-    XMLFileParserImpl() {
+public class XMLFileParserImpl1 implements FileParser {
+    XMLFileParserImpl1() {
     }
 
     @Override
@@ -30,6 +30,11 @@ public class XMLFileParserImpl implements FileParser {
         SAXParserFactory spf = SAXParserFactory.newInstance();
         SAXHandler handler = new SAXHandler();
         return getTransactionDTOs(file, spf, handler);
+    }
+
+    @Override
+    public List<String> getInvalidTransactionsData() {
+        return null;
     }
 
     private List<TransactionDTO> getTransactionDTOs(File file, SAXParserFactory spf, SAXHandler handler) {

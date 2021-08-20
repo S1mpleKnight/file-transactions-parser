@@ -14,7 +14,7 @@ public class FileParserFactory {
             return new CSVFileParserImpl();
         }
         if (filenameExtension.equals(XML_EXTENSION)) {
-            return new XMLFileParserImpl();
+            return new XMLFileParserImpl2();
         }
         throw new InvalidFileExtensionException(filenameExtension);
     }

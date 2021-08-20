@@ -2,9 +2,7 @@ package by.itechart.lastcoursetask.parser;
 
 import by.itechart.lastcoursetask.dto.TransactionDTO;
 import by.itechart.lastcoursetask.parser.api.FileParser;
-import by.itechart.lastcoursetask.parser.impl.CSVFileParserImpl;
 import by.itechart.lastcoursetask.parser.impl.FileParserFactory;
-import by.itechart.lastcoursetask.parser.impl.XMLFileParserImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -30,6 +28,7 @@ class FileParserTest {
         FileParser fileParser = FileParserFactory.getParser(CSV_EXTENSION);
         List<TransactionDTO> transactionDTOs = fileParser.parse(file);
         System.out.println(transactionDTOs);
+        System.out.println(fileParser.getInvalidTransactionsData());
         assertNotEquals(0, transactionDTOs.size());
     }
 
@@ -39,6 +38,7 @@ class FileParserTest {
         FileParser fileParser = FileParserFactory.getParser(XML_EXTENSION);
         List<TransactionDTO> transactionDTOs = fileParser.parse(file);
         System.out.println(transactionDTOs);
+        System.out.println(fileParser.getInvalidTransactionsData());
         assertNotEquals(0, transactionDTOs.size());
     }
 }

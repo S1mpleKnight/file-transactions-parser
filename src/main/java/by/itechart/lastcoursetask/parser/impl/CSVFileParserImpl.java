@@ -27,19 +27,25 @@ public class CSVFileParserImpl implements FileParser {
     private final static String TIMEZONE_OFFSET = "+02:00";
     private final static String SUCCESS_STATUS = "success";
     private final static String DELIMITER = ",";
+    private final static String INVALID_DATA_MESSAGE = "Invalid data in line: ";
+    private final List<String> invalidDataMessages;
 
     CSVFileParserImpl() {
+        this.invalidDataMessages = new ArrayList<>();
     }
 
     @Override
     public List<TransactionDTO> parse(File file) {
         log.info("Parsing CSV file");
         List<String> fileStrings = getText(file);
-        if (isDataValid(fileStrings)) {
-            return getTransactionDTOs(fileStrings);
-        } else {
-            throw new FileNotReadException(file.getAbsolutePath());
-        }
+        this.invalidDataMessages.clear();
+        List<String> validData = getValidData(fileStrings);
+        return getTransactionDTOs(validData);
+    }
+
+    @Override
+    public List<String> getInvalidTransactionsData() {
+        return new ArrayList<>(this.invalidDataMessages);
     }
 
     private List<TransactionDTO> getTransactionDTOs(List<String> validStrings) {
@@ -71,10 +77,16 @@ public class CSVFileParserImpl implements FileParser {
         return LocalDateTime.ofEpochSecond(time, 0, ZoneOffset.of(TIMEZONE_OFFSET)).toString();
     }
 
-    private Boolean isDataValid(List<String> text) {
-        return text.stream()
-                .filter(line -> !line.matches(VALID_REGEX))
-                .toList().size() == 0;
+    private List<String> getValidData(List<String> text) {
+        List<String> validData = new ArrayList<>();
+        for (int i = 0; i < text.size(); i++) {
+            if (text.get(i).matches(VALID_REGEX)) {
+                validData.add(text.get(i));
+            } else {
+                this.invalidDataMessages.add(INVALID_DATA_MESSAGE + i);
+            }
+        }
+        return validData;
     }
 
     private List<String> getText(File file) {
