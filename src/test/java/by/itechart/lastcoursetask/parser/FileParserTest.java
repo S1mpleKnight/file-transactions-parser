@@ -4,6 +4,7 @@ import by.itechart.lastcoursetask.dto.TransactionDto;
 import by.itechart.lastcoursetask.parser.api.FileParser;
 import by.itechart.lastcoursetask.parser.impl.FileParserFactory;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
@@ -21,11 +22,13 @@ class FileParserTest {
     private static final String XML_FILE_PATH = "C:\\Users\\Becom\\Downloads\\xml_example.xml";
     private final static String CSV_EXTENSION = "csv";
     private final static String XML_EXTENSION = "xml";
+    @Autowired
+    private FileParserFactory factory;
 
     @Test
     void parseCSVSuccess() {
         File file = new File(CSV_FILE_PATH);
-        FileParser fileParser = FileParserFactory.getParser(CSV_EXTENSION);
+        FileParser fileParser = factory.getParser(CSV_EXTENSION);
         List<TransactionDto> transactionDtos = fileParser.parse(file);
         System.out.println(transactionDtos);
         System.out.println(fileParser.getInvalidTransactionsData());
@@ -35,7 +38,7 @@ class FileParserTest {
     @Test
     void parseXMLSuccess() {
         File file = new File(XML_FILE_PATH);
-        FileParser fileParser = FileParserFactory.getParser(XML_EXTENSION);
+        FileParser fileParser = factory.getParser(XML_EXTENSION);
         List<TransactionDto> transactionDtos = fileParser.parse(file);
         System.out.println(transactionDtos);
         System.out.println(fileParser.getInvalidTransactionsData());

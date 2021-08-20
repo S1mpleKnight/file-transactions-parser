@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 
 @Slf4j
 @Scope("singleton")
-@Component
+@Component("csv")
 public class CsvFileParserImpl implements FileParser {
     private final static String STATUS_REGEX = "((success)|(failed)|(rejected))";
     private final static String UUID_REGEX = "[0-9a-z]{8}-([0-9a-z]{4}-){3}[0-9a-z]{12}";

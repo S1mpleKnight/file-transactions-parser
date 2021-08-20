@@ -22,7 +22,7 @@ import java.util.List;
 
 @Slf4j
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
-@Component
+@Component("xml")
 public class XmlFileParserDomImpl implements FileParser {
     private final static String SUCCESS_TRANSACTION_STATUS = "COMPLETE";
     private final static String DATE_TIME_REGEX = "[0-9]{4}(-[0-9]{2}){2} ([0-9]{2}:){2}[0-9]{2}";

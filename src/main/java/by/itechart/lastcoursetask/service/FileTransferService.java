@@ -24,6 +24,7 @@ public class FileTransferService {
     private final static String XML_EXTENSION = "xml";
     private final TransactionService transactionService;
     private final OperatorService operatorService;
+    private final FileParserFactory factory;
 
     public void loadFile(MultipartFile file, Long id) {
         File loadedFile = storeFile(file);
@@ -37,7 +38,7 @@ public class FileTransferService {
     }
 
     private List<TransactionDto> readTransactions(File loadedFile, String filenameExtension) {
-        FileParser parser = FileParserFactory.getParser(filenameExtension);
+        FileParser parser = factory.getParser(filenameExtension);
         return parser.parse(loadedFile);
     }
 
