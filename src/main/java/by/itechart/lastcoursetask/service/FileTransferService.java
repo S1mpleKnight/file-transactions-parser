@@ -2,7 +2,6 @@ package by.itechart.lastcoursetask.service;
 
 import by.itechart.lastcoursetask.dto.TransactionDto;
 import by.itechart.lastcoursetask.exception.FileNotReadException;
-import by.itechart.lastcoursetask.exception.InvalidFileExtensionException;
 import by.itechart.lastcoursetask.parser.api.FileParser;
 import by.itechart.lastcoursetask.parser.impl.FileParserFactory;
 import lombok.AllArgsConstructor;
@@ -20,26 +19,16 @@ import java.util.UUID;
 @AllArgsConstructor
 public class FileTransferService {
     private final static String UPLOAD_PATH = "./uploads";
-    private final static String CSV_EXTENSION = "csv";
-    private final static String XML_EXTENSION = "xml";
     private final TransactionService transactionService;
     private final OperatorService operatorService;
     private final FileParserFactory factory;
 
-    public void loadFile(MultipartFile file, Long id) {
+    public List<String> loadFile(MultipartFile file, Long id) {
         File loadedFile = storeFile(file);
-        String filenameExtension = checkCSVExtension(getFilenameExtension(loadedFile));
-        if (filenameExtension != null) {
-            List<TransactionDto> transactions = readTransactions(loadedFile, filenameExtension);
-            transactionService.saveAll(transactions, operatorService.findById(id));
-        } else {
-            throw new InvalidFileExtensionException(file.getOriginalFilename());
-        }
-    }
-
-    private List<TransactionDto> readTransactions(File loadedFile, String filenameExtension) {
-        FileParser parser = factory.getParser(filenameExtension);
-        return parser.parse(loadedFile);
+        FileParser parser = factory.getParser(getFilenameExtension(loadedFile));
+        List<TransactionDto> transactions = parser.parse(loadedFile);
+        transactionService.saveAll(transactions, operatorService.findById(id));
+        return parser.getInvalidTransactionsData();
     }
 
     private File storeFile(MultipartFile file) {
@@ -59,22 +48,4 @@ public class FileTransferService {
         int pos = filename.lastIndexOf('.');
         return filename.substring(pos);
     }
-
-    private String checkCSVExtension(String filenameExtension) {
-        return isCSV(filenameExtension) ? CSV_EXTENSION : checkXMLExtension(filenameExtension);
-    }
-
-    private String checkXMLExtension(String filenameExtension) {
-        return isXML(filenameExtension) ? XML_EXTENSION : null;
-    }
-
-    private boolean isCSV(String filenameExtension) {
-        return filenameExtension.equals(CSV_EXTENSION);
-    }
-
-
-    private boolean isXML(String filenameExtension) {
-        return filenameExtension.equals(XML_EXTENSION);
-    }
-
 }

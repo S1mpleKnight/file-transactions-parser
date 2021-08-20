@@ -10,18 +10,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @AllArgsConstructor
 @RequestMapping("/files")
 public class LoadFilesController {
+    private final static String OK_STATUS_RESPONSE = "Transactions have been loaded";
     private final FileTransferService transferService;
 
     //todo: get operator object from Spring Security
     @PostMapping
     public ResponseEntity<String> load(@RequestParam("file") MultipartFile file, @RequestParam("id") Long id) {
         log.info("Save file: " + file.getOriginalFilename() + ", operator: " + id);
-        transferService.loadFile(file, id);
-        return ResponseEntity.ok("Transactions have been loaded");
+        List<String> errorMessages = transferService.loadFile(file, id);
+        String responseText = errorMessages.isEmpty()
+                ? OK_STATUS_RESPONSE
+                : OK_STATUS_RESPONSE + "\n" + String.join("\n", errorMessages);
+        return ResponseEntity.ok(responseText);
     }
 }
