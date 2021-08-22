@@ -20,10 +20,6 @@ public class SaxHandler extends DefaultHandler {
     private final static String AMOUNT_TAG = "amount";
     private final static String CURRENCY_TAG = "currency";
     private final static String STATUS_TAG = "status";
-    private final static String ROOT_TAG = "root";
-    private final static String FIRST_NAME_TAG = "first_name";
-    private final static String LAST_NAME_TAG = "last_name";
-    private final static String EMAIL_TAG = "email";
     private final static String TRANSACTION_TAG = "transaction";
     private final static String TRANSACTIONS_TAG = "transactions";
     private final static String SUCCESS_TRANSACTION_STATUS = "COMPLETE";
