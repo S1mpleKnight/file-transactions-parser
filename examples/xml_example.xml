@@ -1,0 +1,184 @@
+<root>
+    <transactions>
+        <transaction>
+            <id>2154364a-8157-4099-871f-ffd6225b5c76</id>
+            <user>
+                <id>03fe30f5-1758-4a80-b925-00293cf31607</id>
+                <first_name>Will</first_name>
+                <last_name>Smith</last_name>
+                <email>Will.Smith@example.com</email>
+            </user>
+            <timestamp>2021-04-29 16:46:13</timestamp>
+            <payment_details>
+                <amount>9 669</amount>
+                <currency>USD</currency>
+            </payment_details>
+            <status>COMPLETE</status>
+        </transaction>
+        <transaction>
+            <id>c5dd4886-225a-4966-a7f1-fd93d1357d5e</id>
+            <user>
+                <id>297dd03d-c482-4b2f-a6cb-eaa262e49754</id>
+                <first_name>Johny</first_name>
+                <last_name>Depp</last_name>
+                <email>Johny.Depp@example.com</email>
+            </user>
+            <timestamp>2021-03-01 12:00:00</timestamp>
+            <payment_details>
+                <amount>5 000</amount>
+                <currency>USD</currency>
+            </payment_details>
+            <status>FAILURE</status>
+        </transaction>
+        <transaction>
+            <id>2154364a-8157-4099-871f-ffd6225b5c74</id>
+            <user>
+                <id>03fe30f5-1758-4a80-b925-00293cf31607</id>
+                <first_name>Stan</first_name>
+                <last_name>Smith</last_name>
+                <email>Stan.Smith@example.com</email>
+            </user>
+            <timestamp>2021-04-20 16:46:13</timestamp>
+            <payment_details>
+                <amount>19 669</amount>
+                <currency>USD</currency>
+            </payment_details>
+            <status>COMPLETE</status>
+        </transaction>
+        <transaction>
+            <id>c5dd4886-225a-4966-a7f1-fd93d1357d5a</id>
+            <user>
+                <id>297dd03d-c482-4b2f-a6cb-eaa262e49754</id>
+                <first_name>John</first_name>
+                <last_name>Jones</last_name>
+                <email>Johny.Jones@example.com</email>
+            </user>
+            <timestamp>2021-03-05 12:00:00</timestamp>
+            <payment_details>
+                <amount>25 000</amount>
+                <currency>USD</currency>
+            </payment_details>
+            <status>COMPLETE</status>
+        </transaction>
+        <transaction>
+            <id>2154364a-8157-4099-871f-ffd6225b5c86</id>
+            <user>
+                <id>03fe30f5-1758-4a80-b925-00293cf31607</id>
+                <first_name>Will</first_name>
+                <last_name>Brooks</last_name>
+                <email>Will.Brooks@example.com</email>
+            </user>
+            <timestamp>2021-05-02 16:46:13</timestamp>
+            <payment_details>
+                <amount>18 669</amount>
+                <currency>USD</currency>
+            </payment_details>
+            <status>COMPLETE</status>
+        </transaction>
+        <transaction>
+            <id>c5dd4886-225a-4966-a7f1-fd93d1357d6e</id>
+            <user>
+                <id>297dd03d-c482-4b2f-a6cb-eaa262e49754</id>
+                <first_name>Samuel</first_name>
+                <last_name>Jackson</last_name>
+                <email>Sam.Jackson@example.com</email>
+            </user>
+            <timestamp>2021-03-10 12:00:00</timestamp>
+            <payment_details>
+                <amount>35 000</amount>
+                <currency>USD</currency>
+            </payment_details>
+            <status>COMPLETE</status>
+        </transaction>
+        <transaction>
+            <id>2154364a-8157-4099-871f-ffd6225b5a76</id>
+            <user>
+                <id>03fe30f5-1758-4a80-b925-00293cf31607</id>
+                <first_name>Jessica</first_name>
+                <last_name>Jones</last_name>
+                <email>Jessica.Jones@example.com</email>
+            </user>
+            <timestamp>2021-04-09 16:46:13</timestamp>
+            <payment_details>
+                <amount>9 659</amount>
+                <currency>USD</currency>
+            </payment_details>
+            <status>FAILURE</status>
+        </transaction>
+        <transaction>
+            <id>c5dd4886-225a-4966-a7f1-fd93d1357b5e</id>
+            <user>
+                <id>297dd03d-c482-4b2f-a6cb-eaa262e49754</id>
+                <first_name>Michael</first_name>
+                <last_name>Chandler</last_name>
+                <email>Michael.Chandler@example.com</email>
+            </user>
+            <timestamp>2021-03-10 12:00:00</timestamp>
+            <payment_details>
+                <amount>65 432</amount>
+                <currency>USD</currency>
+            </payment_details>
+            <status>FAILURE</status>
+        </transaction>
+        <transaction>
+            <id>2154364a-8157-4099-871f-fdd6225b5c76</id>
+            <user>
+                <id>03fe30f5-1758-4a80-b925-00293cf31607</id>
+                <first_name>Cristian</first_name>
+                <last_name>Bale</last_name>
+                <email>Cristian.Bale@example.com</email>
+            </user>
+            <timestamp>2021-04-09 16:46:13</timestamp>
+            <payment_details>
+                <amount>23 456</amount>
+                <currency>USD</currency>
+            </payment_details>
+            <status>COMPLETE</status>
+        </transaction>
+        <transaction>
+            <id>c5dd4886-225a-4966-a7f1-fd94d1357d5e</id>
+            <user>
+                <id>297dd03d-c482-4b2f-a6cb-eaa262e49754</id>
+                <first_name>Ryan</first_name>
+                <last_name>Reynolds</last_name>
+                <email>Ryan.Reynolds@example.com</email>
+            </user>
+            <timestamp>2021-04-01 12:00:00</timestamp>
+            <payment_details>
+                <amount>76 543</amount>
+                <currency>USD</currency>
+            </payment_details>
+            <status>COMPLETE</status>
+        </transaction>
+        <transaction>
+            <id>2154364a-8157-4099-871f-ffd6325b5c76</id>
+            <user>
+                <id>03fe30f5-1758-4a80-b925-00293cf31607</id>
+                <first_name>Brad</first_name>
+                <last_name>Pitt</last_name>
+                <email>Brad.Pitt@example.com</email>
+            </user>
+            <timestamp>2021-04-15 16:46:13</timestamp>
+            <payment_details>
+                <amount>19 827</amount>
+                <currency>USD</currency>
+            </payment_details>
+            <status>COMPLETE</status>
+        </transaction>
+        <transaction>
+            <id>c5dd4886-225a-4966-a7f1-fd13d1357d5e</id>
+            <user>
+                <id>297dd03d-c482-4b2f-a6cb-eaa262e49754</id>
+                <first_name>Ivan</first_name>
+                <last_name>Ivanov</last_name>
+                <email>Ivan.Ivanov@example.com</email>
+            </user>
+            <timestamp>2021-03-09 12:00:00</timestamp>
+            <payment_details>
+                <amount>500</amount>
+                <currency>USD</currency>
+            </payment_details>
+            <status>FAILURE</status>
+        </transaction>
+    </transactions>
+</root>

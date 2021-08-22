@@ -53,7 +53,13 @@ public class XmlFileParserDomImpl implements FileParser {
 
     @Override
     public List<TransactionDto> parse(File file) {
+        log.info("Parsing XML file");
+        this.invalidDataMessages.clear();
         DocumentBuilderFactory factory = prepareParser();
+        return getTransactions(file, factory);
+    }
+
+    private List<TransactionDto> getTransactions(File file, DocumentBuilderFactory factory) {
         try {
             Document document = getDocument(file, factory);
             NodeList nodeList = document.getElementsByTagName(TRANSACTION_TAG_NAME);
@@ -121,7 +127,7 @@ public class XmlFileParserDomImpl implements FileParser {
         if (statusValue.toLowerCase().matches(STATUS_REGEX)) {
             this.transactionDTO.setStatus(statusValue.equals(SUCCESS_TRANSACTION_STATUS));
         } else {
-            throw new SAXException("Invalid status value in " + nodes.get(STATUS_TAG_POS).getBaseURI());
+            throw new SAXException("Invalid status value in " + getInvalidTransactionId(nodes));
         }
     }
 
@@ -130,7 +136,7 @@ public class XmlFileParserDomImpl implements FileParser {
         if (currencyValue.matches(CURRENCY_REGEX)) {
             this.transactionDTO.setCurrency(currencyValue);
         } else {
-            throw new SAXException("Invalid currency value in " + nodes.get(PAYMENT_DETAILS_TAG_POS).getBaseURI());
+            throw new SAXException("Invalid currency value in " + getInvalidTransactionId(nodes));
         }
     }
 
@@ -139,7 +145,7 @@ public class XmlFileParserDomImpl implements FileParser {
         if (amountValue.matches(AMOUNT_REGEX)) {
             this.transactionDTO.setAmount(amountValue);
         } else {
-            throw new SAXException("Invalid amount value in " + nodes.get(PAYMENT_DETAILS_TAG_POS).getBaseURI());
+            throw new SAXException("Invalid amount value in " + getInvalidTransactionId(nodes));
         }
     }
 
@@ -148,7 +154,7 @@ public class XmlFileParserDomImpl implements FileParser {
         if (dateTimeValue.matches(DATE_TIME_REGEX)) {
             this.transactionDTO.setDateTime(dateTimeValue);
         } else {
-            throw new SAXException("Invalid date&time value in " + nodes.get(DATE_TIME_TAG_POS).getBaseURI());
+            throw new SAXException("Invalid date&time value in " + getInvalidTransactionId(nodes));
         }
     }
 
@@ -157,7 +163,7 @@ public class XmlFileParserDomImpl implements FileParser {
         if (customerIdValue.matches(ID_REGEX)) {
             this.transactionDTO.setCustomerId(customerIdValue);
         } else {
-            throw new SAXException("Invalid customer id value in " + nodes.get(USER_TAG_POS).getBaseURI());
+            throw new SAXException("Invalid customer id value in " + getInvalidTransactionId(nodes));
         }
     }
 
@@ -166,7 +172,7 @@ public class XmlFileParserDomImpl implements FileParser {
         if (transactionIdValue.matches(ID_REGEX)) {
             this.transactionDTO.setTransactionId(transactionIdValue);
         } else {
-            throw new SAXException("Invalid transaction id value in " + nodes.get(TRANSACTION_ID_TAG_POS).getBaseURI());
+            throw new SAXException("Invalid transaction id value in " + getInvalidTransactionId(nodes));
         }
     }
 
@@ -178,5 +184,9 @@ public class XmlFileParserDomImpl implements FileParser {
     private String getStringValue(Node node, int index) {
         Node transactionId = node.getChildNodes().item(index);
         return transactionId.getTextContent();
+    }
+
+    private String getInvalidTransactionId(List<Node> nodes) {
+        return nodes.get(TRANSACTION_ID_TAG_POS).getTextContent();
     }
 }

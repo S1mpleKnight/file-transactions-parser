@@ -46,6 +46,6 @@ public class FileTransferService {
     private String getFilenameExtension(File file) {
         String filename = file.getName();
         int pos = filename.lastIndexOf('.');
-        return filename.substring(pos);
+        return filename.substring(pos + 1);
     }
 }
