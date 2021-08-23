@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -24,7 +24,7 @@ public class TransactionsController {
     private final TransactionService transactionService;
 
     @GetMapping
-    public ResponseEntity<Set<TransactionDto>> findAll() {
+    public ResponseEntity<List<TransactionDto>> findAll() {
         log.info("Find All");
         return ResponseEntity.ok(transactionService.findAll());
     }
@@ -32,13 +32,13 @@ public class TransactionsController {
     @GetMapping("/{id}")
     public ResponseEntity<TransactionDto> findById(@PathVariable String id) {
         log.info("Find by id: " + id);
-        return ResponseEntity.ok(transactionService.findById(UUID.fromString(id)));
+        return ResponseEntity.ok(transactionService.findById(id));
     }
 
-    @GetMapping("/customer/{id}")
-    public ResponseEntity<Set<TransactionDto>> findByCustomerId(@PathVariable String id) {
+    @GetMapping("/customers/{id}")
+    public ResponseEntity<List<TransactionDto>> findByCustomerId(@PathVariable String id) {
         log.info("Find by customer id: " + id);
-        return ResponseEntity.ok(transactionService.findByCustomerId(UUID.fromString(id)));
+        return ResponseEntity.ok(transactionService.findByCustomerId(id));
     }
 
     @DeleteMapping("/{id}")

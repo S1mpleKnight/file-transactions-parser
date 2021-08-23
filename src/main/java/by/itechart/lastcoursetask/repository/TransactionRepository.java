@@ -5,14 +5,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, UUID> {
-    Set<Transaction> findByCustomerId(UUID customerId);
+    List<Transaction> findByCustomerId(UUID customerId);
 
-    Set<Transaction> findByDateTime(LocalDateTime dateTime);
+    List<Transaction> findByDateTime(LocalDateTime dateTime);
 
-    Set<Transaction> findByOperator_Id(Long id);
+    List<Transaction> findByOperator_Id(Long id);
 }

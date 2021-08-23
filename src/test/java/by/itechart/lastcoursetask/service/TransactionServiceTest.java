@@ -31,12 +31,12 @@ class TransactionServiceTest {
 
     @Test
     void findByIdEqualsAmountTrue() {
-        assertEquals("4942", transactionService.findById(UUID.fromString("7499c7f2-c8e6-4ea2-8a02-e5e2bf5a21c8")).getAmount());
+        assertEquals("4942", transactionService.findById("7499c7f2-c8e6-4ea2-8a02-e5e2bf5a21c8").getAmount());
     }
 
     @Test
     void findByCustomerIdSizeNotNullTrue() {
-        assertFalse(transactionService.findByCustomerId(UUID.fromString("bebb0888-2a6f-4f38-b8e7-800a2a3145e7")).isEmpty());
+        assertFalse(transactionService.findByCustomerId("bebb0888-2a6f-4f38-b8e7-800a2a3145e7").isEmpty());
     }
 
     @Test

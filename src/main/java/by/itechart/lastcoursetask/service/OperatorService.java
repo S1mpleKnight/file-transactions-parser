@@ -11,8 +11,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -24,9 +24,9 @@ public class OperatorService {
     private final OperatorRepository repository;
     private final EntityMapper mapper;
 
-    public Set<OperatorDto> findAll() {
-        Set<Operator> operators = new HashSet<>(repository.findAll());
-        return operators.stream().map(mapper::mapToOperatorDTO).collect(Collectors.toSet());
+    public List<OperatorDto> findAll() {
+        List<Operator> operators = new ArrayList<>(repository.findAll());
+        return operators.stream().map(mapper::mapToOperatorDTO).collect(Collectors.toList());
     }
 
     public OperatorDto findById(Long id) {
@@ -61,7 +61,7 @@ public class OperatorService {
     @Transactional
     public void delete(Long operatorId) {
         if (repository.existsById(operatorId)) {
-            Set<TransactionDto> transactionDtos = transactionService.findByOperatorId(operatorId);
+            List<TransactionDto> transactionDtos = transactionService.findByOperatorId(operatorId);
             repository.deleteById(operatorId);
             for (TransactionDto transaction : transactionDtos) {
                 transactionService.updateOperator(UUID.fromString(transaction.getTransactionId()), ADMIN_ID);

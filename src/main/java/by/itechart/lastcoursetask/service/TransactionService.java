@@ -13,42 +13,49 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class TransactionService {
+    private final static String ID_REGEX = "[0-9a-z]{8}-([0-9a-z]{4}-){3}[0-9a-z]{12}";
     private final OperatorRepository operatorRepository;
     private final TransactionRepository transactionRepository;
     private final EntityMapper mapper;
 
-    public Set<TransactionDto> findAll() {
-        Set<Transaction> transactions = new HashSet<>(transactionRepository.findAll());
-        return getTransactionDTOSet(transactions);
+    public List<TransactionDto> findAll() {
+        List<Transaction> transactions = new ArrayList<>(transactionRepository.findAll());
+        return getTransactionDtoList(transactions);
     }
 
-    public TransactionDto findById(UUID id) {
-        return transactionRepository.findById(id).map(mapper::mapToTransactionDTO)
-                .orElseThrow(() -> new TransactionNotFoundException(id.toString()));
+    public TransactionDto findById(String id) {
+        if (id.matches(ID_REGEX)) {
+            return transactionRepository.findById(UUID.fromString(id)).map(mapper::mapToTransactionDTO)
+                    .orElseThrow(() -> new TransactionNotFoundException(id));
+        }
+        throw new TransactionNotFoundException(id);
     }
 
-    public Set<TransactionDto> findByCustomerId(UUID customerId) {
-        Set<Transaction> transactions = transactionRepository.findByCustomerId(customerId);
-        return getTransactionDTOSet(transactions);
+    public List<TransactionDto> findByCustomerId(String customerId) {
+        if (customerId.matches(ID_REGEX)){
+            List<Transaction> transactions = transactionRepository.findByCustomerId(UUID.fromString(customerId));
+            return getTransactionDtoList(transactions);
+        }
+        throw new TransactionNotFoundException(customerId);
     }
 
-    public Set<TransactionDto> findByDateAndTime(LocalDateTime dateTime) {
-        Set<Transaction> transactions = transactionRepository.findByDateTime(dateTime);
-        return getTransactionDTOSet(transactions);
+    public List<TransactionDto> findByDateAndTime(LocalDateTime dateTime) {
+        List<Transaction> transactions = transactionRepository.findByDateTime(dateTime);
+        return getTransactionDtoList(transactions);
     }
 
-    public Set<TransactionDto> findByOperatorId(Long id) {
-        Set<Transaction> transactions = transactionRepository.findByOperator_Id(id);
-        return getTransactionDTOSet(transactions);
+    public List<TransactionDto> findByOperatorId(Long id) {
+        List<Transaction> transactions = transactionRepository.findByOperator_Id(id);
+        return getTransactionDtoList(transactions);
     }
 
     @Transactional
@@ -104,7 +111,7 @@ public class TransactionService {
         return transactionRepository.findById(UUID.fromString(transactionUUID)).isPresent();
     }
 
-    private Set<TransactionDto> getTransactionDTOSet(Set<Transaction> transactions) {
-        return transactions.stream().map(mapper::mapToTransactionDTO).collect(Collectors.toSet());
+    private List<TransactionDto> getTransactionDtoList(List<Transaction> transactions) {
+        return transactions.stream().map(mapper::mapToTransactionDTO).collect(Collectors.toList());
     }
 }

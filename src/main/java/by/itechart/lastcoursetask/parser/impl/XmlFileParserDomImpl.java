@@ -29,7 +29,7 @@ public class XmlFileParserDomImpl implements FileParser {
     private final static String STATUS_REGEX = "((complete)|(failure))";
     private final static String CURRENCY_REGEX = "[A-Z]{3}";
     private final static String AMOUNT_REGEX = "[0-9 ]+";
-    private final static String ID_REGEX = "[0-9a-z]{8}-([0-9a-z]{4}-){3}[0-9a-z]{12}";
+    private final static String UUID_REGEX = "[0-9a-z]{8}-([0-9a-z]{4}-){3}[0-9a-z]{12}";
     private final static String TRANSACTION_TAG_NAME = "transaction";
     private final static int TRANSACTION_ID_TAG_POS = 0;
     private final static int CUSTOMER_ID_TAG_POS = 1;
@@ -160,7 +160,7 @@ public class XmlFileParserDomImpl implements FileParser {
 
     private void trySetCustomerId(List<Node> nodes) throws SAXException {
         String customerIdValue = getStringValue(nodes.get(USER_TAG_POS), CUSTOMER_ID_TAG_POS);
-        if (customerIdValue.matches(ID_REGEX)) {
+        if (customerIdValue.matches(UUID_REGEX)) {
             this.transactionDTO.setCustomerId(customerIdValue);
         } else {
             throw new SAXException("Invalid customer id value in " + getInvalidTransactionId(nodes));
@@ -169,7 +169,7 @@ public class XmlFileParserDomImpl implements FileParser {
 
     private void trySetTransactionId(List<Node> nodes) throws SAXException {
         String transactionIdValue = getStringValue(nodes, TRANSACTION_ID_TAG_POS);
-        if (transactionIdValue.matches(ID_REGEX)) {
+        if (transactionIdValue.matches(UUID_REGEX)) {
             this.transactionDTO.setTransactionId(transactionIdValue);
         } else {
             throw new SAXException("Invalid transaction id value in " + getInvalidTransactionId(nodes));

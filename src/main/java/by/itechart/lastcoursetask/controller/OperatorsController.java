@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Set;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -24,7 +24,7 @@ public class OperatorsController {
     private final OperatorService operatorService;
 
     @GetMapping
-    public ResponseEntity<Set<OperatorDto>> findAll() {
+    public ResponseEntity<List<OperatorDto>> findAll() {
         log.info("Find all");
         return ResponseEntity.ok(operatorService.findAll());
     }
