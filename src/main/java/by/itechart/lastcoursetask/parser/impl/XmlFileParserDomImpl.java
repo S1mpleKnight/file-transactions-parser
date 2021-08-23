@@ -92,23 +92,17 @@ public class XmlFileParserDomImpl implements FileParser {
     }
 
     private void addTransaction(List<TransactionDto> transactions, Node node) {
-        try {
-            tryFillTransaction(node);
-            transactions.add(this.transactionDTO);
-        } catch (SAXException e) {
-            this.invalidDataMessages.add(e.getMessage());
-            log.error(e.getMessage());
-        }
+            if (tryFillTransaction(node)) {
+                transactions.add(this.transactionDTO);
+            } else {
+                this.invalidDataMessages.add("Invalid data in transaction: " + getInvalidTransactionId(node));
+            }
     }
 
-    private void tryFillTransaction(Node node) throws SAXException {
+    private boolean tryFillTransaction(Node node) {
         List<Node> nodes = deleteWhitespaces(node);
-        trySetTransactionId(nodes);
-        trySetCustomerId(nodes);
-        trySetDateTime(nodes);
-        trySetCurrency(nodes);
-        trySetAmount(nodes);
-        trySetStatus(nodes);
+        return trySetTransactionId(nodes) && trySetCustomerId(nodes) && trySetDateTime(nodes) && trySetCurrency(nodes)
+            && trySetAmount(nodes) && trySetStatus(nodes);
     }
 
     private List<Node> deleteWhitespaces(Node parentNode) {
@@ -122,58 +116,58 @@ public class XmlFileParserDomImpl implements FileParser {
         return nodes;
     }
 
-    private void trySetStatus(List<Node> nodes) throws SAXException {
+    private boolean trySetStatus(List<Node> nodes) {
         String statusValue = getStringValue(nodes, STATUS_TAG_POS);
         if (statusValue.toLowerCase().matches(STATUS_REGEX)) {
             this.transactionDTO.setStatus(statusValue.equals(SUCCESS_TRANSACTION_STATUS));
-        } else {
-            throw new SAXException("Invalid status value in " + getInvalidTransactionId(nodes));
+            return true;
         }
+        return false;
     }
-
-    private void trySetCurrency(List<Node> nodes) throws SAXException {
+    
+    private boolean trySetCurrency(List<Node> nodes) {
         String currencyValue = getStringValue(deleteWhitespaces(nodes.get(PAYMENT_DETAILS_TAG_POS)), CURRENCY_TAG_POS);
         if (currencyValue.matches(CURRENCY_REGEX)) {
             this.transactionDTO.setCurrency(currencyValue);
-        } else {
-            throw new SAXException("Invalid currency value in " + getInvalidTransactionId(nodes));
+            return true;
         }
+        return false;
     }
 
-    private void trySetAmount(List<Node> nodes) throws SAXException {
+    private boolean trySetAmount(List<Node> nodes) {
         String amountValue = getStringValue(deleteWhitespaces(nodes.get(PAYMENT_DETAILS_TAG_POS)), AMOUNT_TAG_POS);
         if (amountValue.matches(AMOUNT_REGEX)) {
             this.transactionDTO.setAmount(amountValue);
-        } else {
-            throw new SAXException("Invalid amount value in " + getInvalidTransactionId(nodes));
+            return true;
         }
+        return false;
     }
 
-    private void trySetDateTime(List<Node> nodes) throws SAXException {
+    private boolean trySetDateTime(List<Node> nodes) {
         String dateTimeValue = getStringValue(nodes, DATE_TIME_TAG_POS);
         if (dateTimeValue.matches(DATE_TIME_REGEX)) {
             this.transactionDTO.setDateTime(dateTimeValue);
-        } else {
-            throw new SAXException("Invalid date&time value in " + getInvalidTransactionId(nodes));
+            return true;
         }
+        return false;
     }
 
-    private void trySetCustomerId(List<Node> nodes) throws SAXException {
+    private boolean trySetCustomerId(List<Node> nodes) {
         String customerIdValue = getStringValue(nodes.get(USER_TAG_POS), CUSTOMER_ID_TAG_POS);
         if (customerIdValue.matches(UUID_REGEX)) {
             this.transactionDTO.setCustomerId(customerIdValue);
-        } else {
-            throw new SAXException("Invalid customer id value in " + getInvalidTransactionId(nodes));
+            return true;
         }
+        return false;
     }
 
-    private void trySetTransactionId(List<Node> nodes) throws SAXException {
+    private boolean trySetTransactionId(List<Node> nodes) {
         String transactionIdValue = getStringValue(nodes, TRANSACTION_ID_TAG_POS);
         if (transactionIdValue.matches(UUID_REGEX)) {
             this.transactionDTO.setTransactionId(transactionIdValue);
-        } else {
-            throw new SAXException("Invalid transaction id value in " + getInvalidTransactionId(nodes));
+            return true;
         }
+        return false;
     }
 
     private String getStringValue(List<Node> nodes, int index) {
@@ -186,7 +180,7 @@ public class XmlFileParserDomImpl implements FileParser {
         return transactionId.getTextContent();
     }
 
-    private String getInvalidTransactionId(List<Node> nodes) {
-        return nodes.get(TRANSACTION_ID_TAG_POS).getTextContent();
+    private String getInvalidTransactionId(Node node) {
+        return deleteWhitespaces(node).get(TRANSACTION_ID_TAG_POS).getTextContent();
     }
 }
