@@ -3,7 +3,6 @@ package by.itechart.lastcoursetask.parser;
 import by.itechart.lastcoursetask.dto.TransactionDto;
 import by.itechart.lastcoursetask.parser.api.FileParser;
 import by.itechart.lastcoursetask.parser.impl.FileParserFactory;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +29,10 @@ class FileParserTest {
     void parseFileSuccessfully(String value) {
         File file = new File(value);
         FileParser fileParser = factory.getParser(getFilenameExtension(file));
-        List<TransactionDto> transactionDtos = fileParser.parse(file);
-        System.out.println(transactionDtos);
+        List<TransactionDto> transactions = fileParser.parse(file);
+        System.out.println(transactions);
         System.out.println(fileParser.getInvalidTransactionsData());
-        assertNotEquals(0, transactionDtos.size());
+        assertNotEquals(0, transactions.size());
     }
 
     private String getFilenameExtension(File file) {
