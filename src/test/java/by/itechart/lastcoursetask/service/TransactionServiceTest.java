@@ -53,12 +53,6 @@ class TransactionServiceTest {
     }
 
     @Test
-    void updateTransactionSuccess() {
-        TransactionDto newTransactionDto = createTransaction("4f9a9605-bd78-4b35-aa10-9f1e0407d03c", "31d1b033-08a3-4755-b9ab-1475092548fc");
-        assertDoesNotThrow(() -> transactionService.update(UUID.fromString("1c22f114-8251-404e-8c3f-73b70bd0ec80"), newTransactionDto));
-    }
-
-    @Test
     void deleteTransactionSuccess() {
         assertDoesNotThrow(() -> transactionService.delete(UUID.fromString("b54ca174-03f1-4a87-a1f2-dee732a8b754")));
     }

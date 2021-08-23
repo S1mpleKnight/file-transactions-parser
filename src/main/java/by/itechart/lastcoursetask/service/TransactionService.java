@@ -97,16 +97,6 @@ public class TransactionService {
         }
     }
 
-    @Transactional
-    public void updateOperator(UUID oldTransactionId, Long operatorId) {
-        if (transactionRepository.existsById(oldTransactionId)) {
-            Transaction transaction = transactionRepository.getById(oldTransactionId);
-            transaction.setOperator(operatorRepository.getById(operatorId));
-        } else {
-            throw new TransactionNotFoundException(oldTransactionId.toString());
-        }
-    }
-
     private boolean isTransactionExist(String transactionUUID) {
         return transactionRepository.findById(UUID.fromString(transactionUUID)).isPresent();
     }

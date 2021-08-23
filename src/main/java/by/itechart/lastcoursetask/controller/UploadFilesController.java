@@ -16,15 +16,15 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/files")
-public class LoadFilesController {
+public class UploadFilesController {
     private final static String OK_STATUS_RESPONSE = "Transactions have been loaded";
     private final FileTransferService transferService;
 
     //todo: get operator object from Spring Security
     @PostMapping
-    public ResponseEntity<String> load(@RequestParam("file") MultipartFile file, @RequestParam("id") Long id) {
+    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file, @RequestParam("id") Long id) {
         log.info("Save file: " + file.getOriginalFilename() + ", operator: " + id);
-        List<String> errorMessages = transferService.loadFile(file, id);
+        List<String> errorMessages = transferService.uploadFile(file, id);
         String responseText = errorMessages.isEmpty()
                 ? OK_STATUS_RESPONSE
                 : OK_STATUS_RESPONSE + "\n" + String.join("\n", errorMessages);

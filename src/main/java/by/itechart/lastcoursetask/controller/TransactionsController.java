@@ -8,9 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -46,12 +44,5 @@ public class TransactionsController {
         log.info("Delete id: " + id);
         transactionService.delete(UUID.fromString(id));
         return ResponseEntity.ok("Transaction was successfully deleted");
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<String> update(@PathVariable String id, @RequestParam TransactionDto transactionDTO) {
-        log.info("Update id: " + id);
-        transactionService.update(UUID.fromString(id), transactionDTO);
-        return ResponseEntity.ok("Transaction was successfully updated");
     }
 }

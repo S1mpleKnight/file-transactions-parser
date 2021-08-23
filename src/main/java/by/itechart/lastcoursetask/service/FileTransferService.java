@@ -23,7 +23,7 @@ public class FileTransferService {
     private final OperatorService operatorService;
     private final FileParserFactory factory;
 
-    public List<String> loadFile(MultipartFile file, Long id) {
+    public List<String> uploadFile(MultipartFile file, Long id) {
         File loadedFile = storeFile(file);
         FileParser parser = factory.getParser(getFilenameExtension(loadedFile));
         List<TransactionDto> transactions = parser.parse(loadedFile);
