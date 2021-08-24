@@ -11,7 +11,7 @@ VALUES
     (4,'Misha', 'Prostak', 'genius', '654321ytrewq', 2),
     (5,'Boss', 'Galaxy', 'admin', 'zmpqksjdp', 1);
 
-INSERT INTO transaction
+INSERT INTO transactions
 (date_time,id,customer_id,amount,currency,status,operator_id)
 VALUES
     (FROM_UNIXTIME(1619674154),'1c22f114-8251-404e-8c3f-73b70bd0ec80','a00a7fb0-3a72-454d-865d-8f6818f8dd62',34623,'usd',true, 1),
