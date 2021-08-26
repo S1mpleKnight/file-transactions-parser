@@ -4,6 +4,7 @@ import by.itechart.lastcoursetask.service.FileTransferService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +17,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/files")
+@PreAuthorize("hasRole('user')")
 public class UploadFilesController {
     private final static String OK_STATUS_RESPONSE = "Transactions have been loaded";
     private final FileTransferService transferService;
