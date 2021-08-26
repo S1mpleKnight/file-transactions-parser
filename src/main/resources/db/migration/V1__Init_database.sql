@@ -11,7 +11,7 @@ create table operator
         primary key,
     first_name varchar(20) not null,
     last_name  varchar(30) not null,
-    nickname   varchar(15) not null,
+    nickname   varchar(15) not null unique,
     password   varchar(50) not null,
     role_id    int(11) not null,
     constraint operator_role_id_fk
