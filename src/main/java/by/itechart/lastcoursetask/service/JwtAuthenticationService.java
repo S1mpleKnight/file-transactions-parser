@@ -20,8 +20,7 @@ public class JwtAuthenticationService {
 
     public Map<Object, Object> authenticate(AuthenticationRequestDto request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getNickname(), request.getPassword()));
-        String token = createToken(request);
-        return fillMap(request, token);
+        return fillMap(request, createToken(request));
     }
 
     private String createToken(AuthenticationRequestDto request) {
