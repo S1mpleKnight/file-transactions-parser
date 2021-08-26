@@ -49,7 +49,7 @@ public class JwtTokenProvider {
             return isTokenValid(claimsJws);
         } catch (JwtException | IllegalArgumentException e) {
             log.error(e.getMessage());
-            throw new JwtAuthenticationException("JWT token is expired or invalid");
+            throw new JwtAuthenticationException("JWT token is not valid");
         }
     }
 

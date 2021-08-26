@@ -31,7 +31,7 @@ public class ExceptionHandlerController {
     }
 
     @ExceptionHandler({JwtAuthenticationException.class})
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ResponseBody
     public String unauthorized(AuthenticationException exception) {
         return exception.getMessage();
