@@ -41,11 +41,11 @@ VALUES
 
 INSERT INTO operator (id,first_name, last_name, nickname, password, role_id)
 VALUES
-    (1,'Petya', 'Hechiparenko', 'krendel', 'q1w2e3r4t5y6', 2),
-    (2,'Dasha', 'Deshina', 'deshda', '123qwe456rty', 2),
-    (3,'Kostya', 'Shatko', 'mashina', 'asdqwe123654', 2),
-    (4,'Misha', 'Prostak', 'genius', '654321ytrewq', 2),
-    (5,'Boss', 'Galaxy', 'admin', 'zmpqksjdp', 1);
+    (1,'Admin', 'Adminov', 'adminchik', '$2y$12$PvNtgoklIlW8dX508R0/iul/8ccochxJ7jgVGTd9qrAhPNR/AWb0y', 1),
+    (2,'Dasha', 'Deshina', 'deshda', '$2y$12$iYNl1WVNTaA4ObeJDm4kOucgQ3bMGL/EfbcSs6bPGuv4kvlRrAaYa', 2),
+    (3,'Kostya', 'Shatko', 'mashina', '$2y$12$oG8Rt5uCSjmJ5wv3zKsNQ.88EFWDfTcslElRKwId1k.zigJqAjBey', 2),
+    (4,'Misha', 'Prostak', 'genius', '$2y$12$NudJT.8iwcJk901JzarEM.ogPiTwOO6sg50qyiGt3afvNmBeY6Lee', 2),
+    (5,'Boss', 'Galaxy', 'admin', '$2y$12$wK1x0G6TM8DOWoo./rk7hOHfxYV0q7SgOgPEX2Zb60Qyp/hpBGePu', 1);
 
 INSERT INTO transactions
 (date_time,id,customer_id,amount,currency,status,operator_id)

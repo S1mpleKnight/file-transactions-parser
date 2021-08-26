@@ -1,0 +1,5 @@
+    (1,'Petya', 'Hechiparenko', 'krendel', 'q1w2e3r4t5y6', 2),
+    (2,'Dasha', 'Deshina', 'deshda', '123qwe456rty', 2),
+    (3,'Kostya', 'Shatko', 'mashina', 'asdqwe123654', 2),
+    (4,'Misha', 'Prostak', 'genius', '654321ytrewq', 2),
+    (5,'Boss', 'Galaxy', 'admin', 'zmpqksjdp', 1);
