@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
 import java.util.List;
 
 @Slf4j
@@ -19,17 +20,15 @@ import java.util.List;
 @RequestMapping("/files")
 @PreAuthorize("hasRole('user')")
 public class UploadFilesController {
-    private final static String OK_STATUS_RESPONSE = "Transactions have been loaded";
     private final FileTransferService transferService;
 
-    //todo: get operator object from Spring Security
     @PostMapping
-    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file, @RequestParam("id") Long id) {
-        log.info("Save file: " + file.getOriginalFilename() + ", operator: " + id);
-        List<String> errorMessages = transferService.uploadFile(file, id);
+    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file, Principal principal) {
+        log.info("Save file: " + file.getOriginalFilename() + ", operator: " + principal.getName());
+        List<String> errorMessages = transferService.uploadFile(file, principal.getName());
         String responseText = errorMessages.isEmpty()
-                ? OK_STATUS_RESPONSE
-                : OK_STATUS_RESPONSE + "\n" + String.join("\n", errorMessages);
+                ? "Transactions have been loaded"
+                : "Transactions have been loaded" + "\n" + String.join("\n", errorMessages);
         return ResponseEntity.ok(responseText);
     }
 }

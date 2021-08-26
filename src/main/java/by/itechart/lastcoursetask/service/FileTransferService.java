@@ -23,11 +23,11 @@ public class FileTransferService {
     private final OperatorService operatorService;
     private final FileParserFactory factory;
 
-    public List<String> uploadFile(MultipartFile file, Long id) {
+    public List<String> uploadFile(MultipartFile file, String nickname) {
         File loadedFile = storeFile(file);
         FileParser parser = factory.getParser(getFilenameExtension(loadedFile));
         List<TransactionDto> transactions = parser.parse(loadedFile);
-        transactionService.saveAll(transactions, operatorService.findById(id));
+        transactionService.saveAll(transactions, operatorService.findByNickName(nickname));
         return parser.getInvalidTransactionsData();
     }
 
