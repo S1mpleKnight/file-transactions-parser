@@ -8,17 +8,21 @@ import by.itechart.lastcoursetask.exception.OperatorNotFoundException;
 import by.itechart.lastcoursetask.repository.OperatorRepository;
 import by.itechart.lastcoursetask.util.EntityMapper;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Service
+@Service("operatorService")
 @AllArgsConstructor
-public class OperatorService {
+public class OperatorService implements UserDetailsService {
     private static final Long ADMIN_ID = 1L;
     private final TransactionService transactionService;
     private final OperatorRepository repository;
@@ -32,13 +36,6 @@ public class OperatorService {
     public OperatorDto findById(Long id) {
         return repository.findById(id).map(mapper::mapToOperatorDTO)
                 .orElseThrow(() -> new OperatorNotFoundException(id.toString()));
-    }
-
-    public OperatorDto findByNickName(String nickname) {
-        if (repository.existsByNickname(nickname)) {
-            return mapper.mapToOperatorDTO(repository.findByNickname(nickname));
-        }
-        throw new OperatorNotFoundException(nickname);
     }
 
     public OperatorDto findByFirstNameAndLastName(String firstName, String lastName) {
@@ -80,6 +77,21 @@ public class OperatorService {
         } else {
             throw new OperatorNotFoundException(operatorId.toString());
         }
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String nickname) {
+        if (repository.existsByNickname(nickname)) {
+            OperatorDto operatorDto = mapper.mapToOperatorDTO(repository.findByNickname(nickname));
+            return castFromOperatorDto(operatorDto);
+        } else {
+            throw new OperatorNotFoundException(nickname);
+        }
+    }
+
+    private UserDetails castFromOperatorDto(OperatorDto operatorDto) {
+        return new User(operatorDto.getNickname(), operatorDto.getPassword(),
+                true, true, true, true, Collections.emptyList());
     }
 
     private boolean isOperatorExist(String firstName, String lastName) {

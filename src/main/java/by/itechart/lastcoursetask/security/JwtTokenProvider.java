@@ -31,7 +31,7 @@ public class JwtTokenProvider {
     @Value("${jwt.header}")
     private String httpHeader;
 
-    public JwtTokenProvider(@Qualifier("userDetailsService") UserDetailsService userDetailsService) {
+    public JwtTokenProvider(@Qualifier("operatorService") UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
