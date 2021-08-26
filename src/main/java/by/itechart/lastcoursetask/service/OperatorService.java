@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Service("operatorService")
+@Service
 @AllArgsConstructor
 public class OperatorService implements UserDetailsService {
     private static final Long ADMIN_ID = 1L;
@@ -81,12 +81,8 @@ public class OperatorService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String nickname) {
-        if (repository.existsByNickname(nickname)) {
-            OperatorDto operatorDto = mapper.mapToOperatorDTO(repository.findByNickname(nickname));
-            return castFromOperatorDto(operatorDto);
-        } else {
-            throw new OperatorNotFoundException(nickname);
-        }
+        OperatorDto operatorDto = findByNickName(nickname);
+        return castFromOperatorDto(operatorDto);
     }
 
     private UserDetails castFromOperatorDto(OperatorDto operatorDto) {
@@ -97,4 +93,12 @@ public class OperatorService implements UserDetailsService {
     private boolean isOperatorExist(String firstName, String lastName) {
         return repository.existsByFirstNameAndLastName(firstName, lastName);
     }
+
+    public OperatorDto findByNickName(String nickname) {
+        if (repository.existsByNickname(nickname)) {
+            return mapper.mapToOperatorDTO(repository.findByNickname(nickname));
+        }
+        throw new OperatorNotFoundException(nickname);
+    }
+
 }
