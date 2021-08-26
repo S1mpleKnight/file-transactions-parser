@@ -53,9 +53,8 @@ public class JwtTokenProvider {
         }
     }
 
-    @PostConstruct
-    protected void init() {
-        this.secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+    public String resolveToken(HttpServletRequest request) {
+        return request.getHeader(httpHeader);
     }
 
     public Authentication getAuthentication(String token) {
@@ -63,8 +62,9 @@ public class JwtTokenProvider {
         return new UsernamePasswordAuthenticationToken(userDetails, "");
     }
 
-    public String resolveToken(HttpServletRequest request) {
-        return request.getHeader(httpHeader);
+    @PostConstruct
+    protected void init() {
+        this.secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
     private String getNickname(String token) {
