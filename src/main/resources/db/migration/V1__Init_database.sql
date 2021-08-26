@@ -12,7 +12,7 @@ create table operator
     first_name varchar(20) not null,
     last_name  varchar(30) not null,
     nickname   varchar(15) not null unique,
-    password   varchar(50) not null,
+    password   varchar(255) not null,
     role_id    int not null,
     constraint operator_role_id_fk
         foreign key (role_id) references role (id)

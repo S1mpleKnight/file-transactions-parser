@@ -12,7 +12,7 @@ create table operator
     first_name varchar(20) not null,
     last_name  varchar(30) not null,
     nickname   varchar(15) not null unique,
-    password   varchar(50) not null,
+    password   varchar(255) not null,
     role_id    bigint      not null,
     constraint operator_role_id_fk
         foreign key (role_id) references role (id)
@@ -41,7 +41,7 @@ VALUES
 
 INSERT INTO operator (id,first_name, last_name, nickname, password, role_id)
 VALUES
-    (1,'Admin', 'Adminov', 'adminchik', '$2y$12$PvNtgoklIlW8dX508R0/iul/8ccochxJ7jgVGTd9qrAhPNR/AWb0y', 1),
+    (1,'Admin', 'Adminov', 'adminchik', '$2y$12$bjyhCU7WG5g2LtqJy/smyOisyuYQ/EjhiTepIS6QoawnNwrh8Ljne', 1),
     (2,'Dasha', 'Deshina', 'deshda', '$2y$12$iYNl1WVNTaA4ObeJDm4kOucgQ3bMGL/EfbcSs6bPGuv4kvlRrAaYa', 2),
     (3,'Kostya', 'Shatko', 'mashina', '$2y$12$oG8Rt5uCSjmJ5wv3zKsNQ.88EFWDfTcslElRKwId1k.zigJqAjBey', 2),
     (4,'Misha', 'Prostak', 'genius', '$2y$12$NudJT.8iwcJk901JzarEM.ogPiTwOO6sg50qyiGt3afvNmBeY6Lee', 2),
