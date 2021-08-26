@@ -21,7 +21,7 @@ class OperatorRepositoryTest {
 
     @Test
     void existByNicknameTrue() {
-        Assertions.assertTrue(repository.existsByNickname("krendel"));
+        Assertions.assertTrue(repository.existsByNickname("adminchik"));
     }
 
     @Test

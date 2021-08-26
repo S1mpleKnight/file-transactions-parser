@@ -39,7 +39,7 @@ class OperatorServiceTest {
 
     @Test
     void findByFirstNameAndLastNameSuccess() {
-        assertEquals(1L, operatorService.findByFirstNameAndLastName("Petya", "Hechiparenko").getId());
+        assertEquals(1L, operatorService.findByFirstNameAndLastName("Admin", "Adminov").getId());
     }
 
     @Test
