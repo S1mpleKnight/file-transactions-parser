@@ -57,7 +57,7 @@ public class OperatorService implements UserDetailsService {
 
     @Transactional
     public void delete(Long operatorId) {
-        if (repository.existsById(operatorId)) {
+        if (operatorId != 1 && repository.existsById(operatorId)) {
             List<TransactionDto> transactionDtos = transactionService.findByOperatorId(operatorId);
             repository.deleteById(operatorId);
             for (TransactionDto transaction : transactionDtos) {
@@ -100,5 +100,4 @@ public class OperatorService implements UserDetailsService {
         }
         throw new OperatorNotFoundException(nickname);
     }
-
 }
