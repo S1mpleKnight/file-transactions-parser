@@ -19,7 +19,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/transactions")
 @AllArgsConstructor
-@PreAuthorize("hasRole('admin')")
+@PreAuthorize("hasAuthority('admin')")
 public class TransactionsController {
     private final TransactionService transactionService;
 

@@ -21,7 +21,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/operators")
-@PreAuthorize("hasRole('admin')")
+@PreAuthorize("hasAuthority('admin')")
 public class OperatorsController {
     private final OperatorService operatorService;
 
