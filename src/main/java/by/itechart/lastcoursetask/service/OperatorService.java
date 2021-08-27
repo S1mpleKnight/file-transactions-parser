@@ -8,6 +8,7 @@ import by.itechart.lastcoursetask.exception.OperatorNotFoundException;
 import by.itechart.lastcoursetask.repository.OperatorRepository;
 import by.itechart.lastcoursetask.util.EntityMapper;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -87,7 +88,8 @@ public class OperatorService implements UserDetailsService {
 
     private UserDetails castFromOperatorDto(OperatorDto operatorDto) {
         return new User(operatorDto.getNickname(), operatorDto.getPassword(),
-                true, true, true, true, Collections.emptyList());
+                true, true, true, true,
+                Collections.singleton(new SimpleGrantedAuthority(operatorDto.getRole())));
     }
 
     private boolean isOperatorExist(String firstName, String lastName) {
