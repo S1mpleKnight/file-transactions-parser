@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/files")
-@PreAuthorize("hasRole('user')")
+@PreAuthorize("hasAuthority('USER')")
 public class UploadFilesController {
     private final FileTransferService transferService;
 
