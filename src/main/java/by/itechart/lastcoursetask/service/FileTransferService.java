@@ -1,6 +1,5 @@
 package by.itechart.lastcoursetask.service;
 
-import by.itechart.lastcoursetask.dto.TransactionDto;
 import by.itechart.lastcoursetask.exception.FileNotReadException;
 import by.itechart.lastcoursetask.parser.api.FileParser;
 import by.itechart.lastcoursetask.parser.impl.FileParserFactory;
@@ -24,26 +23,34 @@ public class FileTransferService {
     private final FileParserFactory factory;
 
     public List<String> uploadFile(MultipartFile file, String nickname) {
-        File loadedFile = storeFile(file);
-        FileParser parser = factory.getParser(getFilenameExtension(loadedFile));
-        List<TransactionDto> transactions = parser.parse(loadedFile);
-        transactionService.saveAll(transactions, operatorService.findByNickName(nickname));
+        createUploadDir();
+        storeFile(file);
+        FileParser parser = factory.getParser(getFilenameExtension(file));
+        transactionService.saveAll(parser.parse(file), operatorService.findByNickName(nickname));
         return parser.getInvalidTransactionsData();
     }
 
-    private File storeFile(MultipartFile file) {
+    private void createUploadDir() {
+        File file = new File(UPLOAD_PATH);
+        boolean result = file.exists();
+        while (!result) {
+            log.info("Creating upload dir");
+            result = file.exists();
+        }
+    }
+
+    private void storeFile(MultipartFile file) {
         String anotherFilename = UPLOAD_PATH + "/" + UUID.randomUUID() + "." + file.getOriginalFilename();
         File newFile = new File(anotherFilename);
         try {
             file.transferTo(newFile);
-            return newFile;
         } catch (IOException e) {
             log.error(e.getMessage());
             throw new FileNotReadException(file.getOriginalFilename());
         }
     }
 
-    private String getFilenameExtension(File file) {
+    private String getFilenameExtension(MultipartFile file) {
         String filename = file.getName();
         int pos = filename.lastIndexOf('.');
         return filename.substring(pos + 1);
