@@ -6,6 +6,7 @@ import by.itechart.lastcoursetask.parser.api.FileParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -35,10 +37,20 @@ public class CsvFileParserImpl implements FileParser {
     }
 
     @Override
+    public List<TransactionDto> parse(MultipartFile file) {
+        try {
+            return parse(file.getResource().getFile());
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
     public List<TransactionDto> parse(File file) {
         log.info("Parsing CSV file");
-        List<String> fileStrings = getText(file);
         this.invalidDataMessages.clear();
+        List<String> fileStrings = getText(file);
         List<String> validData = getValidData(fileStrings);
         return getTransactionDTOs(validData);
     }
