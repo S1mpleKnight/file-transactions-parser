@@ -36,8 +36,8 @@ create table transactions
 
 INSERT INTO role (id, name)
 VALUES
-    (1,'admin'),
-    (2,'user');
+    (1,'ADMIN'),
+    (2,'USER');
 
 INSERT INTO operator (id,first_name, last_name, nickname, password, role_id)
 VALUES
