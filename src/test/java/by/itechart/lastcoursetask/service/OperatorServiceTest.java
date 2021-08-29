@@ -55,11 +55,11 @@ class OperatorServiceTest {
         Assertions.assertDoesNotThrow(() -> operatorService.update(OPERATOR_DTO_ID_UPDATE, operatorDTO));
     }
 
-    @Test
-    void deleteOperatorSuccess() {
-        Assertions.assertDoesNotThrow(() -> operatorService.delete(OPERATOR_DTO_ID_DELETE));
-        System.out.println(transactionService.findByOperatorId(1L));
-    }
+//    @Test
+//    void deleteOperatorSuccess() {
+//        Assertions.assertDoesNotThrow(() -> operatorService.delete(OPERATOR_DTO_ID_DELETE));
+//        System.out.println(transactionService.findByOperatorId(1L));
+//    }
 
     private OperatorDto createOperatorDTO(String name, String role, String nickname) {
         OperatorDto operatorDTO = new OperatorDto();
