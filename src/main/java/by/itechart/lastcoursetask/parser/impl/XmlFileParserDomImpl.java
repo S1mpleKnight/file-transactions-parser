@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -52,15 +51,6 @@ public class XmlFileParserDomImpl implements FileParser {
         return new ArrayList<>(this.invalidDataMessages);
     }
 
-    @Override
-    public List<TransactionDto> parse(MultipartFile file) {
-        try {
-             return parse(file.getResource().getFile());
-        } catch (IOException e) {
-            log.error(e.getMessage());
-            return Collections.emptyList();
-        }
-    }
 
     @Override
     public List<TransactionDto> parse(File file) {

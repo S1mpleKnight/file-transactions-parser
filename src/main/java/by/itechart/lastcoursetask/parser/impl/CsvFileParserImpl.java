@@ -37,16 +37,6 @@ public class CsvFileParserImpl implements FileParser {
     }
 
     @Override
-    public List<TransactionDto> parse(MultipartFile file) {
-        try {
-            return parse(file.getResource().getFile());
-        } catch (IOException e) {
-            log.error(e.getMessage());
-            return Collections.emptyList();
-        }
-    }
-
-    @Override
     public List<TransactionDto> parse(File file) {
         log.info("Parsing CSV file");
         this.invalidDataMessages.clear();
