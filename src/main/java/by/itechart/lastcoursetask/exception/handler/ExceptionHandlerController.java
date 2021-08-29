@@ -1,5 +1,6 @@
 package by.itechart.lastcoursetask.exception.handler;
 
+import by.itechart.lastcoursetask.exception.AccessDeniedException;
 import by.itechart.lastcoursetask.exception.FileNotReadException;
 import by.itechart.lastcoursetask.exception.InvalidFileExtensionException;
 import by.itechart.lastcoursetask.exception.JwtAuthenticationException;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ExceptionHandlerController {
 
     @ExceptionHandler({OperatorExistException.class, TransactionExistException.class,
-            FileNotReadException.class, InvalidFileExtensionException.class})
+            FileNotReadException.class, InvalidFileExtensionException.class, AccessDeniedException.class})
     public ResponseEntity<String> badRequest(RuntimeException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
