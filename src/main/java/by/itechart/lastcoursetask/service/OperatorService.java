@@ -117,7 +117,6 @@ public class OperatorService implements UserDetailsService {
 
     private void deleteAdmin(Long operatorId, Principal principal) {
         if (principal.getName().equals(ROOT_ADMIN_NICKNAME)) {
-            System.out.println(principal.getName());
             deleteOperator(operatorId);
         } else {
             throw new AccessDeniedException("Can not delete admin");
