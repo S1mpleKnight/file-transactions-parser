@@ -1,7 +1,6 @@
 package by.itechart.lastcoursetask.config;
 
 import by.itechart.lastcoursetask.security.JwtConfigurer;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

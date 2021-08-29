@@ -3,8 +3,9 @@ package by.itechart.lastcoursetask.service;
 import by.itechart.lastcoursetask.exception.FileNotReadException;
 import by.itechart.lastcoursetask.parser.api.FileParser;
 import by.itechart.lastcoursetask.parser.impl.FileParserFactory;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,43 +16,47 @@ import java.util.UUID;
 
 @Service
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class FileTransferService {
-    private final static String UPLOAD_PATH = "./uploads";
+    @Value("${upload.path}")
+    private String uploadPath;
     private final TransactionService transactionService;
     private final OperatorService operatorService;
     private final FileParserFactory factory;
 
     public List<String> uploadFile(MultipartFile file, String nickname) {
         createUploadDir();
-        storeFile(file);
-        FileParser parser = factory.getParser(getFilenameExtension(file));
-        transactionService.saveAll(parser.parse(file), operatorService.findByNickName(nickname));
+        File loadedFile = storeFile(file);
+        FileParser parser = factory.getParser(getFilenameExtension(loadedFile.getAbsolutePath()));
+        transactionService.saveAll(parser.parse(loadedFile), operatorService.findByNickName(nickname));
         return parser.getInvalidTransactionsData();
     }
 
     private void createUploadDir() {
-        File file = new File(UPLOAD_PATH);
-        boolean result = file.exists();
-        while (!result) {
+        File file = new File(uploadPath);
+        if (!file.exists()) {
             log.info("Creating upload dir");
-            result = file.exists();
+            System.out.println(file.getAbsolutePath());
+            boolean result = file.mkdirs();
+            if (!result) {
+                throw new FileNotReadException("Upload directory is not found");
+            }
         }
     }
 
-    private void storeFile(MultipartFile file) {
-        String anotherFilename = UPLOAD_PATH + "/" + UUID.randomUUID() + "." + file.getOriginalFilename();
+    private File storeFile(MultipartFile file) {
+        String anotherFilename = uploadPath + "/" + UUID.randomUUID() + "." + file.getOriginalFilename();
         File newFile = new File(anotherFilename);
         try {
             file.transferTo(newFile);
+            return newFile;
         } catch (IOException e) {
             log.error(e.getMessage());
             throw new FileNotReadException(file.getOriginalFilename());
         }
     }
 
-    private String getFilenameExtension(MultipartFile file) {
-        String filename = file.getName();
+    private String getFilenameExtension(String filename) {
         int pos = filename.lastIndexOf('.');
         return filename.substring(pos + 1);
     }
