@@ -3,6 +3,7 @@ package by.itechart.lastcoursetask.service;
 import by.itechart.lastcoursetask.dto.OperatorDto;
 import by.itechart.lastcoursetask.dto.TransactionDto;
 import by.itechart.lastcoursetask.entity.Operator;
+import by.itechart.lastcoursetask.exception.AccessDeniedException;
 import by.itechart.lastcoursetask.exception.OperatorExistException;
 import by.itechart.lastcoursetask.exception.OperatorNotFoundException;
 import by.itechart.lastcoursetask.repository.OperatorRepository;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,6 +27,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class OperatorService implements UserDetailsService {
     private static final Long ADMIN_ID = 1L;
+    private static final String ADMIN_ROLE_NAME = "ADMIN";
+    private static final String ROOT_ADMIN_NICKNAME = "adminchik";
     private final TransactionService transactionService;
     private final OperatorRepository repository;
     private final EntityMapper mapper;
@@ -57,13 +61,9 @@ public class OperatorService implements UserDetailsService {
     }
 
     @Transactional
-    public void delete(Long operatorId) {
+    public void delete(Long operatorId, Principal principal) {
         if (operatorId != 1 && repository.existsById(operatorId)) {
-            List<TransactionDto> transactionDtos = transactionService.findByOperatorId(operatorId);
-            repository.deleteById(operatorId);
-            for (TransactionDto transaction : transactionDtos) {
-                transactionService.updateOperator(UUID.fromString(transaction.getTransactionId()), ADMIN_ID);
-            }
+            deleteUser(operatorId, principal);
         } else {
             throw new OperatorNotFoundException(operatorId.toString());
         }
@@ -101,5 +101,34 @@ public class OperatorService implements UserDetailsService {
             return mapper.mapToOperatorDTO(repository.findByNickname(nickname));
         }
         throw new OperatorNotFoundException(nickname);
+    }
+
+    private void deleteUser(Long operatorId, Principal principal) {
+        if (isAdminRole(operatorId)) {
+            deleteAdmin(operatorId, principal);
+        } else {
+            deleteOperator(operatorId);
+        }
+    }
+
+    private boolean isAdminRole(Long operatorId) {
+        return repository.getById(operatorId).getRole().getName().equals(ADMIN_ROLE_NAME);
+    }
+
+    private void deleteAdmin(Long operatorId, Principal principal) {
+        if (principal.getName().equals(ROOT_ADMIN_NICKNAME)) {
+            System.out.println(principal.getName());
+            deleteOperator(operatorId);
+        } else {
+            throw new AccessDeniedException("Can not delete admin");
+        }
+    }
+
+    private void deleteOperator(Long operatorId) {
+        List<TransactionDto> transactionDtos = transactionService.findByOperatorId(operatorId);
+        repository.deleteById(operatorId);
+        for (TransactionDto transaction : transactionDtos) {
+            transactionService.updateOperator(UUID.fromString(transaction.getTransactionId()), ADMIN_ID);
+        }
     }
 }

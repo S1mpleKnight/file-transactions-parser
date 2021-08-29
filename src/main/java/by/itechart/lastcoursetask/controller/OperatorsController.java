@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.List;
 
 @Slf4j
@@ -38,21 +40,21 @@ public class OperatorsController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
+    public ResponseEntity<String> delete(@PathVariable Long id, Principal principal) {
         log.info("Delete by id: " + id);
-        operatorService.delete(id);
+        operatorService.delete(id, principal);
         return ResponseEntity.ok("Operator was successfully deleted");
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> update(@PathVariable Long id, @RequestParam OperatorDto operatorDTO) {
+    public ResponseEntity<String> update(@PathVariable Long id, @RequestBody OperatorDto operatorDTO) {
         log.info("Update by id: " + id + ", operator: " + operatorDTO);
         operatorService.update(id, operatorDTO);
         return ResponseEntity.ok("Operator was successfully updated");
     }
 
     @PostMapping
-    public ResponseEntity<String> save(@RequestParam OperatorDto operatorDTO) {
+    public ResponseEntity<String> save(@RequestBody OperatorDto operatorDTO) {
         log.info("Save operator: " + operatorDTO);
         operatorService.save(operatorDTO);
         return ResponseEntity.ok("Operator was successfully saved");
