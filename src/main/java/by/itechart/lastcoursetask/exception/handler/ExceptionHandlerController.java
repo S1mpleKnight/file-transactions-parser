@@ -1,6 +1,7 @@
 package by.itechart.lastcoursetask.exception.handler;
 
 import by.itechart.lastcoursetask.exception.AccessDeniedException;
+import by.itechart.lastcoursetask.exception.CommandNotFoundException;
 import by.itechart.lastcoursetask.exception.FileNotReadException;
 import by.itechart.lastcoursetask.exception.InvalidFileExtensionException;
 import by.itechart.lastcoursetask.exception.JwtAuthenticationException;
@@ -26,7 +27,8 @@ public class ExceptionHandlerController {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 
-    @ExceptionHandler({TransactionNotFoundException.class, RoleNotFoundException.class, OperatorNotFoundException.class})
+    @ExceptionHandler({TransactionNotFoundException.class, RoleNotFoundException.class, OperatorNotFoundException.class,
+            CommandNotFoundException.class})
     public ResponseEntity<String> notFound(RuntimeException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
