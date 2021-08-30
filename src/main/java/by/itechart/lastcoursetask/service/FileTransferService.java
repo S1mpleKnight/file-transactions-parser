@@ -36,7 +36,6 @@ public class FileTransferService {
         File file = new File(uploadPath);
         if (!file.exists()) {
             log.info("Creating upload dir");
-            System.out.println(file.getAbsolutePath());
             boolean result = file.mkdirs();
             if (!result) {
                 throw new FileNotReadException("Upload directory is not found");
