@@ -58,6 +58,16 @@ public class TransactionService {
         return getTransactionDtoList(transactions);
     }
 
+    public List<TransactionDto> findMinTransactions() {
+        List<Transaction> transactions = transactionRepository.findMinTransactions();
+        return getTransactionDtoList(transactions);
+    }
+
+    public List<TransactionDto> findMaxTransactions() {
+        List<Transaction> transactions = transactionRepository.findMaxTransactions();
+        return getTransactionDtoList(transactions);
+    }
+
     @Transactional
     public void delete(UUID transactionId) {
         if (transactionRepository.existsById(transactionId)) {
