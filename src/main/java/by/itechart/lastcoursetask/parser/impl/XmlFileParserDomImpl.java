@@ -102,8 +102,8 @@ public class XmlFileParserDomImpl implements FileParser {
 
     private boolean tryFillTransaction(Node node) {
         List<Node> nodes = deleteWhitespaces(node);
-        return trySetTransactionId(nodes) && trySetCustomerId(nodes) && trySetDateTime(nodes) && trySetCurrency(nodes)
-            && trySetAmount(nodes) && trySetStatus(nodes);
+        return setTransactionId(nodes) && setCustomerId(nodes) && setDateTime(nodes) && setCurrency(nodes)
+            && setAmount(nodes) && setStatus(nodes);
     }
 
     private List<Node> deleteWhitespaces(Node parentNode) {
@@ -117,7 +117,7 @@ public class XmlFileParserDomImpl implements FileParser {
         return nodes;
     }
 
-    private boolean trySetStatus(List<Node> nodes) {
+    private boolean setStatus(List<Node> nodes) {
         String statusValue = getStringValue(nodes, STATUS_TAG_POS);
         if (statusValue.toLowerCase().matches(STATUS_REGEX)) {
             this.transactionDTO.setStatus(statusValue.equals(SUCCESS_TRANSACTION_STATUS));
@@ -126,7 +126,7 @@ public class XmlFileParserDomImpl implements FileParser {
         return false;
     }
     
-    private boolean trySetCurrency(List<Node> nodes) {
+    private boolean setCurrency(List<Node> nodes) {
         String currencyValue = getStringValue(deleteWhitespaces(nodes.get(PAYMENT_DETAILS_TAG_POS)), CURRENCY_TAG_POS);
         if (currencyValue.matches(CURRENCY_REGEX)) {
             this.transactionDTO.setCurrency(currencyValue);
@@ -135,7 +135,7 @@ public class XmlFileParserDomImpl implements FileParser {
         return false;
     }
 
-    private boolean trySetAmount(List<Node> nodes) {
+    private boolean setAmount(List<Node> nodes) {
         String amountValue = getStringValue(deleteWhitespaces(nodes.get(PAYMENT_DETAILS_TAG_POS)), AMOUNT_TAG_POS);
         if (amountValue.matches(AMOUNT_REGEX)) {
             this.transactionDTO.setAmount(amountValue);
@@ -144,7 +144,7 @@ public class XmlFileParserDomImpl implements FileParser {
         return false;
     }
 
-    private boolean trySetDateTime(List<Node> nodes) {
+    private boolean setDateTime(List<Node> nodes) {
         String dateTimeValue = getStringValue(nodes, DATE_TIME_TAG_POS);
         if (dateTimeValue.matches(DATE_TIME_REGEX)) {
             this.transactionDTO.setDateTime(dateTimeValue);
@@ -153,7 +153,7 @@ public class XmlFileParserDomImpl implements FileParser {
         return false;
     }
 
-    private boolean trySetCustomerId(List<Node> nodes) {
+    private boolean setCustomerId(List<Node> nodes) {
         String customerIdValue = getStringValue(nodes.get(USER_TAG_POS), CUSTOMER_ID_TAG_POS);
         if (customerIdValue.matches(UUID_REGEX)) {
             this.transactionDTO.setCustomerId(customerIdValue);
@@ -162,7 +162,7 @@ public class XmlFileParserDomImpl implements FileParser {
         return false;
     }
 
-    private boolean trySetTransactionId(List<Node> nodes) {
+    private boolean setTransactionId(List<Node> nodes) {
         String transactionIdValue = getStringValue(nodes, TRANSACTION_ID_TAG_POS);
         if (transactionIdValue.matches(UUID_REGEX)) {
             this.transactionDTO.setTransactionId(transactionIdValue);

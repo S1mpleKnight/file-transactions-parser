@@ -1,6 +1,6 @@
 package by.itechart.lastcoursetask.exception.handler;
 
-import by.itechart.lastcoursetask.exception.AccessDeniedException;
+import by.itechart.lastcoursetask.exception.RejectAccessException;
 import by.itechart.lastcoursetask.exception.CommandNotFoundException;
 import by.itechart.lastcoursetask.exception.FileNotReadException;
 import by.itechart.lastcoursetask.exception.InvalidFileExtensionException;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ExceptionHandlerController {
 
     @ExceptionHandler({OperatorExistException.class, TransactionExistException.class,
-            FileNotReadException.class, InvalidFileExtensionException.class, AccessDeniedException.class})
+            FileNotReadException.class, InvalidFileExtensionException.class, RejectAccessException.class})
     public ResponseEntity<String> badRequest(RuntimeException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }

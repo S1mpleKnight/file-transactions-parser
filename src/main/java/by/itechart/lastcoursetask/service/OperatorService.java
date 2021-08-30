@@ -3,7 +3,7 @@ package by.itechart.lastcoursetask.service;
 import by.itechart.lastcoursetask.dto.OperatorDto;
 import by.itechart.lastcoursetask.dto.TransactionDto;
 import by.itechart.lastcoursetask.entity.Operator;
-import by.itechart.lastcoursetask.exception.AccessDeniedException;
+import by.itechart.lastcoursetask.exception.RejectAccessException;
 import by.itechart.lastcoursetask.exception.OperatorExistException;
 import by.itechart.lastcoursetask.exception.OperatorNotFoundException;
 import by.itechart.lastcoursetask.repository.OperatorRepository;
@@ -119,7 +119,7 @@ public class OperatorService implements UserDetailsService {
         if (principal.getName().equals(ROOT_ADMIN_NICKNAME)) {
             deleteOperator(operatorId);
         } else {
-            throw new AccessDeniedException("Can not delete admin");
+            throw new RejectAccessException("Can not delete admin");
         }
     }
 
