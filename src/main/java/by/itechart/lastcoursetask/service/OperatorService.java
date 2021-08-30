@@ -44,7 +44,7 @@ public class OperatorService implements UserDetailsService {
     }
 
     public OperatorDto findByFirstNameAndLastName(String firstName, String lastName) {
-        if (isOperatorExist(firstName, lastName)) {
+        if (isPersonExist(firstName, lastName)) {
             return mapper.mapToOperatorDTO(repository.findByFirstNameAndLastName(firstName, lastName));
         }
         throw new OperatorNotFoundException(firstName + " " + lastName);
@@ -53,11 +53,15 @@ public class OperatorService implements UserDetailsService {
     @Transactional
     public void save(OperatorDto operatorDTO) {
         Operator operator = mapper.mapToOperatorEntity(operatorDTO);
-        if (!isOperatorExist(operator.getFirstName(), operator.getLastName())) {
+        if (isOperatorExist(operator)) {
             repository.save(operator);
         } else {
             throw new OperatorExistException(operator.getId().toString());
         }
+    }
+
+    private boolean isOperatorExist(Operator operator) {
+        return !isPersonExist(operator.getFirstName(), operator.getLastName()) || !isNicknameExist(operator.getNickname());
     }
 
     @Transactional
@@ -92,8 +96,12 @@ public class OperatorService implements UserDetailsService {
                 Collections.singleton(new SimpleGrantedAuthority(operatorDto.getRole())));
     }
 
-    private boolean isOperatorExist(String firstName, String lastName) {
+    private boolean isPersonExist(String firstName, String lastName) {
         return repository.existsByFirstNameAndLastName(firstName, lastName);
+    }
+
+    private boolean isNicknameExist(String nickname) {
+        return repository.existsByNickname(nickname);
     }
 
     public OperatorDto findByNickName(String nickname) {
