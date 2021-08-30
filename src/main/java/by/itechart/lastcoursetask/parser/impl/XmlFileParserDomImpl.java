@@ -31,7 +31,8 @@ public class XmlFileParserDomImpl implements FileParser {
     private final static String AMOUNT_REGEX = "[0-9 ]+";
     private final static String UUID_REGEX = "[0-9a-z]{8}-([0-9a-z]{4}-){3}[0-9a-z]{12}";
     private final static String TRANSACTION_TAG_NAME = "transaction";
-    private final static int TRANSACTION_ID_TAG_POS = 0;
+    private final static int ID_NODE_AMOUNT = 1;
+    private final static int ID_TAG_POS = 0;
     private final static int CUSTOMER_ID_TAG_POS = 1;
     private final static int USER_TAG_POS = 1;
     private final static int DATE_TIME_TAG_POS = 2;
@@ -87,23 +88,36 @@ public class XmlFileParserDomImpl implements FileParser {
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node node = nodeList.item(i);
             this.transactionDTO = new TransactionDto();
-            addTransaction(transactions, node);
+            addTransaction(transactions, node, i);
         }
         return transactions;
     }
 
-    private void addTransaction(List<TransactionDto> transactions, Node node) {
-            if (tryFillTransaction(node)) {
+    private void addTransaction(List<TransactionDto> transactions, Node node, Integer transactionPosition) {
+            if (fillTransaction(node)) {
                 transactions.add(this.transactionDTO);
             } else {
-                this.invalidDataMessages.add("Invalid data in transaction: " + getInvalidTransactionId(node));
+                this.invalidDataMessages.add("Invalid data in transaction: #" + (transactionPosition + 1));
             }
     }
 
-    private boolean tryFillTransaction(Node node) {
+    private boolean fillTransaction(Node node) {
         List<Node> nodes = deleteWhitespaces(node);
-        return setTransactionId(nodes) && setCustomerId(nodes) && setDateTime(nodes) && setCurrency(nodes)
+        return checkIdAmount(nodes) && setTransactionId(nodes) && setCustomerId(nodes) && setDateTime(nodes) && setCurrency(nodes)
             && setAmount(nodes) && setStatus(nodes);
+    }
+
+    private boolean checkIdAmount(List<Node> nodes) {
+        return isTransactionIdExist(nodes) && isCustomerIdExist(nodes);
+    }
+
+    private boolean isCustomerIdExist(List<Node> nodes) {
+        return nodes.get(USER_TAG_POS).hasChildNodes()
+                && deleteWhitespaces(nodes.get(USER_TAG_POS)).get(ID_TAG_POS).getNodeName().equals("id");
+    }
+
+    private boolean isTransactionIdExist(List<Node> nodes) {
+        return nodes.stream().filter(node -> node.getNodeName().equals("id")).count() == ID_NODE_AMOUNT;
     }
 
     private List<Node> deleteWhitespaces(Node parentNode) {
@@ -163,7 +177,7 @@ public class XmlFileParserDomImpl implements FileParser {
     }
 
     private boolean setTransactionId(List<Node> nodes) {
-        String transactionIdValue = getStringValue(nodes, TRANSACTION_ID_TAG_POS);
+        String transactionIdValue = getStringValue(nodes, ID_TAG_POS);
         if (transactionIdValue.matches(UUID_REGEX)) {
             this.transactionDTO.setTransactionId(transactionIdValue);
             return true;
@@ -179,9 +193,5 @@ public class XmlFileParserDomImpl implements FileParser {
     private String getStringValue(Node node, int index) {
         Node transactionId = node.getChildNodes().item(index);
         return transactionId.getTextContent();
-    }
-
-    private String getInvalidTransactionId(Node node) {
-        return deleteWhitespaces(node).get(TRANSACTION_ID_TAG_POS).getTextContent();
     }
 }
