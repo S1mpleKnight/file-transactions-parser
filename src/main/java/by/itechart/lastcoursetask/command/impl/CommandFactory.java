@@ -1,6 +1,7 @@
 package by.itechart.lastcoursetask.command.impl;
 
 import by.itechart.lastcoursetask.command.api.Command;
+import by.itechart.lastcoursetask.dto.CommandDto;
 import by.itechart.lastcoursetask.exception.CommandNotFoundException;
 import lombok.Data;
 import org.springframework.context.annotation.Scope;
@@ -14,10 +15,12 @@ import java.util.Map;
 public class CommandFactory {
     private final Map<String, Command> commandMap;
 
-    public Command getCommand(String command) {
-        if (commandMap.containsKey(command)) {
-            return commandMap.get(command);
+    public Command getCommand(CommandDto commandDto) {
+        if (commandMap.containsKey(commandDto.getCommandName())) {
+            Command command = commandMap.get(commandDto.getCommandName());
+            command.setArgument(commandDto.getStringArgumentValue());
+            return command;
         }
-        throw new CommandNotFoundException(command);
+        throw new CommandNotFoundException(commandDto.toString());
     }
 }
