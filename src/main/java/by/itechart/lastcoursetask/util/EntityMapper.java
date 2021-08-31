@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Slf4j
@@ -49,7 +48,7 @@ public class EntityMapper {
         transactionDTO.setCustomerId(transaction.getCustomerId().toString());
         transactionDTO.setAmount(transaction.getAmount().toString());
         transactionDTO.setCurrency(transaction.getCurrency());
-        transactionDTO.setDateTime(transaction.getDateTime().toString());
+        transactionDTO.setDateTime(transaction.getDateTime());
         transactionDTO.setStatus(transaction.getStatus());
         return transactionDTO;
     }
@@ -60,7 +59,7 @@ public class EntityMapper {
         transaction.setCustomerId(UUID.fromString(transactionDTO.getCustomerId()));
         transaction.setAmount(Long.parseLong(transactionDTO.getAmount()));
         transaction.setCurrency(transactionDTO.getCurrency());
-        transaction.setDateTime(LocalDateTime.parse(transactionDTO.getDateTime()));
+        transaction.setDateTime(transactionDTO.getDateTime());
         transaction.setStatus(transactionDTO.getStatus());
         return transaction;
     }

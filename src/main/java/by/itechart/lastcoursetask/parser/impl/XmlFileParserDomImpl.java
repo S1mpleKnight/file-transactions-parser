@@ -18,6 +18,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -179,7 +181,8 @@ public class XmlFileParserDomImpl implements FileParser {
     private boolean setDateTime(List<Node> nodes) {
         String dateTimeValue = getStringValue(nodes, DATE_TIME_TAG_POS);
         if (dateTimeValue.matches(DATE_TIME_REGEX)) {
-            this.transactionDTO.setDateTime(dateTimeValue);
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            this.transactionDTO.setDateTime(LocalDateTime.parse(dateTimeValue, format));
             return true;
         }
         return false;

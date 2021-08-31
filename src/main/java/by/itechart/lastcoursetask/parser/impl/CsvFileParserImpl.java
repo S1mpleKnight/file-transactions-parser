@@ -76,9 +76,9 @@ public class CsvFileParserImpl implements FileParser {
         return status.equals(SUCCESS_STATUS);
     }
 
-    private String getDateTime(String field) {
+    private LocalDateTime getDateTime(String field) {
         long time = Long.parseLong(field);
-        return LocalDateTime.ofEpochSecond(time, 0, ZoneOffset.of(TIMEZONE_OFFSET)).toString();
+        return LocalDateTime.ofEpochSecond(time, 0, ZoneOffset.of(TIMEZONE_OFFSET));
     }
 
     private List<String> getValidData(List<String> text) {
