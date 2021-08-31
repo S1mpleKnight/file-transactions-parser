@@ -26,10 +26,19 @@ public class FileTransferService {
 
     public List<String> uploadFile(MultipartFile file, String nickname) {
         createUploadDir();
-        File loadedFile = storeFile(file);
-        FileParser parser = factory.getParser(getFilenameExtension(loadedFile.getAbsolutePath()));
-        transactionService.saveAll(parser.parse(loadedFile), operatorService.findByNickName(nickname));
+        storeFile(file);
+        FileParser parser = factory.getParser(getFilenameExtension(file.getOriginalFilename()));
+        saveTransactions(file, nickname, parser);
         return parser.getInvalidTransactionsData();
+    }
+
+    private void saveTransactions(MultipartFile file, String nickname, FileParser parser) {
+        try {
+            transactionService.saveAll(parser.parse(file.getInputStream()), operatorService.findByNickName(nickname));
+        } catch (IOException e) {
+            log.error(e.getMessage(), e.getLocalizedMessage());
+            throw new FileNotReadException(file.getOriginalFilename());
+        }
     }
 
     private void createUploadDir() {
@@ -43,12 +52,11 @@ public class FileTransferService {
         }
     }
 
-    private File storeFile(MultipartFile file) {
+    private void storeFile(MultipartFile file) {
         String anotherFilename = uploadPath + "/" + UUID.randomUUID() + "." + file.getOriginalFilename();
         File newFile = new File(anotherFilename);
         try {
             file.transferTo(newFile);
-            return newFile;
         } catch (IOException e) {
             log.error(e.getMessage());
             throw new FileNotReadException(file.getOriginalFilename());
