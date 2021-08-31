@@ -30,7 +30,7 @@ public class TopFiveTransactionCommand extends Command {
 
     private List<TransactionDto> getTopTransactions() {
         long listSize = service.findAll().size();
-        List<TransactionDto> transactions = getTopTransactions(listSize);
+        List<TransactionDto> transactions = listSize > 5 ? getTopTransactions(listSize): service.findAll();
         transactions.sort(Comparator.reverseOrder());
         return transactions;
     }
