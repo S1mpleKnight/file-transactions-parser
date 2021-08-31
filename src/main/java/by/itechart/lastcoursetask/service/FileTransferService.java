@@ -10,7 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,9 +30,11 @@ public class FileTransferService {
 
     public List<String> uploadFile(MultipartFile file, String nickname) {
         createUploadDir();
-        storeFile(file);
         FileParser parser = factory.getParser(getFilenameExtension(file.getOriginalFilename()));
         saveTransactions(file, nickname, parser);
+        System.out.println("Transactions saved");
+        storeFile(file);
+        System.out.println("File saved");
         return parser.getInvalidTransactionsData();
     }
 
@@ -43,7 +49,7 @@ public class FileTransferService {
 
     private void createUploadDir() {
         File file = new File(uploadPath);
-        if (!file.exists()) {
+        if (Files.notExists(Paths.get(uploadPath))) {
             log.info("Creating upload dir");
             boolean result = file.mkdirs();
             if (!result) {
@@ -53,13 +59,13 @@ public class FileTransferService {
     }
 
     private void storeFile(MultipartFile file) {
-        String anotherFilename = uploadPath + "/" + UUID.randomUUID() + "." + file.getOriginalFilename();
-        File newFile = new File(anotherFilename);
+        String uploadFilename = UUID.randomUUID() + "." + file.getOriginalFilename();
         try {
-            file.transferTo(newFile);
+            Path path = Paths.get(uploadPath).resolve(uploadFilename);
+            Files.copy(file.getInputStream(), path);
         } catch (IOException e) {
             log.error(e.getMessage());
-            throw new FileNotReadException(file.getOriginalFilename());
+            throw new FileNotReadException("Can not store file: " + file.getOriginalFilename());
         }
     }
 
