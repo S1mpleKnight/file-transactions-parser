@@ -11,7 +11,7 @@ import java.util.List;
 
 @Component("all")
 @Slf4j
-public class AllTransactionCommand implements Command {
+public class AllTransactionCommand extends Command {
     private final TransactionService service;
 
     @Autowired

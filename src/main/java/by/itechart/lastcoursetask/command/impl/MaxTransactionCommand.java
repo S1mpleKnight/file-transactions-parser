@@ -11,7 +11,7 @@ import java.util.List;
 
 @Component("max")
 @Slf4j
-public class MaxTransactionCommand implements Command {
+public class MaxTransactionCommand extends Command {
     private final TransactionService service;
 
     @Autowired

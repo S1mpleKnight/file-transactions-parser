@@ -11,7 +11,7 @@ import java.util.List;
 
 @Component("min")
 @Slf4j
-public class MinTransactionCommand implements Command {
+public class MinTransactionCommand extends Command {
     private final TransactionService service;
 
     @Autowired

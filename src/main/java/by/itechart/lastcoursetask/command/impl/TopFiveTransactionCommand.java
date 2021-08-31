@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Component("top")
 @Slf4j
-public class TopFiveTransactionCommand implements Command {
+public class TopFiveTransactionCommand extends Command {
     private final static Integer NUMBER_OF_TOP = 5;
     private final TransactionService service;
 
