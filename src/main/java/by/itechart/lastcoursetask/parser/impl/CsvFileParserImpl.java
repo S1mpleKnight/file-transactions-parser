@@ -1,20 +1,21 @@
 package by.itechart.lastcoursetask.parser.impl;
 
 import by.itechart.lastcoursetask.dto.TransactionDto;
-import by.itechart.lastcoursetask.exception.FileNotReadException;
 import by.itechart.lastcoursetask.parser.api.FileParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Scope("singleton")
@@ -37,8 +38,8 @@ public class CsvFileParserImpl implements FileParser {
     public List<TransactionDto> parse(InputStream stream) {
         log.info("Parsing CSV file");
         this.invalidDataMessages.clear();
-        List<String> fileStrings = getStreamText(stream);
-        List<String> validData = getValidData(fileStrings);
+        BufferedReader reader = getBufferedReader(stream);
+        List<String> validData = getValidDataFromReader(reader);
         return getTransactionDTOs(validData);
     }
 
@@ -76,7 +77,7 @@ public class CsvFileParserImpl implements FileParser {
         return LocalDateTime.ofEpochSecond(time, 0, ZoneOffset.of(TIMEZONE_OFFSET));
     }
 
-    private List<String> getValidData(List<String> text) {
+    private List<String> getValidDataLines(List<String> text) {
         List<String> validData = new ArrayList<>();
         for (int i = 0; i < text.size(); i++) {
             if (text.get(i).matches(VALID_REGEX)) {
@@ -88,13 +89,29 @@ public class CsvFileParserImpl implements FileParser {
         return validData;
     }
 
-    private List<String> getStreamText(InputStream stream) {
+    private List<String> getValidDataFromReader(BufferedReader reader) {
+        readColumnNaming(reader);
+        List<String> text = reader.lines().collect(Collectors.toList());
+        return getValidDataLines(text);
+    }
+
+    private void readColumnNaming(BufferedReader reader) {
         try {
-            String text = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
-            return Arrays.stream(text.trim().split("((\r\n)|(\r)|(\n))")).toList();
+            checkColumnsNaming(reader);
         } catch (IOException e) {
             log.error(e.getMessage());
-            throw new FileNotReadException(stream.toString());
+            invalidDataMessages.add("Columns naming have missed");
         }
+    }
+
+    private void checkColumnsNaming(BufferedReader reader) throws IOException {
+        String naming = reader.readLine();
+        if (!naming.matches(".*(" + DELIMITER + ".*){5}")) {
+            invalidDataMessages.add("Columns naming have missed");
+        }
+    }
+
+    private BufferedReader getBufferedReader(InputStream stream) {
+        return new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
     }
 }
