@@ -1,7 +1,6 @@
 package by.itechart.lastcoursetask.parser.impl;
 
 import by.itechart.lastcoursetask.dto.TransactionDto;
-import by.itechart.lastcoursetask.exception.InvalidDataRepresentationException;
 import by.itechart.lastcoursetask.parser.api.FileParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -15,7 +14,6 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
@@ -57,16 +55,16 @@ public class XmlFileParserDomImpl implements FileParser {
     }
 
     @Override
-    public List<TransactionDto> parse(Object data) {
+    public List<TransactionDto> parse(InputStream stream) {
         log.info("Parsing XML file");
         this.invalidDataMessages.clear();
         DocumentBuilderFactory factory = prepareParser();
-        return getTransactions(data, factory);
+        return getTransactions(stream, factory);
     }
 
-    private List<TransactionDto> getTransactions(Object data, DocumentBuilderFactory factory) {
+    private List<TransactionDto> getTransactions(InputStream stream, DocumentBuilderFactory factory) {
         try {
-            Document document = getDocument(data, factory);
+            Document document = getStreamDocument(stream, factory);
             NodeList nodeList = document.getElementsByTagName(TRANSACTION_TAG_NAME);
             return getTransactions(nodeList);
         } catch (ParserConfigurationException | SAXException | IOException e) {
@@ -75,27 +73,10 @@ public class XmlFileParserDomImpl implements FileParser {
         }
     }
 
-    private Document getDocument(Object data, DocumentBuilderFactory factory) throws ParserConfigurationException, IOException, SAXException {
-        if (data instanceof InputStream stream) {
-            return getStreamDocument(stream, factory);
-        }
-        if (data instanceof File file) {
-            return getFileDocument(file, factory);
-        }
-        throw new InvalidDataRepresentationException("Invalid data representation: " + data.toString());
-    }
-
-
     private Document getStreamDocument(InputStream stream, DocumentBuilderFactory factory) throws ParserConfigurationException,
             SAXException, IOException {
         DocumentBuilder builder = factory.newDocumentBuilder();
         return builder.parse(stream);
-    }
-
-    private Document getFileDocument(File file, DocumentBuilderFactory factory) throws ParserConfigurationException,
-            SAXException, IOException {
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        return builder.parse(file);
     }
 
     private DocumentBuilderFactory prepareParser() {
