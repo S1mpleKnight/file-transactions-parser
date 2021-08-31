@@ -1,3 +1,4 @@
+timestamp,transaction_id,user_id,amount,currency,transaction_result
 1619674154,1c22f114-8251-404e-8c3f-73b70bd0ec80,a00a7fb0-3a72-454d-865d-8f6818f8dd62,34623,byn,success
 1619676213,b54ca174-03f1-4a87-a1f2-dee732a8b754,4289aa66-720d-498f-979a-b9ccda3415e9,124,usd,success
 1619676321,fb3e82e1-8608-41cd-9148-b604f4f1c5a4,bebb0888-2a6f-4f38-b8e7-800a2a3145e8,2422843,usd,rejected
