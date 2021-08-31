@@ -11,6 +11,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -26,10 +28,10 @@ class FileParserTest {
 
     @ParameterizedTest(name = "{index} {0} is parsed successfully")
     @ValueSource(strings = {XML_FILE_PATH, CSV_FILE_PATH})
-    void parseFileSuccessfully(String value) {
+    void parseFileSuccessfully(String value) throws FileNotFoundException {
         File file = new File(value);
         FileParser fileParser = factory.getParser(getFilenameExtension(file));
-        List<TransactionDto> transactions = fileParser.parse(file);
+        List<TransactionDto> transactions = fileParser.parse(new FileInputStream(file));
         System.out.println(transactions);
         System.out.println(fileParser.getInvalidTransactionsData());
         assertNotEquals(0, transactions.size());
