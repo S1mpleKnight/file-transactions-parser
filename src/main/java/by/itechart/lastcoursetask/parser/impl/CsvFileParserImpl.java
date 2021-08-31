@@ -82,7 +82,7 @@ public class CsvFileParserImpl implements FileParser {
             if (text.get(i).matches(VALID_REGEX)) {
                 validData.add(text.get(i));
             } else {
-                this.invalidDataMessages.add(INVALID_DATA_MESSAGE + i);
+                this.invalidDataMessages.add(INVALID_DATA_MESSAGE + (i + 1));
             }
         }
         return validData;
@@ -91,7 +91,7 @@ public class CsvFileParserImpl implements FileParser {
     private List<String> getStreamText(InputStream stream) {
         try {
             String text = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
-            return Arrays.stream(text.split("\n")).toList();
+            return Arrays.stream(text.trim().split("((\r\n)|(\r)|(\n))")).toList();
         } catch (IOException e) {
             log.error(e.getMessage());
             throw new FileNotReadException(stream.toString());
