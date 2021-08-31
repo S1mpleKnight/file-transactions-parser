@@ -2,19 +2,21 @@ package by.itechart.lastcoursetask.parser.impl;
 
 import by.itechart.lastcoursetask.dto.TransactionDto;
 import by.itechart.lastcoursetask.exception.FileNotReadException;
+import by.itechart.lastcoursetask.exception.InvalidDataRepresentationException;
 import by.itechart.lastcoursetask.parser.api.FileParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -37,10 +39,10 @@ public class CsvFileParserImpl implements FileParser {
     }
 
     @Override
-    public List<TransactionDto> parse(File file) {
+    public List<TransactionDto> parse(Object data) {
         log.info("Parsing CSV file");
         this.invalidDataMessages.clear();
-        List<String> fileStrings = getText(file);
+        List<String> fileStrings = getText(data);
         List<String> validData = getValidData(fileStrings);
         return getTransactionDTOs(validData);
     }
@@ -91,7 +93,17 @@ public class CsvFileParserImpl implements FileParser {
         return validData;
     }
 
-    private List<String> getText(File file) {
+    private List<String> getText(Object data) {
+        if (data instanceof File file) {
+            return getFileText(file);
+        }
+        if (data instanceof InputStream stream) {
+            return getStreamText(stream);
+        }
+        throw new InvalidDataRepresentationException("Invalid data representation: " + data.toString());
+    }
+
+    private List<String> getFileText(File file) {
         List<String> fileStrings;
         try (Stream<String> stringStream = Files.lines(file.toPath())) {
             fileStrings = stringStream.collect(Collectors.toList());
@@ -100,5 +112,15 @@ public class CsvFileParserImpl implements FileParser {
             throw new FileNotReadException(file.getAbsolutePath());
         }
         return fileStrings;
+    }
+
+    private List<String> getStreamText(InputStream stream) {
+        try {
+            String text = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
+            return Arrays.stream(text.split("\n")).toList();
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            throw new FileNotReadException(stream.toString());
+        }
     }
 }
