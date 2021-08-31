@@ -13,6 +13,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -85,7 +87,7 @@ class TransactionsControllerTest {
         transactionDto.setCustomerId(customerId);
         transactionDto.setCurrency(currency);
         transactionDto.setAmount(amount);
-        transactionDto.setDateTime(dateTime);
+        transactionDto.setDateTime(LocalDateTime.parse(dateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         transactionDto.setStatus(status);
         return transactionDto;
     }

@@ -62,7 +62,7 @@ class TransactionServiceTest {
         transactionDTO.setStatus(true);
         transactionDTO.setCurrency("usd");
         transactionDTO.setAmount("123123");
-        transactionDTO.setDateTime(LocalDateTime.now().toString());
+        transactionDTO.setDateTime(LocalDateTime.now());
         transactionDTO.setTransactionId(transactionId);
         transactionDTO.setCustomerId(customerId);
         return transactionDTO;
