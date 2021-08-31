@@ -12,7 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -30,7 +29,7 @@ public class Transaction {
     @Type(type = "uuid-char")
     private UUID id;
     private Boolean status;
-    private BigDecimal amount;
+    private Long amount;
     private String currency;
     @Column(name = "customer_id")
     @Type(type = "uuid-char")
@@ -44,7 +43,9 @@ public class Transaction {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Transaction that = (Transaction) o;
-        return Objects.equals(id, that.id) && Objects.equals(status, that.status) && Objects.equals(amount, that.amount) && Objects.equals(currency, that.currency) && Objects.equals(customerId, that.customerId) && Objects.equals(dateTime, that.dateTime) && Objects.equals(operator, that.operator);
+        return Objects.equals(id, that.id) && Objects.equals(status, that.status) && Objects.equals(amount, that.amount)
+                && Objects.equals(currency, that.currency) && Objects.equals(customerId, that.customerId)
+                && Objects.equals(dateTime, that.dateTime) && Objects.equals(operator, that.operator);
     }
 
     @Override

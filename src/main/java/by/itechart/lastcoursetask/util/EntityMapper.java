@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -59,7 +58,7 @@ public class EntityMapper {
         Transaction transaction = new Transaction();
         transaction.setId(UUID.fromString(transactionDTO.getTransactionId()));
         transaction.setCustomerId(UUID.fromString(transactionDTO.getCustomerId()));
-        transaction.setAmount(new BigDecimal(transactionDTO.getAmount()));
+        transaction.setAmount(Long.parseLong(transactionDTO.getAmount()));
         transaction.setCurrency(transactionDTO.getCurrency());
         transaction.setDateTime(LocalDateTime.parse(transactionDTO.getDateTime()));
         transaction.setStatus(transactionDTO.getStatus());

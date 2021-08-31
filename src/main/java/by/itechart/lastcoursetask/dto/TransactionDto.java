@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,6 +17,6 @@ public class TransactionDto implements Comparable<TransactionDto>{
 
     @Override
     public int compareTo(TransactionDto o) {
-        return new BigDecimal(this.amount).compareTo(new BigDecimal(o.getAmount()));
+        return Long.compare(Long.parseLong(this.amount), Long.parseLong(o.getAmount()));
     }
 }
