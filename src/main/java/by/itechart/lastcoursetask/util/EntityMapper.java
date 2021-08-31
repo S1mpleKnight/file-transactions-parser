@@ -57,7 +57,7 @@ public class EntityMapper {
         Transaction transaction = new Transaction();
         transaction.setId(UUID.fromString(transactionDTO.getTransactionId()));
         transaction.setCustomerId(UUID.fromString(transactionDTO.getCustomerId()));
-        transaction.setAmount(Long.parseLong(transactionDTO.getAmount()));
+        transaction.setAmount(Long.parseLong(String.join("", transactionDTO.getAmount().split(" "))));
         transaction.setCurrency(transactionDTO.getCurrency());
         transaction.setDateTime(transactionDTO.getDateTime());
         transaction.setStatus(transactionDTO.getStatus());
