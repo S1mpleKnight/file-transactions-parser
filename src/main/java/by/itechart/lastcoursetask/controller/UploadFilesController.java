@@ -23,9 +23,9 @@ public class UploadFilesController {
     private final FileTransferService transferService;
 
     @PostMapping
-    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file, Principal principal) {
-        log.info("Save file: " + file.getOriginalFilename() + ", operator: " + principal.getName());
-        List<String> errorMessages = transferService.uploadFile(file, principal.getName());
+    public ResponseEntity<String> upload(@RequestParam("files") MultipartFile[] files, Principal principal) {
+        log.info("Save files, operator: " + principal.getName());
+        List<String> errorMessages = transferService.uploadFiles(files, principal.getName());
         String responseText = errorMessages.isEmpty()
                 ? "Transactions have been loaded"
                 : "Transactions have been loaded" + "\n" + String.join("\n", errorMessages);
