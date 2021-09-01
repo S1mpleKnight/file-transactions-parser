@@ -23,11 +23,4 @@ public class AuthenticationController {
         Map<Object, Object> response = authenticationService.authenticate(request);
         return ResponseEntity.ok(response);
     }
-
-    @PostMapping("/logout")
-    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
-        SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
-        securityContextLogoutHandler.logout(request, response, null);
-        return ResponseEntity.ok("Successfully logout");
-    }
 }
