@@ -81,18 +81,18 @@ public class XmlFileParserDomImpl implements FileParser {
      * @see         TransactionDto
      */
     @Override
-    public List<TransactionDto> parse(InputStream stream) {
+    public List<TransactionDto> parse(InputStream stream, String filename) {
         log.info("Parsing XML file");
         this.invalidDataMessages.clear();
         DocumentBuilderFactory factory = prepareParser();
-        return getTransactions(stream, factory);
+        return getTransactionsDto(stream, factory, filename);
     }
 
-    private List<TransactionDto> getTransactions(InputStream stream, DocumentBuilderFactory factory) {
+    private List<TransactionDto> getTransactionsDto(InputStream stream, DocumentBuilderFactory factory, String filename) {
         try {
             Document document = getStreamDocument(stream, factory);
             NodeList nodeList = document.getElementsByTagName(TRANSACTION_TAG_NAME);
-            return getTransactions(nodeList);
+            return getTransactions(nodeList, filename);
         } catch (ParserConfigurationException | SAXException | IOException e) {
             log.error(e.getMessage());
             return Collections.emptyList();
@@ -110,21 +110,22 @@ public class XmlFileParserDomImpl implements FileParser {
         return DocumentBuilderFactory.newInstance();
     }
 
-    private List<TransactionDto> getTransactions(NodeList nodeList) {
+    private List<TransactionDto> getTransactions(NodeList nodeList, String filename) {
         List<TransactionDto> transactions = new ArrayList<>();
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node node = nodeList.item(i);
             this.transactionDTO = new TransactionDto();
-            addTransaction(transactions, node, i);
+            addTransaction(transactions, node, i, filename);
         }
         return transactions;
     }
 
-    private void addTransaction(List<TransactionDto> transactions, Node node, Integer transactionPosition) {
+    private void addTransaction(List<TransactionDto> transactions, Node node, Integer transactionPosition, String filename) {
             if (fillTransaction(node)) {
                 transactions.add(this.transactionDTO);
             } else {
-                this.invalidDataMessages.add("Invalid data in transaction: #" + (transactionPosition + 1));
+                this.invalidDataMessages.add("Invalid data in transaction: #" + (transactionPosition + 1)
+                        + " file: " + filename);
             }
     }
 

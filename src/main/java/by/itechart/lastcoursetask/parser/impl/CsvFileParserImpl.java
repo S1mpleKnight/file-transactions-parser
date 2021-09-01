@@ -56,15 +56,16 @@ public class CsvFileParserImpl implements FileParser {
     /**
      * Parsing incoming data from CSV file to the {@code TransactionDto} list
      * @param       stream Representation of given data
+     * @param       filename Name of file
      * @return      List of successfully parsed {@code TransactionDto} objects
      * @see         TransactionDto
      */
     @Override
-    public List<TransactionDto> parse(InputStream stream) {
+    public List<TransactionDto> parse(InputStream stream, String filename) {
         log.info("Parsing CSV file");
         this.invalidDataMessages.clear();
         BufferedReader reader = getBufferedReader(stream);
-        List<String> validData = getValidDataFromReader(reader);
+        List<String> validData = getValidDataFromReader(reader, filename);
         return getTransactionDTOs(validData);
     }
 
@@ -106,22 +107,22 @@ public class CsvFileParserImpl implements FileParser {
         return LocalDateTime.ofEpochSecond(time, 0, ZoneOffset.of(TIMEZONE_OFFSET));
     }
 
-    private List<String> getValidDataLines(List<String> text) {
+    private List<String> getValidDataLines(List<String> text, String filename) {
         List<String> validData = new ArrayList<>();
         for (int i = 0; i < text.size(); i++) {
             if (text.get(i).matches(VALID_REGEX)) {
                 validData.add(text.get(i));
             } else {
-                this.invalidDataMessages.add(INVALID_DATA_MESSAGE + (i + 1));
+                this.invalidDataMessages.add(INVALID_DATA_MESSAGE + (i + 1) + " in file: " + filename);
             }
         }
         return validData;
     }
 
-    private List<String> getValidDataFromReader(BufferedReader reader) {
+    private List<String> getValidDataFromReader(BufferedReader reader, String filename) {
         readColumnNaming(reader);
         List<String> text = reader.lines().collect(Collectors.toList());
-        return getValidDataLines(text);
+        return getValidDataLines(text, filename);
     }
 
     private void readColumnNaming(BufferedReader reader) {

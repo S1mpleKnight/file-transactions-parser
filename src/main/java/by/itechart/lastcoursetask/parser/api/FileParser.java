@@ -8,7 +8,7 @@ import java.util.List;
 
 @Component
 public interface FileParser {
-    List<TransactionDto> parse(InputStream stream);
+    List<TransactionDto> parse(InputStream stream, String filename);
 
     List<String> getInvalidTransactionsData();
 }
