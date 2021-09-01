@@ -1,4 +1,4 @@
-package by.itechart.lastcoursetask.command.api;
+package by.itechart.lastcoursetask.command;
 
 import lombok.Data;
 import org.springframework.stereotype.Component;

@@ -1,6 +1,5 @@
-package by.itechart.lastcoursetask.command.impl;
+package by.itechart.lastcoursetask.command;
 
-import by.itechart.lastcoursetask.command.api.Command;
 import by.itechart.lastcoursetask.dto.CommandDto;
 import by.itechart.lastcoursetask.exception.CommandNotFoundException;
 import lombok.Data;

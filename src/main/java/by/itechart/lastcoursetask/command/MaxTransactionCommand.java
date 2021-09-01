@@ -1,6 +1,5 @@
-package by.itechart.lastcoursetask.command.impl;
+package by.itechart.lastcoursetask.command;
 
-import by.itechart.lastcoursetask.command.api.Command;
 import by.itechart.lastcoursetask.dto.TransactionDto;
 import by.itechart.lastcoursetask.service.TransactionService;
 import lombok.extern.slf4j.Slf4j;
