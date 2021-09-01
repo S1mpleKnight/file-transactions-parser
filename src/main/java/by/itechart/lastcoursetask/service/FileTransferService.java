@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -51,7 +52,7 @@ public class FileTransferService {
      * Parsing input data represented by multipart file with {@code FileParser}.
      * Store transaction with the given nickname by {@code OperatorService}.
      * Store uploaded file to local storage.
-     * @param       file File to parse & store
+     * @param       files Files to parse & store
      * @param       nickname Operator nickname String value
      * @return      List of exception messages, which occurs while file have been proceeded
      * @throws      FileNotReadException
@@ -61,9 +62,16 @@ public class FileTransferService {
      * @throws      by.itechart.lastcoursetask.exception.TransactionExistException
      *              If transaction is already exist
      */
-
-    public List<String> uploadFile(MultipartFile file, String nickname) {
+    public List<String> uploadFiles(MultipartFile[] files, String nickname) {
         createUploadDir();
+        List<String> messages = new ArrayList<>();
+        for (MultipartFile file : files) {
+            messages.addAll(uploadFile(file, nickname));
+        }
+        return messages;
+    }
+
+    private List<String> uploadFile(MultipartFile file, String nickname) {
         FileParser parser = factory.getParser(getFilenameExtension(file.getOriginalFilename()));
         saveTransactions(file, nickname, parser);
         storeFile(file);
@@ -72,10 +80,11 @@ public class FileTransferService {
 
     private void saveTransactions(MultipartFile file, String nickname, FileParser parser) {
         try {
-            transactionService.saveAll(parser.parse(file.getInputStream()), operatorService.findByNickName(nickname));
+            transactionService.saveAll(parser.parse(file.getInputStream(), file.getOriginalFilename()),
+                    operatorService.findByNickName(nickname));
         } catch (IOException e) {
             log.error(e.getMessage(), e.getLocalizedMessage());
-            throw new FileNotReadException(file.getOriginalFilename());
+            throw new FileNotReadException("File have not been read: " + file.getOriginalFilename());
         }
     }
 
