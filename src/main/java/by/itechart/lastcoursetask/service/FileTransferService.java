@@ -30,7 +30,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FileTransferService {
     /**
-     * String value of the path, which represent upload directory
+     * String value of the path, which represent upload directory, should be different on macOS, Windows & Linux
      */
     @Value("${upload.path}")
     private String uploadPath;
