@@ -1,5 +1,6 @@
 package by.itechart.lastcoursetask.service;
 
+import by.itechart.lastcoursetask.dto.OperatorDto;
 import by.itechart.lastcoursetask.exception.FileNotReadException;
 import by.itechart.lastcoursetask.parser.api.FileParser;
 import by.itechart.lastcoursetask.parser.impl.FileParserFactory;
@@ -10,31 +11,62 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+
+/**
+ * Service which is providing the ability of upload files to the local storage
+ * and parsing incoming InputStream to get inner data as list of strings.
+ */
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class FileTransferService {
+    /**
+     * String value of the path, which represent upload directory
+     */
     @Value("${upload.path}")
     private String uploadPath;
+    /**
+     * TransactionService provides method saveAll{@link TransactionService#saveAll(Collection, OperatorDto)}
+     * which save all valid transactions in the database
+     */
     private final TransactionService transactionService;
+    /**
+     * With the help of OperatorService operator can be established to the uploaded transactions
+     */
     private final OperatorService operatorService;
+    /**
+     * FileParserFactory takes parser, which correspond filename extension
+     */
     private final FileParserFactory factory;
+
+    /**
+     * Parsing input data represented by multipart file with {@code FileParser}.
+     * Store transaction with the given nickname by {@code OperatorService}.
+     * Store uploaded file to local storage.
+     * @param       file File to parse & store
+     * @param       nickname Operator nickname String value
+     * @return      List of exception messages, which occurs while file have been proceeded
+     * @throws      FileNotReadException
+     *              If file can not be proceeded
+     * @throws      by.itechart.lastcoursetask.exception.InvalidFileExtensionException
+     *              If parser for the file extension is not exist
+     * @throws      by.itechart.lastcoursetask.exception.TransactionExistException
+     *              If transaction is already exist
+     */
 
     public List<String> uploadFile(MultipartFile file, String nickname) {
         createUploadDir();
         FileParser parser = factory.getParser(getFilenameExtension(file.getOriginalFilename()));
         saveTransactions(file, nickname, parser);
-        System.out.println("Transactions saved");
         storeFile(file);
-        System.out.println("File saved");
         return parser.getInvalidTransactionsData();
     }
 
@@ -74,3 +106,11 @@ public class FileTransferService {
         return filename.substring(pos + 1);
     }
 }
+
+/**
+ * @Author      Vanya Zelezinsky
+ * @Version     1.0
+ * @see         by.itechart.lastcoursetask.service.TransactionService
+ * @see         by.itechart.lastcoursetask.parser.api.FileParser
+ * @see         by.itechart.lastcoursetask.service.OperatorService
+ */

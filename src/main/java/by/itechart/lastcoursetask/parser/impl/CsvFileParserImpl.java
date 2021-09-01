@@ -17,23 +17,48 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of FileParser which works with CSV files
+ */
+
 @Slf4j
 @Scope("singleton")
 @Component("csv")
 public class CsvFileParserImpl implements FileParser {
+    /**
+     * Regular expression for the transaction status
+     */
     private final static String STATUS_REGEX = "((success)|(failed)|(rejected))";
+    /**
+     * Regular expression for the UUID string value
+     */
     private final static String UUID_REGEX = "[0-9a-z]{8}-([0-9a-z]{4}-){3}[0-9a-z]{12}";
+    /**
+     * Regular expression for the transaction data
+     */
     private final static String VALID_REGEX = "[0-9]{10,},(" + UUID_REGEX + ",){2}[0-9]+,[a-z]{3}," + STATUS_REGEX;
+    /**
+     * Current time zone offset
+     */
     private final static String TIMEZONE_OFFSET = "+02:00";
     private final static String SUCCESS_STATUS = "success";
     private final static String DELIMITER = ",";
     private final static String INVALID_DATA_MESSAGE = "Invalid data in line: ";
+    /**
+     * Storage for all exception messages, if they were occurred
+     */
     private final List<String> invalidDataMessages;
 
     CsvFileParserImpl() {
         this.invalidDataMessages = new ArrayList<>();
     }
 
+    /**
+     * Parsing incoming data from CSV file to the {@code TransactionDto} list
+     * @param       stream Representation of given data
+     * @return      List of successfully parsed {@code TransactionDto} objects
+     * @see         TransactionDto
+     */
     @Override
     public List<TransactionDto> parse(InputStream stream) {
         log.info("Parsing CSV file");
@@ -43,6 +68,10 @@ public class CsvFileParserImpl implements FileParser {
         return getTransactionDTOs(validData);
     }
 
+    /**
+     * Takes list of exceptions
+     * @return      List of exception, which occurs while parsing incoming data
+     */
     @Override
     public List<String> getInvalidTransactionsData() {
         return new ArrayList<>(this.invalidDataMessages);
@@ -115,3 +144,11 @@ public class CsvFileParserImpl implements FileParser {
         return new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
     }
 }
+
+/**
+ * @Author      Vanya Zelezinsky
+ * @Version     1.0
+ * @see         by.itechart.lastcoursetask.parser.impl.XmlFileParserDomImpl
+ * @see         by.itechart.lastcoursetask.parser.api.FileParser
+ * @see         by.itechart.lastcoursetask.parser.impl.FileParserFactory
+ */

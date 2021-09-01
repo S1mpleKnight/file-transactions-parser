@@ -22,17 +22,27 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Implementation of FileParser which works with XML files
+ */
+
 @Slf4j
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Component("xml")
 public class XmlFileParserDomImpl implements FileParser {
     private final static String SUCCESS_TRANSACTION_STATUS = "COMPLETE";
+    /**
+     * Regular expression for the XML file structure validation
+     */
     private final static String DATE_TIME_REGEX = "[0-9]{4}(-[0-9]{2}){2} ([0-9]{2}:){2}[0-9]{2}";
     private final static String STATUS_REGEX = "((complete)|(failure))";
     private final static String CURRENCY_REGEX = "[A-Z]{3}";
     private final static String AMOUNT_REGEX = "[0-9 ]+";
     private final static String UUID_REGEX = "[0-9a-z]{8}-([0-9a-z]{4}-){3}[0-9a-z]{12}";
     private final static String TRANSACTION_TAG_NAME = "transaction";
+    /**
+     * Positions of nodes in their parents
+     */
     private final static int ID_NODE_AMOUNT = 1;
     private final static int ID_TAG_POS = 0;
     private final static int CUSTOMER_ID_TAG_POS = 1;
@@ -42,18 +52,34 @@ public class XmlFileParserDomImpl implements FileParser {
     private final static int AMOUNT_TAG_POS = 0;
     private final static int CURRENCY_TAG_POS = 1;
     private final static int STATUS_TAG_POS = 4;
+    /**
+     * Storage for all exception messages, if they were occurred
+     */
     private final List<String> invalidDataMessages;
+    /**
+     * Temporary storage for the proceeding transaction
+     */
     private TransactionDto transactionDTO;
 
     XmlFileParserDomImpl() {
         this.invalidDataMessages = new ArrayList<>();
     }
 
+    /**
+     * Takes list of exceptions
+     * @return      List of exception, which occurs while parsing incoming data
+     */
     @Override
     public List<String> getInvalidTransactionsData() {
         return new ArrayList<>(this.invalidDataMessages);
     }
 
+    /**
+     * Parsing incoming data from XML file to the {@code TransactionDto} list
+     * @param       stream Representation of given data
+     * @return      List of successfully parsed {@code TransactionDto} objects
+     * @see         TransactionDto
+     */
     @Override
     public List<TransactionDto> parse(InputStream stream) {
         log.info("Parsing XML file");
@@ -73,8 +99,8 @@ public class XmlFileParserDomImpl implements FileParser {
         }
     }
 
-    private Document getStreamDocument(InputStream stream, DocumentBuilderFactory factory) throws ParserConfigurationException,
-            SAXException, IOException {
+    private Document getStreamDocument(InputStream stream, DocumentBuilderFactory factory)
+            throws ParserConfigurationException, SAXException, IOException {
         DocumentBuilder builder = factory.newDocumentBuilder();
         return builder.parse(stream);
     }
@@ -197,3 +223,11 @@ public class XmlFileParserDomImpl implements FileParser {
         return transactionId.getTextContent();
     }
 }
+
+/**
+ * @Author      Vanya Zelezinsky
+ * @Version     1.0
+ * @see         by.itechart.lastcoursetask.parser.impl.CsvFileParserImpl
+ * @see         by.itechart.lastcoursetask.parser.api.FileParser
+ * @see         by.itechart.lastcoursetask.parser.impl.FileParserFactory
+ */
