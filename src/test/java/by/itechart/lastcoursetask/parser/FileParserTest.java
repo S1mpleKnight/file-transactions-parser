@@ -31,7 +31,7 @@ class FileParserTest {
     void parseFileSuccessfully(String value) throws FileNotFoundException {
         File file = new File(value);
         FileParser fileParser = factory.getParser(getFilenameExtension(file));
-        List<TransactionDto> transactions = fileParser.parse(new FileInputStream(file));
+        List<TransactionDto> transactions = fileParser.parse(new FileInputStream(file), file.getName());
         System.out.println(transactions);
         System.out.println(fileParser.getInvalidTransactionsData());
         assertNotEquals(0, transactions.size());
