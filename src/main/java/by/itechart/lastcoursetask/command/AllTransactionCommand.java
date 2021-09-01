@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component("all")
+@Component("allTransactions")
 @Slf4j
 public class AllTransactionCommand extends Command {
     private final TransactionService service;

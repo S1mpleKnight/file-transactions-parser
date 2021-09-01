@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component("max")
+@Component("maxAmountTransaction")
 @Slf4j
 public class MaxTransactionCommand extends Command {
     private final TransactionService service;

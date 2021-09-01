@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component("min")
+@Component("minAmountTransaction")
 @Slf4j
 public class MinTransactionCommand extends Command {
     private final TransactionService service;

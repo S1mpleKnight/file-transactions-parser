@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component("info")
+@Component("shortInfo")
 @Slf4j
 public class TransactionStatisticsCommand extends Command {
     private final TransactionService service;

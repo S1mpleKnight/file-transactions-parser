@@ -10,14 +10,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component("top")
+@Component("topAmountTransactions")
 @Slf4j
-public class TopFiveTransactionCommand extends Command {
+public class TopAmountTransactionCommand extends Command {
     private final static Integer NUMBER_OF_TOP = 5;
     private final TransactionService service;
 
     @Autowired
-    TopFiveTransactionCommand(TransactionService service) {
+    TopAmountTransactionCommand(TransactionService service) {
         this.service = service;
     }
 
