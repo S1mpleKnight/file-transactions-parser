@@ -1,6 +1,7 @@
 package by.itechart.lastcoursetask.command;
 
 import by.itechart.lastcoursetask.dto.TransactionDto;
+import by.itechart.lastcoursetask.dto.TransactionStatisticsDto;
 import by.itechart.lastcoursetask.service.TransactionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +20,12 @@ public class TransactionStatisticsCommand extends Command {
     }
 
     @Override
-    public String execute() {
+    public TransactionStatisticsDto execute() {
         log.info("Transaction statistics command");
         return getReport();
     }
 
-    private String getReport() {
+    private TransactionStatisticsDto getReport() {
         TransactionDto min = service.findMinTransactions().get(0);
         TransactionDto max = service.findMaxTransactions().get(0);
         List<TransactionDto> transactions = service.findAll();
@@ -40,15 +41,10 @@ public class TransactionStatisticsCommand extends Command {
                 .count();
     }
 
-    private String createReport(long size, long successful, TransactionDto minTransaction, TransactionDto maxTransaction) {
-        return String.format("""
-                Total number of transactions: %d
-                where successful: %d
-                failed: %d
-                MIN transaction: %s %s
-                MAX transaction: %s %s""",
+    private TransactionStatisticsDto createReport(long size, long successful, TransactionDto minTransaction, TransactionDto maxTransaction) {
+        return new TransactionStatisticsDto(
                 size, successful, size - successful,
-                minTransaction.getAmount(), minTransaction.getCurrency(),
-                maxTransaction.getAmount(), maxTransaction.getCurrency());
+                Long.parseLong(minTransaction.getAmount()), minTransaction.getCurrency(),
+                Long.parseLong(maxTransaction.getAmount()), maxTransaction.getCurrency());
     }
 }
