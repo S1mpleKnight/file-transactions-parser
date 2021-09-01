@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import javax.xml.bind.ValidationException;
+
 @ControllerAdvice
 public class ExceptionHandlerController {
 
-    @ExceptionHandler({OperatorExistException.class, TransactionExistException.class,
+    @ExceptionHandler({OperatorExistException.class, TransactionExistException.class, ValidationException.class,
             FileNotReadException.class, InvalidFileExtensionException.class, RejectAccessException.class})
     public ResponseEntity<String> badRequest(RuntimeException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
