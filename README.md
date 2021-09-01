@@ -1,2 +1,2 @@
-# lastCourseTask
+# file-transactions-parser
 iTechArt project
