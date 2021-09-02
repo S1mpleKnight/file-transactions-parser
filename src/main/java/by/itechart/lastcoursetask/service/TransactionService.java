@@ -96,18 +96,6 @@ public class TransactionService {
     }
 
     @Transactional
-    public void update(UUID oldTransactionId, TransactionDto newTransaction) {
-        if (transactionRepository.existsById(oldTransactionId)) {
-            Transaction transaction = mapper.mapToTransactionEntity(newTransaction);
-            transaction.setId(oldTransactionId);
-            transaction.setOperator(transactionRepository.getById(oldTransactionId).getOperator());
-            transactionRepository.save(transaction);
-        } else {
-            throw new TransactionNotFoundException(oldTransactionId.toString());
-        }
-    }
-
-    @Transactional
     public void updateOperator(UUID oldTransactionId, Long operatorId) {
         if (transactionRepository.existsById(oldTransactionId)) {
             Transaction transaction = transactionRepository.getById(oldTransactionId);
