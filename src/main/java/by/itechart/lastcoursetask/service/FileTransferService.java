@@ -23,6 +23,12 @@ import java.util.UUID;
 /**
  * Service which is providing the ability of upload files to the local storage
  * and parsing incoming InputStream to get inner data as list of strings.
+ *
+ * @since     1.0
+ * @author      Vanya Zelezinsky
+ * @see         by.itechart.lastcoursetask.service.TransactionService
+ * @see         by.itechart.lastcoursetask.parser.api.FileParser
+ * @see         by.itechart.lastcoursetask.service.OperatorService
  */
 
 @Service
@@ -115,11 +121,3 @@ public class FileTransferService {
         return filename.substring(pos + 1);
     }
 }
-
-/**
- * @Author      Vanya Zelezinsky
- * @Version     1.0
- * @see         by.itechart.lastcoursetask.service.TransactionService
- * @see         by.itechart.lastcoursetask.parser.api.FileParser
- * @see         by.itechart.lastcoursetask.service.OperatorService
- */

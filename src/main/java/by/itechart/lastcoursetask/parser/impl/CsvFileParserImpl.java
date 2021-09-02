@@ -19,6 +19,12 @@ import java.util.stream.Collectors;
 
 /**
  * Implementation of FileParser which works with CSV files
+ *
+ * @since      1.0
+ * @author      Vanya Zelezinsky
+ * @see         by.itechart.lastcoursetask.parser.impl.XmlFileParserDomImpl
+ * @see         by.itechart.lastcoursetask.parser.api.FileParser
+ * @see         by.itechart.lastcoursetask.parser.impl.FileParserFactory
  */
 
 @Slf4j
@@ -145,11 +151,3 @@ public class CsvFileParserImpl implements FileParser {
         return new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
     }
 }
-
-/**
- * @Author      Vanya Zelezinsky
- * @Version     1.0
- * @see         by.itechart.lastcoursetask.parser.impl.XmlFileParserDomImpl
- * @see         by.itechart.lastcoursetask.parser.api.FileParser
- * @see         by.itechart.lastcoursetask.parser.impl.FileParserFactory
- */

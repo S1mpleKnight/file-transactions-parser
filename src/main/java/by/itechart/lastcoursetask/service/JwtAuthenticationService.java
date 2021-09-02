@@ -13,6 +13,11 @@ import java.util.Map;
 
 /**
  * Simple service, which contain only one method, connected with JWT authentication
+ *
+ * @since      1.0
+ * @author      Vanya Zelezinsky
+ * @see         by.itechart.lastcoursetask.service.OperatorService
+ * @see         by.itechart.lastcoursetask.security.JwtTokenProvider
  */
 
 @Service
@@ -57,10 +62,3 @@ public class JwtAuthenticationService {
         return response;
     }
 }
-
-/**
- * @Author      Vanya Zelezinsky
- * @Version     1.0
- * @see         by.itechart.lastcoursetask.service.OperatorService
- * @see         by.itechart.lastcoursetask.security.JwtTokenProvider
- */

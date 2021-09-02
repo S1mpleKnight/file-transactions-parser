@@ -24,6 +24,12 @@ import java.util.List;
 
 /**
  * Implementation of FileParser which works with XML files
+ *
+ * @since      1.0
+ * @author      Vanya Zelezinsky
+ * @see         by.itechart.lastcoursetask.parser.impl.CsvFileParserImpl
+ * @see         by.itechart.lastcoursetask.parser.api.FileParser
+ * @see         by.itechart.lastcoursetask.parser.impl.FileParserFactory
  */
 
 @Slf4j
@@ -224,11 +230,3 @@ public class XmlFileParserDomImpl implements FileParser {
         return transactionId.getTextContent();
     }
 }
-
-/**
- * @Author      Vanya Zelezinsky
- * @Version     1.0
- * @see         by.itechart.lastcoursetask.parser.impl.CsvFileParserImpl
- * @see         by.itechart.lastcoursetask.parser.api.FileParser
- * @see         by.itechart.lastcoursetask.parser.impl.FileParserFactory
- */
