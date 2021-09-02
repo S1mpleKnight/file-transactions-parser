@@ -19,6 +19,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    private static final String[] AUTH_WHITELIST = {
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/login"
+    };
     private final JwtConfigurer jwtConfigurer;
     @Value("${password.hash.strength}")
     private Integer hashStrength;
@@ -31,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .authorizeRequests()
-                    .antMatchers("/login").permitAll()
+                    .antMatchers(AUTH_WHITELIST).permitAll()
                     .anyRequest()
                     .authenticated()
                 .and()
