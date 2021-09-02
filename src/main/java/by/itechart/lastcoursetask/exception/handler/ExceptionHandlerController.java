@@ -24,7 +24,8 @@ import javax.xml.bind.ValidationException;
 public class ExceptionHandlerController {
 
     @ExceptionHandler({OperatorExistException.class, TransactionExistException.class, ValidationException.class,
-            FileNotReadException.class, InvalidFileExtensionException.class, RejectAccessException.class})
+            FileNotReadException.class, InvalidFileExtensionException.class, RejectAccessException.class,
+            IllegalArgumentException.class})
     public ResponseEntity<String> badRequest(RuntimeException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
