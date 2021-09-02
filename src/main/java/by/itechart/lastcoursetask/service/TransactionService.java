@@ -68,6 +68,11 @@ public class TransactionService {
         return getTransactionDtoList(transactions);
     }
 
+    public List<TransactionDto> findAboveTransactions(Long amount) {
+        List<Transaction> transactions = transactionRepository.findAboveTransactions(amount);
+        return getTransactionDtoList(transactions);
+    }
+
     @Transactional
     public void delete(UUID transactionId) {
         if (transactionRepository.existsById(transactionId)) {
