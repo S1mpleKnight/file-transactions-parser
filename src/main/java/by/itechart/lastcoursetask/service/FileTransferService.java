@@ -1,9 +1,11 @@
 package by.itechart.lastcoursetask.service;
 
 import by.itechart.lastcoursetask.dto.OperatorDto;
+import by.itechart.lastcoursetask.entity.ErrorMessage;
 import by.itechart.lastcoursetask.exception.FileNotReadException;
 import by.itechart.lastcoursetask.parser.api.FileParser;
 import by.itechart.lastcoursetask.parser.impl.FileParserFactory;
+import by.itechart.lastcoursetask.util.EntityMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +17,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -35,6 +39,9 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 public class FileTransferService {
+
+    private final ErrorMessageService messageService;
+    private final EntityMapper mapper;
     /**
      * String value of the path, which represent upload directory, should be different on macOS, Windows & Linux
      */
@@ -58,9 +65,10 @@ public class FileTransferService {
      * Parsing input data represented by multipart file with {@code FileParser}.
      * Store transaction with the given nickname by {@code OperatorService}.
      * Store uploaded file to local storage.
+     * Store appeared error messages.
      * @param       files Files to parse & store
-     * @param       nickname Operator nickname String value
-     * @return      List of exception messages, which occurs while file have been proceeded
+     * @param       principal Current operator
+     * @return      Result of parsing in String
      * @throws      FileNotReadException
      *              If file can not be proceeded
      * @throws      by.itechart.lastcoursetask.exception.InvalidFileExtensionException
@@ -68,13 +76,13 @@ public class FileTransferService {
      * @throws      by.itechart.lastcoursetask.exception.TransactionExistException
      *              If transaction is already exist
      */
-    public List<String> uploadFiles(MultipartFile[] files, String nickname) {
+    public String uploadFiles(MultipartFile[] files, Principal principal) {
         createUploadDir();
         List<String> messages = new ArrayList<>();
         for (MultipartFile file : files) {
-            messages.addAll(uploadFile(file, nickname));
+            messages.addAll(uploadFile(file, principal.getName()));
         }
-        return messages;
+        return getResponseText(parseMessages(messages, principal));
     }
 
     private List<String> uploadFile(MultipartFile file, String nickname) {
@@ -119,5 +127,30 @@ public class FileTransferService {
     private String getFilenameExtension(String filename) {
         int pos = filename.lastIndexOf('.');
         return filename.substring(pos + 1);
+    }
+
+    private List<ErrorMessage> parseMessages(List<String> errorMessages, Principal principal) {
+        List<ErrorMessage> errors = new ArrayList<>();
+        for (String errorMessage : errorMessages) {
+            errors.add(createErrorMessage(errorMessage, principal));
+        }
+        return errors;
+    }
+
+    private ErrorMessage createErrorMessage(String errorMessageValue, Principal principal) {
+        ErrorMessage errorMessage = new ErrorMessage();
+        errorMessage.setErrorMessage(errorMessageValue);
+        errorMessage.setErrorTime(LocalDateTime.now());
+        errorMessage.setOperator(mapper.mapToOperatorEntity(operatorService.findByNickName(principal.getName())));
+        return errorMessage;
+    }
+
+    private String getResponseText(List<ErrorMessage> errorMessages) {
+        if (errorMessages.isEmpty()) {
+            return "Transactions have been loaded";
+        } else {
+            messageService.saveAll(errorMessages);
+            return "Transactions have been loaded with some errors";
+        }
     }
 }
