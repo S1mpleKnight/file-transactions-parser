@@ -1,10 +1,11 @@
 package by.itechart.lastcoursetask.controller;
 
+import by.itechart.lastcoursetask.dto.ErrorMessageDto;
 import by.itechart.lastcoursetask.dto.OperatorDto;
 import by.itechart.lastcoursetask.dto.TransactionDto;
+import by.itechart.lastcoursetask.service.ErrorMessageService;
 import by.itechart.lastcoursetask.service.OperatorService;
 import by.itechart.lastcoursetask.service.TransactionService;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -32,6 +33,7 @@ import java.util.List;
 public class OperatorsController {
     private final OperatorService operatorService;
     private final TransactionService transactionService;
+    private final ErrorMessageService messageService;
 
     @GetMapping
     public ResponseEntity<List<OperatorDto>> findAll() {
@@ -50,6 +52,13 @@ public class OperatorsController {
         log.info("Find transactions by operator, id: " + id);
         return ResponseEntity.ok().body(transactionService.findByOperatorId(id));
     }
+
+    @GetMapping("/{id}/errors")
+    public ResponseEntity<List<ErrorMessageDto>> findMessagesByOperator(@PathVariable("id") Long id) {
+        log.info("Find messages by operator, id: " + id);
+        return ResponseEntity.ok().body(messageService.findMessagesByOperatorId(id));
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id, Principal principal) {
