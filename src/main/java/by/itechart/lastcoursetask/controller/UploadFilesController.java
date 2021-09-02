@@ -1,6 +1,8 @@
 package by.itechart.lastcoursetask.controller;
 
 import by.itechart.lastcoursetask.service.FileTransferService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.security.Principal;
 import java.util.List;
 
+@Schema(name = "Upload files controller")
 @Slf4j
 @RestController
 @AllArgsConstructor
@@ -22,6 +25,7 @@ import java.util.List;
 public class UploadFilesController {
     private final FileTransferService transferService;
 
+    @Operation(description = "Save file, parse & save transactions")
     @PostMapping
     public ResponseEntity<String> upload(@RequestParam("files") MultipartFile[] files, Principal principal) {
         log.info("Save files, operator: " + principal.getName());

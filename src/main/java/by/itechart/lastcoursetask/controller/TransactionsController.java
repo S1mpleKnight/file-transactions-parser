@@ -2,6 +2,7 @@ package by.itechart.lastcoursetask.controller;
 
 import by.itechart.lastcoursetask.dto.TransactionDto;
 import by.itechart.lastcoursetask.service.TransactionService;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.UUID;
 
+@Schema(name = "Transaction Controller", description = "Searching & deleting transactions")
 @Slf4j
 @RestController
 @RequestMapping("/transactions")

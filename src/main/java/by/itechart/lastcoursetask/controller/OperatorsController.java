@@ -2,6 +2,8 @@ package by.itechart.lastcoursetask.controller;
 
 import by.itechart.lastcoursetask.dto.OperatorDto;
 import by.itechart.lastcoursetask.service.OperatorService;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 import java.util.List;
 
+@Tag(name = "Operator controller", description = "Common CRUD")
 @Slf4j
 @RestController
 @AllArgsConstructor
@@ -46,7 +49,9 @@ public class OperatorsController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> update(@PathVariable Long id, @RequestBody OperatorDto operatorDTO) {
+    public ResponseEntity<String> update(
+            @PathVariable @Parameter(description = "Old operator id") Long id,
+            @RequestBody @Parameter(description = "New operator object") OperatorDto operatorDTO) {
         log.info("Update by id: " + id + ", operator: " + operatorDTO);
         operatorService.update(id, operatorDTO);
         return ResponseEntity.ok("Operator was successfully updated");
