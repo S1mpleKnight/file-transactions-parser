@@ -1,7 +1,9 @@
 package by.itechart.lastcoursetask.util;
 
+import by.itechart.lastcoursetask.dto.ErrorMessageDto;
 import by.itechart.lastcoursetask.dto.OperatorDto;
 import by.itechart.lastcoursetask.dto.TransactionDto;
+import by.itechart.lastcoursetask.entity.ErrorMessage;
 import by.itechart.lastcoursetask.entity.Operator;
 import by.itechart.lastcoursetask.entity.Role;
 import by.itechart.lastcoursetask.entity.Transaction;
@@ -62,6 +64,15 @@ public class EntityMapper {
         transaction.setDateTime(transactionDTO.getDateTime());
         transaction.setStatus(transactionDTO.getStatus());
         return transaction;
+    }
+
+    public ErrorMessageDto mapToErrorMessageDto(ErrorMessage errorMessage) {
+        ErrorMessageDto messageDto = new ErrorMessageDto();
+        messageDto.setErrorMessage(errorMessage.getErrorMessage());
+        messageDto.setOperatorId(errorMessage.getOperator().getId());
+        messageDto.setLocalDateTime(errorMessage.getErrorTime());
+        messageDto.setId(errorMessage.getId());
+        return messageDto;
     }
 
     private Role getRole(String role) {
