@@ -2,8 +2,8 @@ package by.itechart.lastcoursetask.command;
 
 import by.itechart.lastcoursetask.dto.TransactionDto;
 import by.itechart.lastcoursetask.service.TransactionService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
@@ -12,14 +12,10 @@ import java.util.stream.Collectors;
 
 @Component("topAmountTransactions")
 @Slf4j
+@RequiredArgsConstructor
 public class TopAmountTransactionCommand extends Command {
     private final static Integer NUMBER_OF_TOP = 5;
     private final TransactionService service;
-
-    @Autowired
-    TopAmountTransactionCommand(TransactionService service) {
-        this.service = service;
-    }
 
     @Override
     public List<TransactionDto> execute() {
