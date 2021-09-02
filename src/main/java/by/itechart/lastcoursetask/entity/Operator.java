@@ -36,6 +36,9 @@ public class Operator {
     @ToString.Exclude
     @OneToMany(mappedBy = "operator")
     private Set<Transaction> transactions;
+    @ToString.Exclude
+    @OneToMany(mappedBy = "operator")
+    private Set<ErrorMessage> errorMessages;
 
     @Override
     public boolean equals(Object o) {
