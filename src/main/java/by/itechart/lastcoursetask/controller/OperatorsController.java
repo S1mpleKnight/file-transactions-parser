@@ -1,7 +1,10 @@
 package by.itechart.lastcoursetask.controller;
 
 import by.itechart.lastcoursetask.dto.OperatorDto;
+import by.itechart.lastcoursetask.dto.TransactionDto;
 import by.itechart.lastcoursetask.service.OperatorService;
+import by.itechart.lastcoursetask.service.TransactionService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -28,6 +31,7 @@ import java.util.List;
 @PreAuthorize("hasAuthority('ADMIN')")
 public class OperatorsController {
     private final OperatorService operatorService;
+    private final TransactionService transactionService;
 
     @GetMapping
     public ResponseEntity<List<OperatorDto>> findAll() {
@@ -39,6 +43,12 @@ public class OperatorsController {
     public ResponseEntity<OperatorDto> findById(@PathVariable Long id) {
         log.info("Find by id: " + id);
         return ResponseEntity.ok().body(operatorService.findById(id));
+    }
+
+    @GetMapping("/{id}/transactions")
+    public ResponseEntity<List<TransactionDto>> findTransactionsByOperator(@PathVariable("id") Long id) {
+        log.info("Find transactions by operator, id: " + id);
+        return ResponseEntity.ok().body(transactionService.findByOperatorId(id));
     }
 
     @DeleteMapping("/{id}")
