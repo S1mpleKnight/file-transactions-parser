@@ -11,18 +11,11 @@ import javax.validation.constraints.Positive;
 @Data
 @AllArgsConstructor
 public class TransactionStatisticsDto {
-    @Positive
     private Long transactionsNumber;
-    @Positive
     private Long successfulTransactionsAmount;
-    @Positive
     private Long failedTransactionsAmount;
-    @Positive
     private Long minTransactionAmount;
-    @Pattern(regexp = "[a-zA-Z]{3}")
     private String maxTransactionCurrency;
-    @Positive
     private Long maxTransactionAmount;
-    @Pattern(regexp = "[a-zA-Z]{3}")
     private String minTransactionCurrency;
 }

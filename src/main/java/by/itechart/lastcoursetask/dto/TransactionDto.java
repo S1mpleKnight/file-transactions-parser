@@ -18,24 +18,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TransactionDto implements Comparable<TransactionDto>{
-    @Schema(description = "UUID string format")
-    @NotBlank
-    @Size(min = 36, max = 36)
     private String transactionId;
-    @Schema(description = "UUID string format")
-    @NotBlank
-    @Size(min = 36, max = 36)
     private String customerId;
-    @Schema(description = "Represent currency in 3 letters")
-    @NotBlank
-    @Pattern(regexp = "[a-zA-Z]{3}")
     private String currency;
-    @Positive
     private String amount;
-    @Schema(description = "Status of the transaction")
-    @NotNull
     private Boolean status;
-    @Past
     private LocalDateTime dateTime;
 
     @Override
