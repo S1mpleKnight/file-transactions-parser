@@ -10,7 +10,7 @@ import javax.validation.constraints.Pattern;
 @Data
 public class AuthenticationRequestDto {
     @NotBlank
-    @Pattern(regexp = "[a-zA-Z0-9@]{5,50}")
+    @Pattern(regexp = "[a-zA-Z0-9@]{5,15}")
     private String nickname;
     @NotBlank
     private String password;
