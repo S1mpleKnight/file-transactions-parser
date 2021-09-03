@@ -11,25 +11,37 @@ import by.itechart.lastcoursetask.exception.RejectAccessException;
 import by.itechart.lastcoursetask.exception.RoleNotFoundException;
 import by.itechart.lastcoursetask.exception.TransactionExistException;
 import by.itechart.lastcoursetask.exception.TransactionNotFoundException;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.validation.BindException;
 
-import javax.xml.bind.ValidationException;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @ControllerAdvice
 public class ExceptionHandlerController {
 
-    @ExceptionHandler({OperatorExistException.class, TransactionExistException.class, ValidationException.class,
+    @ExceptionHandler({OperatorExistException.class, TransactionExistException.class,
             FileNotReadException.class, InvalidFileExtensionException.class, RejectAccessException.class,
             IllegalArgumentException.class})
     public ResponseEntity<String> badRequest(RuntimeException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
+
+    @ExceptionHandler({MethodArgumentNotValidException.class})
+    public ResponseEntity<String> badRequest(BindException e) {
+        return ResponseEntity.badRequest().body(takeErrorFields(e));
+    }
+
 
     @ExceptionHandler({TransactionNotFoundException.class, RoleNotFoundException.class, OperatorNotFoundException.class,
             CommandNotFoundException.class, ErrorMessageNotFoundException.class})
@@ -42,5 +54,21 @@ public class ExceptionHandlerController {
     @ResponseBody
     public String unauthorized(AuthenticationException exception) {
         return exception.getMessage();
+    }
+
+    private String takeErrorFields(BindException e) {
+        StringBuilder stringBuilder = new StringBuilder("Invalid data in:\n");
+        for (String fieldError : getDistinctErrorFields(e)) {
+            stringBuilder.append("Field - ").append(fieldError).append("\n");
+        }
+        return stringBuilder.toString();
+    }
+
+    private List<String> getDistinctErrorFields(BindException e) {
+        return e.getFieldErrors()
+                .stream()
+                .map(FieldError::getField)
+                .distinct()
+                .collect(Collectors.toList());
     }
 }
