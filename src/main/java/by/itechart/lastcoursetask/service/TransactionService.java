@@ -9,11 +9,13 @@ import by.itechart.lastcoursetask.repository.OperatorRepository;
 import by.itechart.lastcoursetask.repository.TransactionRepository;
 import by.itechart.lastcoursetask.util.EntityMapper;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -27,9 +29,8 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final EntityMapper mapper;
 
-    public List<TransactionDto> findAll() {
-        List<Transaction> transactions = new ArrayList<>(transactionRepository.findAll());
-        return getTransactionDtoList(transactions);
+    public Page<TransactionDto> findAll(Pageable pageable) {
+        return new PageImpl<>(getTransactionDtoList(transactionRepository.findAll(pageable).stream().toList()));
     }
 
     public TransactionDto findById(String id) {

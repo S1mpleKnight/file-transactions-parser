@@ -6,6 +6,9 @@ import by.itechart.lastcoursetask.exception.ErrorMessageNotFoundException;
 import by.itechart.lastcoursetask.repository.ErrorMessageRepository;
 import by.itechart.lastcoursetask.util.EntityMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,8 +21,8 @@ public class ErrorMessageService {
     private final OperatorService operatorService;
     private final EntityMapper mapper;
 
-    public List<ErrorMessageDto> findAll() {
-        return getMessages(messageRepository.findAll());
+    public Page<ErrorMessageDto> findAll(Pageable pageable) {
+        return getMessagesPage(messageRepository.findAll(pageable));
     }
 
     public ErrorMessageDto findMessageById(Long id) {
@@ -31,7 +34,7 @@ public class ErrorMessageService {
 
     public List<ErrorMessageDto> findMessagesByOperatorId(Long id) {
         operatorService.findById(id);
-        return getMessages(messageRepository.findByOperator_Id(id));
+        return getErrorMessageDto(messageRepository.findByOperator_Id(id));
     }
 
     public void saveAll(List<ErrorMessage> messages) {
@@ -40,7 +43,11 @@ public class ErrorMessageService {
         }
     }
 
-    private List<ErrorMessageDto> getMessages(List<ErrorMessage> messages) {
+    private Page<ErrorMessageDto> getMessagesPage(Page<ErrorMessage> messages) {
+        return new PageImpl<>(getErrorMessageDto(messages.stream().toList()));
+    }
+
+    private List<ErrorMessageDto> getErrorMessageDto(List<ErrorMessage> messages) {
         return messages.stream().map(mapper::mapToErrorMessageDto).collect(Collectors.toList());
     }
 

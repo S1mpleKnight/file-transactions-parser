@@ -3,12 +3,15 @@ package by.itechart.lastcoursetask.service;
 import by.itechart.lastcoursetask.dto.OperatorDto;
 import by.itechart.lastcoursetask.dto.TransactionDto;
 import by.itechart.lastcoursetask.entity.Operator;
-import by.itechart.lastcoursetask.exception.RejectAccessException;
 import by.itechart.lastcoursetask.exception.OperatorExistException;
 import by.itechart.lastcoursetask.exception.OperatorNotFoundException;
+import by.itechart.lastcoursetask.exception.RejectAccessException;
 import by.itechart.lastcoursetask.repository.OperatorRepository;
 import by.itechart.lastcoursetask.util.EntityMapper;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -33,9 +35,8 @@ public class OperatorService implements UserDetailsService {
     private final OperatorRepository repository;
     private final EntityMapper mapper;
 
-    public List<OperatorDto> findAll() {
-        List<Operator> operators = new ArrayList<>(repository.findAll());
-        return operators.stream().map(mapper::mapToOperatorDTO).collect(Collectors.toList());
+    public Page<OperatorDto> findAll(Pageable pageable) {
+        return new PageImpl<>(getOperatorsDto(repository.findAll(pageable)));
     }
 
     public OperatorDto findById(Long id) {
@@ -58,10 +59,6 @@ public class OperatorService implements UserDetailsService {
         } else {
             throw new OperatorExistException(operator.getId().toString());
         }
-    }
-
-    private boolean isOperatorExist(Operator operator) {
-        return !isPersonExist(operator.getFirstName(), operator.getLastName()) || !isNicknameExist(operator.getNickname());
     }
 
     @Transactional
@@ -137,5 +134,16 @@ public class OperatorService implements UserDetailsService {
         for (TransactionDto transaction : transactionDtos) {
             transactionService.updateOperator(UUID.fromString(transaction.getTransactionId()), ADMIN_ID);
         }
+    }
+
+    public List<OperatorDto> getOperatorsDto(Page<Operator> operators) {
+        return operators
+                .stream()
+                .map(mapper::mapToOperatorDTO)
+                .collect(Collectors.toList());
+    }
+
+    private boolean isOperatorExist(Operator operator) {
+        return !isPersonExist(operator.getFirstName(), operator.getLastName()) || !isNicknameExist(operator.getNickname());
     }
 }
