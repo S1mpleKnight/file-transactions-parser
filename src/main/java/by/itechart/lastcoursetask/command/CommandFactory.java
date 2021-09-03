@@ -20,6 +20,6 @@ public class CommandFactory {
             command.setArgument(commandDto.getStringArgumentValue());
             return command;
         }
-        throw new CommandNotFoundException(commandDto.toString());
+        throw new CommandNotFoundException("Command not found: " + commandDto.getCommandName());
     }
 }
