@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.Map;
 
 @RestController
@@ -22,7 +23,7 @@ public class AuthenticationController {
     @Operation(summary = "Operator authentication")
     @PostMapping("/login")
     public ResponseEntity<Map<Object, Object>> authenticate(
-            @RequestBody @Parameter(required = true, description = "Object, which contains nickname & password")
+            @Valid @RequestBody @Parameter(required = true, description = "Object, which contains nickname & password")
                     AuthenticationRequestDto request) {
         Map<Object, Object> response = authenticationService.authenticate(request);
         return ResponseEntity.ok(response);

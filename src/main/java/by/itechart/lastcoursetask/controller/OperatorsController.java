@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 
@@ -70,14 +71,14 @@ public class OperatorsController {
     @PutMapping("/{id}")
     public ResponseEntity<String> update(
             @PathVariable @Parameter(description = "Old operator id") Long id,
-            @RequestBody @Parameter(description = "New operator object") OperatorDto operatorDTO) {
+            @Valid @RequestBody @Parameter(description = "New operator object") OperatorDto operatorDTO) {
         log.info("Update by id: " + id + ", operator: " + operatorDTO);
         operatorService.update(id, operatorDTO);
         return ResponseEntity.ok("Operator was successfully updated");
     }
 
     @PostMapping
-    public ResponseEntity<String> save(@RequestBody OperatorDto operatorDTO) {
+    public ResponseEntity<String> save(@Valid @RequestBody OperatorDto operatorDTO) {
         log.info("Save operator: " + operatorDTO);
         operatorService.save(operatorDTO);
         return ResponseEntity.ok("Operator was successfully saved");
