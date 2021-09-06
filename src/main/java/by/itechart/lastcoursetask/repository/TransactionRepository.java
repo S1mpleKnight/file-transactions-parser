@@ -21,6 +21,5 @@ public interface TransactionRepository extends JpaRepository<Transaction, UUID> 
 
     List<Transaction> findByOperator_Id(Long id);
 
-    @Query(value = "SELECT DISTINCT * FROM transactions WHERE transactions.amount > ?1", nativeQuery = true)
-    List<Transaction> findAboveTransactions(Long amount);
+    List<Transaction> findAllByAmountGreaterThan(Long amount);
 }
