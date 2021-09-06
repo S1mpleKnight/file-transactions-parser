@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -31,6 +32,10 @@ public class TransactionService {
 
     public Page<TransactionDto> findAll(Pageable pageable) {
         return new PageImpl<>(getTransactionDtoList(transactionRepository.findAll(pageable).stream().toList()));
+    }
+
+    public List<TransactionDto> findAll() {
+        return getTransactionDtoList(transactionRepository.findAll().stream().toList());
     }
 
     public TransactionDto findById(String id) {
@@ -60,12 +65,12 @@ public class TransactionService {
     }
 
     public List<TransactionDto> findMinTransactions() {
-        List<Transaction> transactions = transactionRepository.findMinTransactions();
+        List<Transaction> transactions = Collections.singletonList(transactionRepository.findTopByOrderByAmountAsc());
         return getTransactionDtoList(transactions);
     }
 
     public List<TransactionDto> findMaxTransactions() {
-        List<Transaction> transactions = transactionRepository.findMaxTransactions();
+        List<Transaction> transactions = Collections.singletonList(transactionRepository.findTopByOrderByAmountDesc());
         return getTransactionDtoList(transactions);
     }
 

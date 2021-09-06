@@ -36,7 +36,11 @@ public class OperatorService implements UserDetailsService {
     private final EntityMapper mapper;
 
     public Page<OperatorDto> findAll(Pageable pageable) {
-        return new PageImpl<>(getOperatorsDto(repository.findAll(pageable)));
+        return new PageImpl<>(getOperatorsDto(repository.findAll(pageable).toList()));
+    }
+
+    public List<OperatorDto> findAll() {
+        return getOperatorsDto(repository.findAll());
     }
 
     public OperatorDto findById(Long id) {
@@ -136,7 +140,7 @@ public class OperatorService implements UserDetailsService {
         }
     }
 
-    public List<OperatorDto> getOperatorsDto(Page<Operator> operators) {
+    public List<OperatorDto> getOperatorsDto(List<Operator> operators) {
         return operators
                 .stream()
                 .map(mapper::mapToOperatorDTO)
