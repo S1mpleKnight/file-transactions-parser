@@ -40,10 +40,14 @@ public class OperatorsController {
     private final ErrorMessageService messageService;
 
     @GetMapping
-    public ResponseEntity<Page<OperatorDto>> findAll(
-            @RequestParam("page") int page, @RequestParam("size") int size) {
+    public ResponseEntity<?> findAll(
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size) {
         log.info("Find all");
-        return ResponseEntity.ok(operatorService.findAll(PageRequest.of(page, size)));
+        if (page != null && size != null) {
+            return ResponseEntity.ok(operatorService.findAll(PageRequest.of(page, size)));
+        }
+        return ResponseEntity.ok(operatorService.findAll());
     }
 
     @GetMapping("/{id}")
