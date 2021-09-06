@@ -34,7 +34,7 @@ import java.util.List;
 
 @Slf4j
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
-@Component("xml")
+//@Component("xml")
 public class XmlFileParserDomImpl implements FileParser {
     private final static String SUCCESS_TRANSACTION_STATUS = "COMPLETE";
     /**
