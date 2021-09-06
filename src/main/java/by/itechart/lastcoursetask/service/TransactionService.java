@@ -75,7 +75,7 @@ public class TransactionService {
     }
 
     public List<TransactionDto> findAboveTransactions(Long amount) {
-        List<Transaction> transactions = transactionRepository.findAboveTransactions(amount);
+        List<Transaction> transactions = transactionRepository.findAllByAmountGreaterThan(amount);
         return getTransactionDtoList(transactions);
     }
 
