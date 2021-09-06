@@ -11,6 +11,10 @@ import java.util.UUID;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, UUID> {
+    Transaction findTopByOrderByAmountDesc();
+
+    Transaction findTopByOrderByAmountAsc();
+
     List<Transaction> findByCustomerId(UUID customerId);
 
     List<Transaction> findByDateTime(LocalDateTime dateTime);
@@ -19,12 +23,4 @@ public interface TransactionRepository extends JpaRepository<Transaction, UUID> 
 
     @Query(value = "SELECT DISTINCT * FROM transactions WHERE transactions.amount > ?1", nativeQuery = true)
     List<Transaction> findAboveTransactions(Long amount);
-
-    @Query(value = "SELECT DISTINCT * FROM transactions WHERE amount = (SELECT MIN(amount) FROM transactions)",
-            nativeQuery = true)
-    List<Transaction> findMinTransactions();
-
-    @Query(value = "SELECT DISTINCT * FROM transactions WHERE amount = (SELECT MAX(amount) FROM transactions)",
-            nativeQuery = true)
-    List<Transaction> findMaxTransactions();
 }
