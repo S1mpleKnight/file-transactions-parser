@@ -8,19 +8,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @SpringBootTest
 @TestPropertySource(locations = "classpath:test.properties")
 @ActiveProfiles("test")
 class OperatorServiceTest {
     private static final Long OPERATOR_DTO_ID_UPDATE = 4L;
-    private static final Long OPERATOR_DTO_ID_DELETE = 3L;
     private static final Long OPERATOR_DTO_ID_SAVE = 3L;
     @Autowired
     private OperatorService operatorService;
-    @Autowired
-    private TransactionService transactionService;
 
     @Test
     void findAllSizeNotNullTrue() {
@@ -55,11 +53,6 @@ class OperatorServiceTest {
         Assertions.assertDoesNotThrow(() -> operatorService.update(OPERATOR_DTO_ID_UPDATE, operatorDTO));
     }
 
-//    @Test
-//    void deleteOperatorSuccess() {
-//        Assertions.assertDoesNotThrow(() -> operatorService.delete(OPERATOR_DTO_ID_DELETE));
-//        System.out.println(transactionService.findByOperatorId(1L));
-//    }
 
     private OperatorDto createOperatorDTO(String name, String role, String nickname) {
         OperatorDto operatorDTO = new OperatorDto();
