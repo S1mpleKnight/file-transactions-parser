@@ -70,7 +70,7 @@ public class OperatorService implements UserDetailsService {
         if (operatorId != 1 && repository.existsById(operatorId)) {
             deleteUser(operatorId, principal);
         } else {
-            throw new OperatorNotFoundException(operatorId.toString());
+            throw new RejectAccessException("Can not delete admin");
         }
     }
 
