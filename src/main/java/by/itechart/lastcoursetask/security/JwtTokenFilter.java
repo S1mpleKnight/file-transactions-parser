@@ -25,17 +25,16 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         String token = tokenProvider.resolveToken(httpServletRequest);
         try {
             acceptAuthentication(token);
+            filterChain.doFilter(httpServletRequest, httpServletResponse);
         } catch (JwtAuthenticationException e) {
-            rejectAuthentication( httpServletResponse, e);
+            rejectAuthentication(e);
         }
-        filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 
-    private void rejectAuthentication(HttpServletResponse servletResponse, JwtAuthenticationException e) throws IOException {
+    private void rejectAuthentication(JwtAuthenticationException e) {
         log.error(e.getMessage());
         SecurityContextHolder.clearContext();
-        servletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-        throw new JwtAuthenticationException("JWT token filter have not been passed", e);
+        throw new JwtAuthenticationException("JWT token filter have not been passed");
     }
 
     private void acceptAuthentication(String token) {
