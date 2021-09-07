@@ -11,9 +11,11 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class JwtConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
     private final JwtTokenFilter tokenFilter;
+    private final FilterChainExceptionHandler exceptionHandlerFilter;
 
     @Override
     public void configure(HttpSecurity builder) {
         builder.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
+        builder.addFilterBefore(exceptionHandlerFilter, JwtTokenFilter.class);
     }
 }
