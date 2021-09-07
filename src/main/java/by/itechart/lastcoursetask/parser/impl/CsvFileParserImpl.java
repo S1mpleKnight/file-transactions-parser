@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  *
  * @since      1.0
  * @author      Vanya Zelezinsky
- * @see         by.itechart.lastcoursetask.parser.impl.XmlFileParserDomImpl
+ * @see         by.itechart.lastcoursetask.parser.impl.XmlFileParserImpl
  * @see         by.itechart.lastcoursetask.parser.api.FileParser
  * @see         by.itechart.lastcoursetask.parser.impl.FileParserFactory
  */
