@@ -28,11 +28,16 @@ import java.util.List;
 public class XmlFileParserImpl implements FileParser {
     private static final DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private final static String SUCCESS_TRANSACTION_STATUS = "COMPLETE";
-    private static final String TRANSACTION_TAG = "transactions";
+    private static final String TRANSACTION_TAG = "transaction";
     private static final String USER_TAG = "user";
     private static final String ID_TAG = "id";
     private static final String[] FIRST_LEVEL_TAGS = {"timestamp", "status", ID_TAG};
     private static final String[] PAYMENT_DETAILS_TAGS = {"amount", "currency"};
+    private static final String DATE_TIME_REGEX = "[0-9]{4}(-[0-9]{2}){2} ([0-9]{2}:){2}[0-9]{2}";
+    private static final String STATUS_REGEX = "((COMPLETE)|(FAILURE))";
+    private static final String ID_REGEX = "[0-9a-z]{8}-([0-9a-z]{4}-){3}[0-9a-z]{12}";
+    private static final String AMOUNT_REGEX = "[0-9 ]+";
+    private static final String CURRENCY_REGEX = "[A-Z]{3}";
     private final List<String> invalidDataMessages;
     private TransactionDto transactionDto;
 
@@ -45,15 +50,24 @@ public class XmlFileParserImpl implements FileParser {
         log.info("Parsing XML file");
         this.invalidDataMessages.clear();
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        return getTransactions(stream, filename, factory);
+    }
+
+    private List<TransactionDto> getTransactions(InputStream stream, String filename, DocumentBuilderFactory factory) {
         try {
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document document = builder.parse(stream);
-            NodeList list = document.getElementsByTagName(TRANSACTION_TAG);
+            NodeList list = getNodeList(stream, factory);
             return getTransactions(list, filename);
         } catch (ParserConfigurationException | IOException | SAXException e) {
             log.error(e.getMessage());
             return Collections.emptyList();
         }
+    }
+
+    private NodeList getNodeList(InputStream stream, DocumentBuilderFactory factory) throws ParserConfigurationException,
+            SAXException, IOException {
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        Document document = builder.parse(stream);
+        return document.getElementsByTagName(TRANSACTION_TAG);
     }
 
     private List<TransactionDto> getTransactions(NodeList list, String filename) {
@@ -71,7 +85,7 @@ public class XmlFileParserImpl implements FileParser {
             transactions.add(transactionDto);
         } else {
             this.invalidDataMessages.add("Invalid data in transaction: #" + (transactionPosition + 1)
-                    + " file: " + filename);
+                    + ", in file: " + filename);
         }
     }
 
@@ -126,12 +140,12 @@ public class XmlFileParserImpl implements FileParser {
 
     private String getCorrespondRegex(String tag) {
         return switch (tag) {
-            case "timestamp" -> "[0-9]{4}(-[0-9]{2}){2} ([0-9]{2}:){2}[0-9]{2}";
-            case "status" -> "((COMPLETE)|(FAILURE))";
-            case "id" -> "[0-9a-z]{8}-([0-9a-z]{4}-){3}[0-9a-z]{12}";
-            case "amount" -> "[0-9 ]+";
-            case "currency" -> "[A-Z]{3}";
-            default -> throw new IllegalArgumentException("Illegal tag naming");
+            case "timestamp" -> DATE_TIME_REGEX;
+            case "status" -> STATUS_REGEX;
+            case "id" -> ID_REGEX;
+            case "amount" -> AMOUNT_REGEX;
+            case "currency" -> CURRENCY_REGEX;
+            default -> throw new IllegalArgumentException("Illegal tag name");
         };
     }
 
