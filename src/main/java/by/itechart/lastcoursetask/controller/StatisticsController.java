@@ -32,4 +32,10 @@ public class StatisticsController {
         Command command = factory.getCommand(commandDto);
         return ResponseEntity.ok(command.execute());
     }
+
+    @GetMapping("/commands")
+    public ResponseEntity<String> getStatisticCommands() {
+        log.info("Get all commands");
+        return ResponseEntity.ok(String.join("\n", factory.getAllCommands()));
+    }
 }
