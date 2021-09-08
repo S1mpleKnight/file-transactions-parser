@@ -54,11 +54,6 @@ public class TransactionService {
         throw new TransactionNotFoundException(customerId);
     }
 
-    public List<TransactionDto> findByDateAndTime(LocalDateTime dateTime) {
-        List<Transaction> transactions = transactionRepository.findByDateTime(dateTime);
-        return getTransactionDtoList(transactions);
-    }
-
     public List<TransactionDto> findByOperatorId(Long id) {
         List<Transaction> transactions = transactionRepository.findByOperator_Id(id);
         return getTransactionDtoList(transactions);
