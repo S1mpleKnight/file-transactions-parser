@@ -44,29 +44,9 @@ class OperatorService {
 interface UserDetailsService {
  +loadUserByUsername(String nickname)
 }
-interface OperatorRepository {
- +findByNickname(String nickname)
- +existsByNickname(String nickname)
- +findByFirstNameAndLastName(String firstName, String lastName)
- +existsByFirstNameAndLastName(String firstName, String lastName)
-}
-interface TransactionRepository {
- +findByCustomerId(UUID customerId)
- +findByDateTime(LocalDateTime dateTime)
- +findByOperator_Id(Long id)
- +findAllByAmountGreaterThan(Long amount)
- +findTopByOrderByAmountAsc()
- +findTopByOrderByAmountDesc()
-}
-interface JpaRepository {
-}
 class RoleService {
  +findByName(String value)
  +findById(Long id)
-}
-interface RoleRepository {
- +findByName(String value)
- +existsByName(String value)
 }
 abstract class Command {
  +execute()
@@ -103,13 +83,6 @@ FileTransferService o-- TransactionService
 FileTransferService o-- OperatorService
 UserDetailsService <|.. OperatorService
 OperatorService o-- TransactionService
-OperatorService o-- OperatorRepository
-JpaRepository <|-- OperatorRepository
-JpaRepository <|-- TransactionRepository
-JpaRepository <|-- RoleRepository
-TransactionService o-- OperatorRepository
-TransactionService o-- TransactionRepository
-RoleService o-- RoleRepository
 Command <|-- AboveAmountTransactionCommand
 Command <|-- AllTransactionCommand
 Command <|-- MaxTransactionCommand
