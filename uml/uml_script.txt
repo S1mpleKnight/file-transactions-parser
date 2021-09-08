@@ -4,64 +4,122 @@ interface FileParser {
  +getInvalidTransactionsData()
 }
 class CsvFileParserImpl {
- -invalidDataMessages
- -STATUS REGEX
- -UUID_REGEX
- -VALID_REGEX
- -TIMEZONE_OFFSET
- -SUCCESS_STATUS
- -DELIMITER
- -INVALID_DATA_MESSAGE
  +parse()
  +getInvalidTransactionsData()
- -getTransactionDTOs()
- -createFromData()
- -getStatus()
- -getDateTime()
- -getValidDataLines()
- -getValidDataFromReader()
- -readColumnNaming()
- -checkColumnsNaming()
- -getBufferedReader()
 }
 class XmlFileParserImpl {
- -invalidDataMessages
- -transactionDto
- -DATE_TIME_REGEX
- -STATUS_REGEX
- -ID_REGEX
- -AMOUNT_REGEX
- -CURRENCY_REGEX
- -TRANSACTION_TAG
- -USER_TAG
- -ID_TAG
- -FIRST_LEVEL_TAGS
- -PAYMENT_DETAILS_TAGS
- -SUCCESS_TRANSACTION_STATUS
- -format
  +parse()
  +getInvalidTransactionsData()
- -getParsedTransactions()
- -getNodeList()
- -getTransactionsFromNodeList()
- -getDataFromTransaction()
- -handleElement()
- -handleSecondLevelChildren()
- -setCustomerIdValue()
- -setCustomerId()
- -getCustomerIdContext()
- -handleMultipleNodes()
- -getTextContent()
- -setCorrespondValue()
- -getCorrespondRegex()
 }
 class FileParserFactory {
- -parserMap
  +getParser()
+}
+class FileTransferService {
+ +uploadFiles()
+}
+class TransactionService {
+ +findAll()
+ +findAll(Pageable pageable)
+ +findById(String id)
+ +findByCustomerId(String customerId)
+ +findByOperatorId(Long id)
+ +findMinTransactions()
+ +findMaxTransactions()
+ +findAboveTransactions(Long amount)
+ +delete(UUID transactionId)
+ +save(TransactionDto transactionDTO, OperatorDto operatorDTO)
+ +saveAll(Collection<TransactionDto> transactions, OperatorDto operatorDTO)
+ +updateOperator(UUID oldTransactionId, Long operatorId)
+}
+class OperatorService {
+ +findAll(Pageable pageable)
+ +findAll()
+ +findById(Long id)
+ +findByFirstNameAndLastName(String firstName, String lastName)
+ +save(OperatorDto operatorDTO)
+ +delete(Long operatorId, Principal principal)
+ +update(Long operatorId, OperatorDto newOperator)
+ +loadUserByUsername(String nickname)
+}
+interface UserDetailsService {
+ +loadUserByUsername(String nickname)
+}
+interface OperatorRepository {
+ +findByNickname(String nickname)
+ +existsByNickname(String nickname)
+ +findByFirstNameAndLastName(String firstName, String lastName)
+ +existsByFirstNameAndLastName(String firstName, String lastName)
+}
+interface TransactionRepository {
+ +findByCustomerId(UUID customerId)
+ +findByDateTime(LocalDateTime dateTime)
+ +findByOperator_Id(Long id)
+ +findAllByAmountGreaterThan(Long amount)
+ +findTopByOrderByAmountAsc()
+ +findTopByOrderByAmountDesc()
+}
+interface JpaRepository {
+}
+class RoleService {
+ +findByName(String value)
+ +findById(Long id)
+}
+interface RoleRepository {
+ +findByName(String value)
+ +existsByName(String value)
+}
+abstract class Command {
+ +execute()
+}
+class AboveAmountTransactionCommand {
+ +execute()
+}
+class AllTransactionCommand {
+ +execute()
+}
+class MaxTransactionCommand {
+ +execute()
+}
+class MinTransactionCommand {
+ +execute()
+}
+class TopAmountTransactionCommand {
+ +execute()
+}
+class TransactionStatisticsCommand {
+ +execute()
+}
+class CommandFactory {
+ +getCommand(CommandDto commandDto)
+ +getAllCommands()
 }
 
 XmlFileParserImpl <-- FileParserFactory
 CsvFileParserImpl <-- FileParserFactory
 FileParser <|.. CsvFileParserImpl
 FileParser <|.. XmlFileParserImpl
+FileTransferService o-- FileParserFactory
+FileTransferService o-- TransactionService
+FileTransferService o-- OperatorService
+UserDetailsService <|.. OperatorService
+OperatorService o-- TransactionService
+OperatorService o-- OperatorRepository
+JpaRepository <|-- OperatorRepository
+JpaRepository <|-- TransactionRepository
+JpaRepository <|-- RoleRepository
+TransactionService o-- OperatorRepository
+TransactionService o-- TransactionRepository
+RoleService o-- RoleRepository
+Command <|-- AboveAmountTransactionCommand
+Command <|-- AllTransactionCommand
+Command <|-- MaxTransactionCommand
+Command <|-- MinTransactionCommand
+Command <|-- TopAmountTransactionCommand
+Command <|-- TransactionStatisticsCommand
+AboveAmountTransactionCommand <-- CommandFactory
+AllTransactionCommand <-- CommandFactory
+MaxTransactionCommand <-- CommandFactory
+MinTransactionCommand <-- CommandFactory
+TopAmountTransactionCommand <-- CommandFactory
+TransactionStatisticsCommand <-- CommandFactory
 @enduml
