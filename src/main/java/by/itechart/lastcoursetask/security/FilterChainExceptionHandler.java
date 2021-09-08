@@ -16,9 +16,12 @@ import java.io.IOException;
 @Component
 @Slf4j
 public class FilterChainExceptionHandler extends OncePerRequestFilter {
+    private final HandlerExceptionResolver resolver;
+
     @Autowired
-    @Qualifier("handlerExceptionResolver")
-    private  HandlerExceptionResolver resolver;
+    public FilterChainExceptionHandler(@Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver) {
+        this.resolver = resolver;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
