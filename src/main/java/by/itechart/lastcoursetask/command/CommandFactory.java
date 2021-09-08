@@ -6,6 +6,7 @@ import lombok.Data;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -21,5 +22,9 @@ public class CommandFactory {
             return command;
         }
         throw new CommandNotFoundException("Command not found: " + commandDto.getCommandName());
+    }
+
+    public List<String> getAllCommands() {
+        return commandMap.keySet().stream().toList();
     }
 }
