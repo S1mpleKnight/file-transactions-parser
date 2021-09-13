@@ -41,9 +41,6 @@ class OperatorService {
  +update(Long operatorId, OperatorDto newOperator)
  +loadUserByUsername(String nickname)
 }
-interface UserDetailsService {
- +loadUserByUsername(String nickname)
-}
 class RoleService {
  +findByName(String value)
  +findById(Long id)
@@ -73,6 +70,33 @@ class CommandFactory {
  +getCommand(CommandDto commandDto)
  +getAllCommands()
 }
+class EntityMapper {
+ +mapToOperatorDTO(Operator operator)
+ +mapToOperatorEntity(OperatorDto operatorDTO)
+ +mapToTransactionDTO(Transaction transaction)
+ +mapToTransactionEntity(TransactionDto transactionDTO)
+ +mapToErrorMessageDto(ErrorMessage errorMessage)
+}
+class Operator {
+ +equals()
+ +hashCode()
+ +getters()
+ +setters()
+}
+class Transaction {
+ +equals()
+ +hashCode()
+ +getters()
+ +setters()
+}
+class TransactionDto {
+ +getters()
+ +setters()
+}
+class OperatorDto {
+ +getters()
+ +setters()
+}
 
 XmlFileParserImpl <-- FileParserFactory
 CsvFileParserImpl <-- FileParserFactory
@@ -81,8 +105,11 @@ FileParser <|.. XmlFileParserImpl
 FileTransferService o-- FileParserFactory
 FileTransferService o-- TransactionService
 FileTransferService o-- OperatorService
-UserDetailsService <|.. OperatorService
 OperatorService o-- TransactionService
+EntityMapper o-- RoleService
+TransactionService o-- EntityMapper
+OperatorService o-- EntityMapper
+FileTransferService o-- EntityMapper
 Command <|-- AboveAmountTransactionCommand
 Command <|-- AllTransactionCommand
 Command <|-- MaxTransactionCommand
@@ -95,4 +122,8 @@ MaxTransactionCommand <-- CommandFactory
 MinTransactionCommand <-- CommandFactory
 TopAmountTransactionCommand <-- CommandFactory
 TransactionStatisticsCommand <-- CommandFactory
+Operator <.. EntityMapper
+Transaction <.. EntityMapper
+Transaction --  TransactionDto
+Operator --  OperatorDto
 @enduml
